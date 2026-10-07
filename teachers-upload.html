@@ -1,0 +1,172 @@
+<!DOCTYPE html><html lang="en-gb"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Teacher&#x27;s Upload Portal - San Juan Sail &amp; Paddle</title><meta name="description" content="Sailing lessons, sailboat rentals, SUP, kayak, windsurf in San Juan Batangas."><meta name="generator" content="Publii Open-Source CMS for Static Site"><link rel="stylesheet" href="/pagefind/pagefind-component-ui.css"><script src="/pagefind/pagefind-component-ui.js" type="module"></script><style>.pagefind-search-fallback{display:flex;align-items:center;border:1px solid #d1d5db;border-radius:.5rem;padding:.55rem .75rem;background:#fff;color:#6b7280}.pagefind-search-fallback input{width:100%;border:0;background:transparent;color:inherit;font:inherit;outline:0}.pagefind-searchbox:defined+.pagefind-search-fallback{display:none}</style><link rel="canonical" href="./teachers-upload.html"><link rel="shortcut icon" href="./media/website/favicon-32x32.png" type="image/x-icon"><link rel="preload" href="./assets/dynamic/fonts/robotoflex/robotoflex.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="./assets/css/style.css?v&#x3D;05f7ee30be7b070fb88dd516653435f3"><script type="application/ld+json">{"@context":"http://schema.org","@type":"Article","mainEntityOfPage":{"@type":"WebPage","@id":"./teachers-upload.html"},"headline":"Teacher's Upload Portal","datePublished":"2026-10-05T06:51+08:00","dateModified":"2026-10-05T06:51+08:00","description":"Sailing lessons, sailboat rentals, SUP, kayak, windsurf in San Juan Batangas.","author":{"@type":"Person","name":"Gerardo Gala","url":"./authors/gerardo-gala/"},"publisher":{"@type":"Organization","name":"Gerardo Gala"}}</script><noscript><style>img[loading] {
+                    opacity: 1;
+                }</style></noscript></head><body class="page-template"><header class="top js-header"><a class="logo" href="./">San Juan Sail &amp; Paddle</a><nav class="navbar js-navbar"><button class="navbar__toggle js-toggle" aria-label="Menu" aria-haspopup="true" aria-expanded="false"><span class="navbar__toggle-box"><span class="navbar__toggle-inner">Menu</span></span></button><ul class="navbar__menu"><li><a href="./" target="_self">Home</a></li><li><a href="./sailboats.html" target="_self">Sailboat Rentals</a></li><li><a href="./rentals.html" target="_self">Kayak and SUP Rentals</a></li><li><a href="./instructors.html" target="_self">Instructors</a></li><li><a href="./online-courses-2.html" target="_self">Online Courses</a></li><li><a href="./sailing-concepts-2.html" target="_self">Sailing Concepts</a></li><li><a href="./tags/blog/" title="Blog" target="_self">Blog</a></li><li><a href="./student-report.html" title="student" target="_self">Student Report</a></li><li><a href="./about-us.html" target="_self">About Us</a></li></ul></nav></header><main class="page" data-pagefind-body><article class="content"><div class="hero hero--noimage"><header class="hero__content"><div class="wrapper"><h1>Teacher&#x27;s Upload Portal</h1></div></header></div><div class="entry-wrapper content__entry"><p> </p><p><script src="https://jsdelivr.net"></script></p><div class="converter-container"><div class="converter-header"><h2>Teacher's Upload Portal</h2><p>Convert structured student grade spreadsheets instantly to clean JSON data.</p></div><div id="drop-zone" class="drop-zone"><p>Drag your Excel file (.xlsx or .xls) here</p><span class="file-input-label">Or Browse Files</span> <input type="file" id="file-input" accept=".xlsx, .xls"></div><div id="status-box" class="status-box"><div class="log-entry">&gt; System ready. Awaiting student spreadsheet...</div></div><div class="action-area"><button id="download-btn" class="btn-download">Download Converted JSON File</button></div></div><p><script>const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('file-input');
+    const statusBox = document.getElementById('status-box');
+    const downloadBtn = document.getElementById('download-btn');
+    
+    let generatedJsonData = null;
+    let originalFileName = "";
+
+    // Trigger file input clicking on container click
+    dropZone.addEventListener('click', () => fileInput.click());
+
+    // Handle drag styling animations
+    ['dragenter', 'dragover'].forEach(eventName => {
+        dropZone.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            dropZone.classList.add('drag-over');
+        }, false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('drag-over');
+        }, false);
+    });
+
+    // Handle Drop file processing
+    dropZone.addEventListener('drop', (e) => {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        if (files.length) handleFileProcessing(files[0]);
+    });
+
+    // Handle standard Explorer input file picking
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length) handleFileProcessing(e.target.files[0]);
+    });
+
+    // Procedural Status Logger Helper
+    function addLog(message, type = '') {
+        const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        const div = document.createElement('div');
+        div.className = `log-entry ${type}`;
+        div.innerText = `[${timestamp}] ${message}`;
+        statusBox.appendChild(div);
+        statusBox.scrollTop = statusBox.scrollHeight;
+    }
+
+    // Reset UI wrapper
+    function resetPortal() {
+        statusBox.innerHTML = '';
+        downloadBtn.style.display = 'none';
+        generatedJsonData = null;
+    }
+
+    // Core Processing Code
+    function handleFileProcessing(file) {
+        resetPortal();
+        originalFileName = file.name;
+        
+        addLog(`File detected: "${file.name}"`);
+
+        // Enforce strict file extension checking
+        const extension = file.name.split('.').pop().toLowerCase();
+        if (extension !== 'xlsx' && extension !== 'xls') {
+            addLog(`Error: Invalid file format (.${extension}). Please upload an Excel sheet.`, 'error');
+            return;
+        }
+
+        addLog(`Step 1: Reading spreadsheet binary...`, 'success');
+        
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            try {
+                addLog(`Step 2: Parsing workbook structure...`, 'success');
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+                
+                // Get the first sheet (assuming standard disciplined structure)
+                const firstSheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[firstSheetName];
+                
+                addLog(`Step 3: Extracting data matrix from sheet: "${firstSheetName}"...`, 'success');
+                
+                // Convert cleanly into structured JSON array mapping row headers
+                const jsonOutput = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
+                
+                if (jsonOutput.length === 0) {
+                    addLog(`Error: The uploaded spreadsheet is empty.`, 'error');
+                    return;
+                }
+
+                generatedJsonData = JSON.stringify(jsonOutput, null, 2);
+                
+                addLog(`Step 4: Successfully extracted ${jsonOutput.length} record rows!`, 'success');
+                addLog(`Process completed safely. Ready to download code.`, 'success');
+                
+                // Reveal the download execution button
+                downloadBtn.style.display = 'block';
+                
+            } catch (err) {
+                addLog(`Critical processing error: ${err.message}`, 'error');
+            }
+        };
+
+        reader.onerror = function() {
+            addLog(`Error: Failed to read file data buffer.`, 'error');
+        };
+
+        reader.readAsArrayBuffer(file);
+    }
+
+    // Trigger Compiled Download Action
+    downloadBtn.addEventListener('click', () => {
+        if (!generatedJsonData) return;
+        
+        const blob = new Blob([generatedJsonData], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        
+        // Match base name but change extension
+        const outputName = originalFileName.substring(0, originalFileName.lastIndexOf('.')) + '.json';
+        
+        a.href = url;
+        a.download = outputName;
+        document.body.appendChild(a);
+        a.click();
+        
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        addLog(`Saved output file file as: "${outputName}"`);
+    });</script></p></div></article><div class="banner banner--after-content"><div class="wrapper"><div class="google-review-cta" style="margin: 10px 0; padding: 12px; border: 1px solid #006ABC; border-radius: 0px; background-color: #ffffff; text-align: center;"><h4 style="margin-top: 0; color: #006ABC; font-size: 1.2rem; font-family: inherit;">Found this guide helpful?</h4><p style="color: #006ABC; margin-bottom: 12px; font-family: inherit;">If you enjoyed our sailing tips, please consider leaving us a quick review on Google Maps!</p><a href="https://g.page" target="_blank" rel="noopener noreferrer" class="google-review-btn">Write a Google Review <span class="review-stars">★★★★★</span></a><style>.google-review-btn {
+            display: inline-block; 
+            padding: 8px 16px; 
+            background-color: #006ABC !important; 
+            color: #ffffff !important; 
+            text-decoration: none; 
+            font-weight: bold; 
+            border-radius: 0px;
+            border: 2px solid #006ABC;
+            transition: all 0.2s ease-in-out;
+            font-family: inherit;
+        }
+        
+        /* Forces the stars to be solid white initially */
+        .google-review-btn .review-stars {
+            color: #ffffff !important;
+            margin-left: 4px; /* Optional: adds a little breathing room between text and stars */
+        }
+
+        .google-review-btn:hover {
+            background-color: #ffffff !important;
+            color: #006ABC !important;
+            border-color: #006ABC;
+        }
+        
+        /* Makes sure the stars flip to blue alongside the text on hover */
+        .google-review-btn:hover .review-stars {
+            color: #006ABC !important;
+        }</style></div></div></div></main><footer class="footer"><div class="wrapper"><div class="footer__copyright"><p class="align-center">© 2026 San Juan Academy. All rights reserved.</p></div><button id="backToTop" class="footer__bttop" aria-label="Back to top" title="Back to top"><svg width="20" height="20"><use xlink:href="./assets/svg/svg-map.svg#toparrow"/></svg></button></div></footer><script defer="defer" src="./assets/js/scripts.min.js?v&#x3D;dafec4f87fead6718cb125f0b0fc8441"></script><script>window.publiiThemeMenuConfig={mobileMenuMode:'sidebar',animationSpeed:300,submenuWidth: 'auto',doubleClickTime:500,mobileMenuExpandableSubmenus:true,relatedContainerForOverlayMenuSelector:'.top'};</script><script>var images = document.querySelectorAll('img[loading]');
+        for (var i = 0; i < images.length; i++) {
+            if (images[i].complete) {
+                images[i].classList.add('is-loaded');
+            } else {
+                images[i].addEventListener('load', function () {
+                    this.classList.add('is-loaded');
+                }, false);
+            }
+        }</script></body></html>
