@@ -1,0 +1,126 @@
+<!DOCTYPE html><html lang="en-gb"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Interactive Visual Thesaurus - San Juan Sail &amp; Paddle</title><meta name="description" content="Sailing lessons, sailboat rentals, SUP, kayak, windsurf in San Juan Batangas."><meta name="generator" content="Publii Open-Source CMS for Static Site"><link rel="canonical" href="https://gerardogala.github.io/SJSP/interactive-visual-thesaurus.html"><link rel="alternate" type="application/atom+xml" href="https://gerardogala.github.io/SJSP/feed.xml" title="San Juan Sail &amp; Paddle - RSS"><link rel="alternate" type="application/json" href="https://gerardogala.github.io/SJSP/feed.json" title="San Juan Sail &amp; Paddle - JSON"><meta property="og:title" content="Interactive Visual Thesaurus"><meta property="og:site_name" content="San Juan Sail &amp; Paddle"><meta property="og:description" content="Sailing lessons, sailboat rentals, SUP, kayak, windsurf in San Juan Batangas."><meta property="og:url" content="https://gerardogala.github.io/SJSP/interactive-visual-thesaurus.html"><meta property="og:type" content="article"><link rel="shortcut icon" href="https://gerardogala.github.io/SJSP/media/website/favicon-32x32.png" type="image/x-icon"><link rel="preload" href="https://gerardogala.github.io/SJSP/assets/dynamic/fonts/robotoflex/robotoflex.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="https://gerardogala.github.io/SJSP/assets/css/style.css?v&#x3D;05f7ee30be7b070fb88dd516653435f3"><script type="application/ld+json">{"@context":"http://schema.org","@type":"Article","mainEntityOfPage":{"@type":"WebPage","@id":"https://gerardogala.github.io/SJSP/interactive-visual-thesaurus.html"},"headline":"Interactive Visual Thesaurus","datePublished":"2026-10-08T18:46+08:00","dateModified":"2026-10-08T21:06+08:00","description":"Sailing lessons, sailboat rentals, SUP, kayak, windsurf in San Juan Batangas.","author":{"@type":"Person","name":"Gerardo Gala","url":"https://gerardogala.github.io/SJSP/authors/gerardo-gala/"},"publisher":{"@type":"Organization","name":"Gerardo Gala"}}</script><noscript><style>img[loading] {
+                    opacity: 1;
+                }</style></noscript></head><body class="page-template"><header class="top js-header"><a class="logo" href="https://gerardogala.github.io/SJSP/">San Juan Sail &amp; Paddle</a><nav class="navbar js-navbar"><button class="navbar__toggle js-toggle" aria-label="Menu" aria-haspopup="true" aria-expanded="false"><span class="navbar__toggle-box"><span class="navbar__toggle-inner">Menu</span></span></button><ul class="navbar__menu"><li><a href="https://gerardogala.github.io/SJSP/" target="_self">Home</a></li><li><a href="https://gerardogala.github.io/SJSP/sailboats.html" target="_self">Sailboat Rentals</a></li><li><a href="https://gerardogala.github.io/SJSP/rentals.html" target="_self">Kayak and SUP Rentals</a></li><li><a href="https://gerardogala.github.io/SJSP/instructors.html" target="_self">Instructors</a></li><li><a href="https://gerardogala.github.io/SJSP/online-courses-2.html" target="_self">Online Courses</a></li><li><a href="https://gerardogala.github.io/SJSP/tags/blog/" title="Blog" target="_self">Blog</a></li><li><a href="https://gerardogala.github.io/SJSP/student-report.html" title="student" target="_self">Student Report</a></li><li><a href="https://gerardogala.github.io/SJSP/about-us.html" target="_self">About Us</a></li></ul></nav></header><main class="page"><article class="content"><div class="hero hero--noimage"><header class="hero__content"><div class="wrapper"><h1>Interactive Visual Thesaurus</h1></div></header></div><div class="entry-wrapper content__entry"><div> </div><div> </div><div> </div><div> </div><div> </div><div> </div><div id="canvas-container" style="text-align: center; width: 100%;"><div id="center-node" style="display: inline-block; text-align: center;"><input type="text" id="word-input" placeholder="Type a word..." autocomplete="off" style="width: 180px; padding: 12px 24px; font-size: 18px; font-weight: 600; border: 2px solid #0056b3; background-color: #ffffff; color: #333333; border-radius: 4px; text-align: center; outline: none; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"></div></div><div> </div><div> </div><div> </div><div> </div><div> </div><div> </div><script>const wordInput = document.getElementById('word-input');
+    const canvasContainer = document.getElementById('canvas-container');
+
+    const EXPLOSION_RADIUS = 150; // Distance nodes branch out from your box coordinate
+
+    wordInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter' && this.value.trim() !== '') {
+            fetchSynonyms(this.value.trim());
+        }
+    });
+
+    function fetchSynonyms(word) {
+        clearCanvas();
+
+        // Safe Base64 string for: "https://datamuse.com"
+        var securePath = atob("aHR0cHM6Ly9hcGkuZGF0YW11c2UuY29tL3dvcmRzP3JlbF9zeW49");
+        var apiUrl = securePath + encodeURIComponent(word);
+
+        fetch(apiUrl)
+            .then(function(response) { return response.json(); })
+            .then(function(data) {
+                var synonyms = data.map(function(item) { return item.word; });
+                if (synonyms.length === 0) {
+                    alert("No synonyms found for that word. Try another!");
+                    return;
+                }
+                generateExplosion(synonyms);
+            })
+            .catch(function(err) { console.error("Error fetching data:", err); });
+    }
+
+    function generateExplosion(synonyms) {
+        const N = synonyms.length;
+        const angleInterval = 360 / N; 
+
+        // 🎯 Get the exact, real-time X/Y position of your text box on the screen
+        const boxRect = wordInput.getBoundingClientRect();
+        const textboxX = boxRect.left + (boxRect.width / 2);
+        const textboxY = boxRect.top + (boxRect.height / 2);
+
+        synonyms.forEach((synonym, index) => {
+            const angleInDegrees = index * angleInterval;
+            const angleInRadians = angleInDegrees * (Math.PI / 180);
+
+            // Calculate trajectory vectors using the literal text box coordinates
+            const targetX = textboxX + EXPLOSION_RADIUS * Math.cos(angleInRadians);
+            const targetY = textboxY + EXPLOSION_RADIUS * Math.sin(angleInRadians);
+
+            // Assemble the button element
+            var synButton = document.createElement('button');
+            synButton.innerText = synonym;
+            
+            // 🎯 INLINE CSS PASS-THROUGH: We style the buttons dynamically in the script!
+            // This bypasses Publii's code filters completely and locks the center alignment code down.
+            synButton.style.position = 'fixed';
+            synButton.style.left = targetX + 'px';
+            synButton.style.top = targetY + 'px';
+            synButton.style.transform = 'translate(-50%, -50%)'; // Midpoint centering fix
+            synButton.style.padding = '10px 20px';
+            synButton.style.fontSize = '14px';
+            synButton.style.fontWeight = 'bold';
+            synButton.style.fontFamily = 'Arial, sans-serif';
+            synButton.style.border = 'none';
+            synButton.style.backgroundColor = '#0056b3'; // Matches your premium blue theme
+            synButton.style.color = '#ffffff';
+            synButton.style.cursor = 'pointer';
+            synButton.style.zIndex = '99999';
+            synButton.style.whiteSpace = 'nowrap';
+            synButton.style.borderRadius = '4px';
+            synButton.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
+
+            synButton.addEventListener('click', () => {
+                wordInput.value = synonym; 
+                fetchSynonyms(synonym);    
+            });
+
+            document.body.appendChild(synButton);
+        });
+    }
+
+    function clearCanvas() {
+        // Find and wipe away any existing custom generated buttons on click refresh
+        var buttons = document.querySelectorAll('button');
+        buttons.forEach(function(button) { 
+            button.remove(); 
+        });
+    }</script></div></article><div class="banner banner--after-content"><div class="wrapper"><div class="google-review-cta" style="margin: 8px 0; padding: 10px; border: 1px solid #006ABC; border-radius: 0px; background-color: #ffffff; text-align: center;"><h5 style="margin-top: 0; color: #006ABC; font-size: .8rem; font-family: inherit;">Found this guide helpful?</h5><a href="https://g.page" target="_blank" rel="noopener noreferrer" class="google-review-btn">Write a Google Review <span class="review-stars">★★★★★</span></a><style>.google-review-btn {
+            display: inline-block; 
+            padding: 8px 16px; 
+            background-color: #006ABC !important; 
+            color: #ffffff !important; 
+            text-decoration: none; 
+            font-weight: bold; 
+            border-radius: 0px;
+            border: 2px solid #006ABC;
+            transition: all 0.2s ease-in-out;
+            font-family: inherit;
+        }
+        
+        /* Forces the stars to be solid white initially */
+        .google-review-btn .review-stars {
+            color: #ffffff !important;
+            margin-left: 4px; /* Optional: adds a little breathing room between text and stars */
+        }
+
+        .google-review-btn:hover {
+            background-color: #ffffff !important;
+            color: #006ABC !important;
+            border-color: #006ABC;
+        }
+        
+        /* Makes sure the stars flip to blue alongside the text on hover */
+        .google-review-btn:hover .review-stars {
+            color: #006ABC !important;
+        }</style></div></div></div></main><footer class="footer"><div class="wrapper"><div class="footer__copyright"><p class="align-center">© 2026 San Juan Academy. All rights reserved.</p></div><button id="backToTop" class="footer__bttop" aria-label="Back to top" title="Back to top"><svg width="20" height="20"><use xlink:href="https://gerardogala.github.io/SJSP/assets/svg/svg-map.svg#toparrow"/></svg></button></div></footer><script defer="defer" src="https://gerardogala.github.io/SJSP/assets/js/scripts.min.js?v&#x3D;dafec4f87fead6718cb125f0b0fc8441"></script><script>window.publiiThemeMenuConfig={mobileMenuMode:'sidebar',animationSpeed:300,submenuWidth: 'auto',doubleClickTime:500,mobileMenuExpandableSubmenus:true,relatedContainerForOverlayMenuSelector:'.top'};</script><script>var images = document.querySelectorAll('img[loading]');
+        for (var i = 0; i < images.length; i++) {
+            if (images[i].complete) {
+                images[i].classList.add('is-loaded');
+            } else {
+                images[i].addEventListener('load', function () {
+                    this.classList.add('is-loaded');
+                }, false);
+            }
+        }</script></body></html>
