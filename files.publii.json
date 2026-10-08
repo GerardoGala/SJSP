@@ -2,32 +2,32 @@
     {
         "path": "404.html",
         "type": "file",
-        "md5": "24b177a898c87b8919c3b0aa9acc3249"
+        "md5": "5c475e1990b7bf3f7949d35b51233fe3"
     },
     {
         "path": "4th-post.html",
         "type": "file",
-        "md5": "44cd21cb2e444c8853f5e823c0b7b00c"
+        "md5": "f74f5b5dad4f1ef7e974b61d41a37be1"
     },
     {
         "path": "5.html",
         "type": "file",
-        "md5": "94cd0cefa18e133921893cb5bde99bac"
+        "md5": "bc1212c0c28231329e3268bc5e3fb5f4"
     },
     {
         "path": "5th-post.html",
         "type": "file",
-        "md5": "f7a67dea0b561c9b0a48dd7be2314ffa"
+        "md5": "5cb4f691002997af1c3b4d9fb39518fb"
     },
     {
         "path": "a-new-post.html",
         "type": "file",
-        "md5": "c5a6bfdca8b5ccf9f0f4482f26813efb"
+        "md5": "f1fe500f118a6f5277d3ae9007509a8e"
     },
     {
         "path": "about-us.html",
         "type": "file",
-        "md5": "7aaded40377d619b3b30d35dcaa10fe8"
+        "md5": "08cafe6fff894fc248197c111a774577"
     },
     {
         "path": "assets",
@@ -122,7 +122,7 @@
     {
         "path": "/authors/gerardo-gala/index.html",
         "type": "file",
-        "md5": "2064ddab2841bfeae9d01728871c3760"
+        "md5": "d7b2c491a70b137cf97729fb93b2749d"
     },
     {
         "path": "authors/gerardo-gala/page",
@@ -137,7 +137,7 @@
     {
         "path": "/authors/gerardo-gala/page/2/index.html",
         "type": "file",
-        "md5": "7c8412e1b5a1f3b0bd684fe898396fe2"
+        "md5": "0eaf947bfe85571f5938ae8644d814f1"
     },
     {
         "path": "feed.json",
@@ -152,17 +152,22 @@
     {
         "path": "index.html",
         "type": "file",
-        "md5": "b9c9a2a09511daa6eb5c085969903da0"
+        "md5": "1a908bff7a6d09598d5156356cd4bf78"
     },
     {
         "path": "instructors.html",
         "type": "file",
-        "md5": "dc7189adf8d72600757cf6042015891e"
+        "md5": "7fda7e243117ffa7d0f6b33b255ecb81"
+    },
+    {
+        "path": "interactive-visual-thesaurus.html",
+        "type": "file",
+        "md5": "0029e06b5f24716d11106e82da84fd68"
     },
     {
         "path": "kombi-quick-canoe-build.html",
         "type": "file",
-        "md5": "00710c66d2e3640664fe9f63856e2617"
+        "md5": "61050b7da70e8f11a2813521c1833ac4"
     },
     {
         "path": "media",
@@ -1987,12 +1992,12 @@
     {
         "path": "online-courses-2.html",
         "type": "file",
-        "md5": "5fd63204815d223837252c0f879da5b9"
+        "md5": "f6ca3de6cbd852f890e7b704b6a45a09"
     },
     {
         "path": "rentals.html",
         "type": "file",
-        "md5": "4397882595473e81315ddbef4ed03238"
+        "md5": "4fc7b5b73d464b65dce79ffa1661c7eb"
     },
     {
         "path": "robots.txt",
@@ -2002,17 +2007,17 @@
     {
         "path": "sailboats.html",
         "type": "file",
-        "md5": "c5175c58935a3a42884e236fe8406506"
+        "md5": "0813c7ad646fd4b4fa75478286b429c9"
     },
     {
         "path": "sailing-concepts-2.html",
         "type": "file",
-        "md5": "55b7ce2b7f190d5684bff6d29606763d"
+        "md5": "baa9580e35744f06a4634aad9b58866f"
     },
     {
         "path": "sitemap.xml",
         "type": "file",
-        "md5": "2c4007898e664b4e7b272bac7510fcc1"
+        "md5": "41b61c5e86a840b278488c3c367c083c"
     },
     {
         "path": "sitemap.xsl",
@@ -2022,7 +2027,7 @@
     {
         "path": "student-report.html",
         "type": "file",
-        "md5": "3f250a82b472448b2484e92f8f325c5e"
+        "md5": "6891e4a8f8379b244791a117577d190e"
     },
     {
         "path": "tags",
@@ -2037,7 +2042,7 @@
     {
         "path": "/tags/blog/index.html",
         "type": "file",
-        "md5": "a764e8b6dbd3bc86f55b47934d24b055"
+        "md5": "78c7254cbd1ace70296d5e8df2fe2fe1"
     },
     {
         "path": "tags/blog/page",
@@ -2052,21 +2057,31 @@
     {
         "path": "/tags/blog/page/2/index.html",
         "type": "file",
-        "md5": "c767b6928900f0e59049614a783a53fc"
+        "md5": "5dfc29d9f4fe5e077389139044d6f876"
     },
     {
         "path": "/tags/index.html",
         "type": "file",
-        "md5": "76a2c9cdf0ddf6b95ca45968891fc1bd"
+        "md5": "5cd46687f3d53f99e2047a0213ab5d27"
     },
     {
         "path": "teachers-upload.html",
         "type": "file",
-        "md5": "0a468d869a73c5cd1616d814c44e95b5"
+        "md5": "a15541727758cf60a553e7d399e1a23c"
     },
     {
         "path": "test.html",
         "type": "file",
-        "md5": "719aafce30ae34e45a347a5dc88b596a"
+        "md5": "c3f591605e65a4b10946912e291a575c"
+    },
+    {
+        "path": "thesaurus.html",
+        "type": "file",
+        "md5": "6cc4a709a90540103f9f1f1fe1083f32"
+    },
+    {
+        "path": "tide-schedule.html",
+        "type": "file",
+        "md5": "b52e56eaccddc7b77edd0e4a483f1fd4"
     }
 ]

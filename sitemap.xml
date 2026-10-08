@@ -53,6 +53,10 @@
 </image:image>
 </url>
 <url>
+<loc>https://gerardogala.github.io/SJSP/interactive-visual-thesaurus.html</loc>
+<lastmod>2026-10-09T03:34:43+08:00</lastmod>
+</url>
+<url>
 <loc>https://gerardogala.github.io/SJSP/kombi-quick-canoe-build.html</loc>
 <lastmod>2026-10-08T01:46:53+08:00</lastmod>
 <image:image>
@@ -583,5 +587,13 @@
 <url>
 <loc>https://gerardogala.github.io/SJSP/test.html</loc>
 <lastmod>2026-10-01T22:38:00+08:00</lastmod>
+</url>
+<url>
+<loc>https://gerardogala.github.io/SJSP/thesaurus.html</loc>
+<lastmod>2026-10-09T03:55:33+08:00</lastmod>
+</url>
+<url>
+<loc>https://gerardogala.github.io/SJSP/tide-schedule.html</loc>
+<lastmod>2026-10-09T07:03:38+08:00</lastmod>
 </url>
 </urlset>

@@ -1,231 +1,131 @@
-<!DOCTYPE html>
-<html lang="en-gb">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Student Report - San Juan Sail &amp; Paddle</title>
-    <meta name="description" content="Sailing lessons, sailboat rentals, SUP, kayak, windsurf in San Juan Batangas.">
-    <meta name="generator" content="Publii Open-Source CMS for Static Site">
-    <link rel="stylesheet" href="/pagefind/pagefind-component-ui.css">
-    <script src="/pagefind/pagefind-component-ui.js" type="module"></script>
-    
-    <!-- NOTE: Insert the CSS code block from Part 1 right here -->
-    
-    <link rel="canonical" href="./student-report.html">
-    <link rel="shortcut icon" href="./media/website/favicon-32x32.png" type="image/x-icon">
-    <link rel="preload" href="./assets/dynamic/fonts/robotoflex/robotoflex.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="./assets/css/style.css?v=05f7ee30be7b070fb88dd516653435f3">
-    <script type="application/ld+json">
-    {
-        "@context": "http://schema.org",
-        "@type": "Article",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "./student-report.html"
-        },
-        "headline": "Student Report",
-        "datePublished": "2026-10-05T02:43+08:00",
-        "dateModified": "2026-10-05T12:10+08:00",
-        "description": "Sailing lessons, sailboat rentals, SUP, kayak, windsurf in San Juan Batangas.",
-        "author": {
-            "@type": "Person",
-            "name": "Gerardo Gala",
-            "url": "./authors/gerardo-gala/"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Gerardo Gala"
+<!DOCTYPE html><html lang="en-gb"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Student Report - San Juan Sail &amp; Paddle</title><meta name="description" content="Sailing lessons, sailboat rentals, SUP, kayak, windsurf in San Juan Batangas."><meta name="generator" content="Publii Open-Source CMS for Static Site"><link rel="canonical" href="https://gerardogala.github.io/SJSP/student-report.html"><link rel="alternate" type="application/atom+xml" href="https://gerardogala.github.io/SJSP/feed.xml" title="San Juan Sail &amp; Paddle - RSS"><link rel="alternate" type="application/json" href="https://gerardogala.github.io/SJSP/feed.json" title="San Juan Sail &amp; Paddle - JSON"><meta property="og:title" content="Student Report"><meta property="og:site_name" content="San Juan Sail &amp; Paddle"><meta property="og:description" content="Sailing lessons, sailboat rentals, SUP, kayak, windsurf in San Juan Batangas."><meta property="og:url" content="https://gerardogala.github.io/SJSP/student-report.html"><meta property="og:type" content="article"><link rel="shortcut icon" href="https://gerardogala.github.io/SJSP/media/website/favicon-32x32.png" type="image/x-icon"><link rel="preload" href="https://gerardogala.github.io/SJSP/assets/dynamic/fonts/robotoflex/robotoflex.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="https://gerardogala.github.io/SJSP/assets/css/style.css?v&#x3D;05f7ee30be7b070fb88dd516653435f3"><script type="application/ld+json">{"@context":"http://schema.org","@type":"Article","mainEntityOfPage":{"@type":"WebPage","@id":"https://gerardogala.github.io/SJSP/student-report.html"},"headline":"Student Report","datePublished":"2026-10-05T02:43+08:00","dateModified":"2026-10-05T12:10+08:00","description":"Sailing lessons, sailboat rentals, SUP, kayak, windsurf in San Juan Batangas.","author":{"@type":"Person","name":"Gerardo Gala","url":"https://gerardogala.github.io/SJSP/authors/gerardo-gala/"},"publisher":{"@type":"Organization","name":"Gerardo Gala"}}</script><noscript><style>img[loading] {
+                    opacity: 1;
+                }</style></noscript></head><body class="page-template"><header class="top js-header"><a class="logo" href="https://gerardogala.github.io/SJSP/">San Juan Sail &amp; Paddle</a><nav class="navbar js-navbar"><button class="navbar__toggle js-toggle" aria-label="Menu" aria-haspopup="true" aria-expanded="false"><span class="navbar__toggle-box"><span class="navbar__toggle-inner">Menu</span></span></button><ul class="navbar__menu"><li><a href="https://gerardogala.github.io/SJSP/" target="_self">Home</a></li><li><a href="https://gerardogala.github.io/SJSP/sailboats.html" target="_self">Sailboat Rentals</a></li><li><a href="https://gerardogala.github.io/SJSP/rentals.html" target="_self">Kayak and SUP Rentals</a></li><li><a href="https://gerardogala.github.io/SJSP/instructors.html" target="_self">Instructors</a></li><li><a href="https://gerardogala.github.io/SJSP/tide-schedule.html" target="_self">Tide Schedule</a></li><li><a href="https://gerardogala.github.io/SJSP/online-courses-2.html" target="_self">Online Courses</a></li><li><a href="https://gerardogala.github.io/SJSP/tags/blog/" title="Blog" target="_self">Blog</a></li><li class="active"><a href="https://gerardogala.github.io/SJSP/student-report.html" title="student" target="_self">Student Report</a></li><li><a href="https://gerardogala.github.io/SJSP/about-us.html" target="_self">About Us</a></li></ul></nav></header><main class="page"><article class="content"><div class="hero hero--noimage"><header class="hero__content"><div class="wrapper"><h1>Student Report</h1></div></header></div><div class="entry-wrapper content__entry"><div id="student-app-container"><div id="targetArea" class="responsive-scroll-box"></div><script>(function() {
+        let masterRows = [];
+        let ascending = Array(7).fill(true);
+        const keys = ["ID", "Name", "Department", "Major", "Enrollment Date", "GPA", "Status"];
+
+        // Fetch data and build UI
+        function loadStudentData() {
+            fetch("students.json")
+                .then(res => res.ok ? res.json() : Promise.reject())
+                .then(data => {
+                    masterRows = data;
+                    setupTableFramework();
+                })
+                .catch(() => console.error("Failed to load students.json"));
         }
-    }
-    </script>
-</head>
-<body class="page-template">
-    <header class="top js-header">
-        <a class="logo" href="./">San Juan Sail &amp; Paddle</a>
-        <nav class="navbar js-navbar">
-            <button class="navbar__toggle js-toggle" aria-label="Menu" aria-haspopup="true" aria-expanded="false">
-                <span class="navbar__toggle-box"><span class="navbar__toggle-inner">Menu</span></span>
-            </button>
-            <ul class="navbar__menu">
-                <li><a href="./" target="_self">Home</a></li>
-                <li><a href="./sailboats.html" target="_self">Sailboat Rentals</a></li>
-                <li><a href="./rentals.html" target="_self">Kayak and SUP Rentals</a></li>
-                <li><a href="./instructors.html" target="_self">Instructors</a></li>
-                <li><a href="./online-courses-2.html" target="_self">Online Courses</a></li>
-                <li><a href="./sailing-concepts-2.html" target="_self">Sailing Concepts</a></li>
-                <li><a href="./tags/blog/" title="Blog" target="_self">Blog</a></li>
-                <li class="active"><a href="./student-report.html" title="student" target="_self">Student Report</a></li>
-                <li><a href="./about-us.html" target="_self">About Us</a></li>
-            </ul>
-        </nav>
-    </header>
 
-    <main class="page" data-pagefind-body>
-        <article class="content">
-            <div class="hero hero--noimage">
-                <header class="hero__content">
-                    <div class="wrapper">
-                        <h1>Student Report</h1>
-                    </div>
-                </header>
-            </div>
-            
-            <div class="entry-wrapper content__entry">
-                
-                <!-- NOTE: The dynamic table container and target script app from Part 3 will sit right here -->
+        // Generate UI shell
+        function setupTableFramework() {
+            const target = document.getElementById('targetArea');
+            if (!target) return;
 
-                <!-- Technical Documentation Area -->
-                <section class="doc-section">
-                    <h2>Technical Documentation: Student Report System</h2>
-                    <p>This section details the internal mechanics of the dynamic, interactive student report engine embedded within this page.</p>
+            let headerCells = "";
+            for (let i = 0; i < keys.length; i++) {
+                headerCells += '<th data-index="' + i + '" style="cursor:pointer; border-bottom: 2px solid #e5e7eb; border-right: 1px solid #e5e7eb; font-weight: 600;">' + keys[i] + ' ↕</th>';
+            }
 
-                    <h3>1. Data Retrieval (Fetching)</h3>
-                    <p>When the page loads, an Immediately Invoked Function Expression (IIFE) checks the document's loading state. As soon as the layout engine confirms the page is ready, it calls the <code>loadStudentData()</code> function. This function uses the JavaScript Fetch API to request an external dataset file named <strong><code>students.json</code></strong>.</p>
+            target.innerHTML = `
+                <table class="report-table" style="width:100%; border-collapse: collapse; text-align: left; background-color: #ffffff;">
+                    <thead>
+                        <tr style="background-color: #f9fafb;">
+                            ${headerCells}
+                        </tr>
+                    </thead>
+                    <tbody id="table-rows-body"></tbody>
+                </table>`;
 
-                    <h3>2. UI Generation & Structure</h3>
-                    <p>Once the JSON data payload is successfully retrieved from the server, the script executes <code>setupTableFramework()</code>. This architecture function performs three core tasks:</p>
-                    <ul>
-                        <li>Locates the placeholder container <code>&lt;div&gt;</code> carrying the explicit ID <strong><code>targetArea</code></strong>.</li>
-                        <li>Dynamically structures an HTML table shell mapping to seven key property headers: <strong>ID, Name, Department, Major, Enrollment Date, GPA, and Status</strong>.</li>
-                        <li>Appends a streamlined event-delegation listener onto the table's header tier (<code>&lt;thead&gt;</code>) to process column sorting interactions seamlessly.</li>
-                    </ul>
+            // Event delegation for table header clicks
+            target.querySelector('thead').addEventListener('click', (e) => {
+                const th = e.target.closest('th');
+                if (th) {
+                    const index = parseInt(th.getAttribute('data-index'), 10);
+                    sortColumn(index);
+                }
+            });
 
-                    <h3>3. Rendering Content</h3>
-                    <p>The <code>renderTableRows()</code> rendering block targets the <code>&lt;tbody&gt;</code> workspace element. It maps through the active records array and processes structured table rows (<code>&lt;tr&gt;</code>) string templates for each entity. Individual records pull dynamic properties like <code>row.ID</code> and <code>row.Name</code>, while explicitly evaluating and modifying floating values like <code>row.GPA</code> directly to a uniform <strong>two decimal places</strong> using <code>.toFixed(2)</code>.</p>
+            renderTableRows();
+        }
 
-                    <h3>4. Interactive Column Sorting</h3>
-                    <p>The layout features built-in multi-type sorting rules orchestrated by the centralized <code>sortColumn(index)</code> calculation routine:</p>
-                    <ul>
-                        <li><strong>GPA Sort Logic:</strong> Parses and evaluates columns linearly by routing a continuous numeric subtraction matrix (<code>Number(valA) - Number(valB)</code>).</li>
-                        <li><strong>Text & Alphanumeric Logic:</strong> Runs structural evaluations using the natural string-comparison tool <code>localeCompare</code> coupled with the <code>{numeric: true}</code> parameter array, handling mixed alpha-numeric identification flags accurately.</li>
-                        <li><strong>State Reversal:</strong> Direction pathways are continually managed globally inside an indexable <code>ascending</code> tracking array. Registering a top header interaction flips the flag bit and updates the dataset order before refreshing the template via <code>renderTableRows()</code>.</li>
-                    </ul>
+        // Render updates only
+        function renderTableRows() {
+            const tbody = document.getElementById('table-rows-body');
+            if (!tbody) return;
 
-                    <h3>5. Framework Environment Context</h3>
-                    <p>The layout wrappers and core styling pipelines are generated natively by the <strong>Publii Open-Source Static CMS</strong> engine. While navigation nodes control site journeys across separate directories (such as Kayak Rentals or Online Courses), the page state relies on static hydration workflows combined with target asynchronous client logic script wrappers to support structural longevity.</p>
-                </section>
-            </div>
-        </article>
-                <!-- Interactive App Component Grid -->
-                <div id="student-app-container" style="margin-top: 30px;">
-                    <div id="targetArea" class="responsive-scroll-box"></div>
-                    <script>
-                    (function() { 
-                        let masterRows = []; 
-                        let ascending = Array(7).fill(true); 
-                        const keys = ["ID", "Name", "Department", "Major", "Enrollment Date", "GPA", "Status"]; 
+            tbody.innerHTML = masterRows.map(row => `
+                <tr style="border-bottom: 1px solid #e5e7eb;">
+                    <td style="border-right: 1px solid #e5e7eb;">${row.ID ?? ''}</td>
+                    <td style="border-right: 1px solid #e5e7eb;"><strong>${row.Name ?? ''}</strong></td>
+                    <td style="border-right: 1px solid #e5e7eb;">${row.Department ?? ''}</td>
+                    <td style="border-right: 1px solid #e5e7eb;">${row.Major ?? ''}</td>
+                    <td style="border-right: 1px solid #e5e7eb;">${row["Enrollment Date"] ?? ''}</td>
+                    <td style="border-right: 1px solid #e5e7eb;">${row.GPA !== undefined ? Number(row.GPA).toFixed(2) : ''}</td>
+                    <td>${row.Status ?? ''}</td>
+                </tr>
+            `).join('');
+        }
 
-                        // Fetch data from external repository and initialize UI
-                        function loadStudentData() { 
-                            fetch("students.json") 
-                                .then(res => res.ok ? res.json() : Promise.reject()) 
-                                .then(data => { 
-                                    masterRows = data; 
-                                    setupTableFramework(); 
-                                }) 
-                                .catch(() => console.error("Failed to load students.json")); 
-                        } 
+        // Sort core array logic
+        function sortColumn(index) {
+            const key = keys[index];
+            const isAsc = ascending[index];
 
-                        // Generate UI shell framework inside the layout tree
-                        function setupTableFramework() { 
-                            const target = document.getElementById('targetArea'); 
-                            if (!target) return; 
-                            let headerCells = ""; 
-                            for (let i = 0; i < keys.length; i++) { 
-                                headerCells += '<th data-index="' + i + '">' + keys[i] + ' ↕</th>'; 
-                            } 
-                            target.innerHTML = ` 
-                                <table class="report-table"> 
-                                    <thead> 
-                                        <tr> ${headerCells} </tr> 
-                                    </thead> 
-                                    <tbody id="table-rows-body"></tbody> 
-                                </table>`; 
-                            
-                            // Attach modern event delegation onto table header elements
-                            target.querySelector('thead').addEventListener('click', (e) => { 
-                                const th = e.target.closest('th'); 
-                                if (th) { 
-                                    const index = parseInt(th.getAttribute('data-index'), 10); 
-                                    sortColumn(index); 
-                                } 
-                            }); 
-                            renderTableRows(); 
-                        } 
+            masterRows.sort((a, b) => {
+                const valA = a[key] ?? '';
+                const valB = b[key] ?? '';
 
-                        // Clear and render active rows layout templates
-                        function renderTableRows() { 
-                            const tbody = document.getElementById('table-rows-body'); 
-                            if (!tbody) return; 
-                            tbody.innerHTML = masterRows.map(row => ` 
-                                <tr> 
-                                    <td>${row.ID ?? ''}</td> 
-                                    <td><strong>${row.Name ?? ''}</strong></td> 
-                                    <td>${row.Department ?? ''}</td> 
-                                    <td>${row.Major ?? ''}</td> 
-                                    <td>${row["Enrollment Date"] ?? ''}</td> 
-                                    <td>${row.GPA !== undefined ? Number(row.GPA).toFixed(2) : ''}</td> 
-                                    <td>${row.Status ?? ''}</td> 
-                                </tr> `).join(''); 
-                        } 
+                if (key === "GPA") return isAsc ? Number(valA) - Number(valB) : Number(valB) - Number(valA);
+                return isAsc 
+                    ? String(valA).localeCompare(String(valB), undefined, {numeric: true}) 
+                    : String(valB).localeCompare(String(valA), undefined, {numeric: true});
+            });
 
-                        // Core dataset sorting math algorithms
-                        function sortColumn(index) { 
-                            const key = keys[index]; 
-                            const isAsc = ascending[index]; 
-                            masterRows.sort((a, b) => { 
-                                const valA = a[key] ?? ''; 
-                                const valB = b[key] ?? ''; 
-                                if (key === "GPA") return isAsc ? Number(valA) - Number(valB) : Number(valB) - Number(valA); 
-                                return isAsc ? String(valA).localeCompare(String(valB), undefined, {numeric: true}) : String(valB).localeCompare(String(valA), undefined, {numeric: true}); 
-                            }); 
-                            ascending[index] = !isAsc; 
-                            renderTableRows(); 
-                        } 
+            ascending[index] = !isAsc;
+            renderTableRows();
+        }
 
-                        // Safely evaluate window lifecycle state before initialization
-                        if (document.readyState === 'loading') { 
-                            document.addEventListener('DOMContentLoaded', loadStudentData); 
-                        } else { 
-                            loadStudentData(); 
-                        } 
-                    })();
-                    </script>
-                </div>
+        // Initialize execution safely on window layout load
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadStudentData);
+        } else {
+            loadStudentData();
+        }
+    })();</script></div></div></article><div class="banner banner--after-content"><div class="wrapper"><div class="google-review-cta" style="margin: 8px 0; padding: 10px; border: 1px solid #006ABC; border-radius: 0px; background-color: #ffffff; text-align: center;"><h5 style="margin-top: 0; color: #006ABC; font-size: .8rem; font-family: inherit;">Found this guide helpful?</h5><a href="https://g.page" target="_blank" rel="noopener noreferrer" class="google-review-btn">Write a Google Review <span class="review-stars">★★★★★</span></a><style>.google-review-btn {
+            display: inline-block; 
+            padding: 8px 16px; 
+            background-color: #006ABC !important; 
+            color: #ffffff !important; 
+            text-decoration: none; 
+            font-weight: bold; 
+            border-radius: 0px;
+            border: 2px solid #006ABC;
+            transition: all 0.2s ease-in-out;
+            font-family: inherit;
+        }
+        
+        /* Forces the stars to be solid white initially */
+        .google-review-btn .review-stars {
+            color: #ffffff !important;
+            margin-left: 4px; /* Optional: adds a little breathing room between text and stars */
+        }
 
-            </div>
-        </article>
-
-        <!-- Post Content Interactive Marketing Modules -->
-        <div class="banner banner--after-content">
-            <div class="wrapper">
-                <div class="google-review-cta">
-                    <h4>Found this guide helpful?</h4>
-                    <p>If you enjoyed our sailing tips, please consider leaving us a quick review on Google Maps!</p>
-                    <a href="https://g.page" target="_blank" rel="noopener noreferrer" class="google-review-btn">Write a Google Review <span class="review-stars">★★★★★</span></a>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <!-- Structural Layout Footnotes -->
-    <footer class="footer">
-        <div class="wrapper">
-            <div class="footer__copyright">
-                <p class="align-center">© 2026 San Juan Academy. All rights reserved.</p>
-            </div>
-            <button id="backToTop" class="footer__bttop" aria-label="Back to top" title="Back to top">
-                <svg width="20" height="20"><use xlink:href="./assets/svg/svg-map.svg#toparrow"/></svg>
-            </button>
-        </div>
-    </footer>
-
-    <!-- System core hydration and behavior asset engines -->
-    <script defer="defer" src="./assets/js/scripts.min.js?v=dafec4f87fead6718cb125f0b0fc8441"></script>
-    <script>
-        window.publiiThemeMenuConfig={mobileMenuMode:'sidebar',animationSpeed:300,submenuWidth: 'auto',doubleClickTime:500,mobileMenuExpandableSubmenus:true,relatedContainerForOverlayMenuSelector:'.top'};
-        var images = document.querySelectorAll('img[loading]'); for (var i = 0; i < images.length; i++) { if (images[i].complete) { images[i].classList.add('is-loaded'); } else { images[i].addEventListener('load', function () { this.classList.add('is-loaded'); }, false); } }
-    </script>
-</body>
-</html>
+        .google-review-btn:hover {
+            background-color: #ffffff !important;
+            color: #006ABC !important;
+            border-color: #006ABC;
+        }
+        
+        /* Makes sure the stars flip to blue alongside the text on hover */
+        .google-review-btn:hover .review-stars {
+            color: #006ABC !important;
+        }</style></div></div></div></main><footer class="footer"><div class="wrapper"><div class="footer__copyright"><p class="align-center">© 2026 San Juan Academy. All rights reserved.</p></div><button id="backToTop" class="footer__bttop" aria-label="Back to top" title="Back to top"><svg width="20" height="20"><use xlink:href="https://gerardogala.github.io/SJSP/assets/svg/svg-map.svg#toparrow"/></svg></button></div></footer><script defer="defer" src="https://gerardogala.github.io/SJSP/assets/js/scripts.min.js?v&#x3D;dafec4f87fead6718cb125f0b0fc8441"></script><script>window.publiiThemeMenuConfig={mobileMenuMode:'sidebar',animationSpeed:300,submenuWidth: 'auto',doubleClickTime:500,mobileMenuExpandableSubmenus:true,relatedContainerForOverlayMenuSelector:'.top'};</script><script>var images = document.querySelectorAll('img[loading]');
+        for (var i = 0; i < images.length; i++) {
+            if (images[i].complete) {
+                images[i].classList.add('is-loaded');
+            } else {
+                images[i].addEventListener('load', function () {
+                    this.classList.add('is-loaded');
+                }, false);
+            }
+        }</script></body></html>
