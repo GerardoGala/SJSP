@@ -142,12 +142,12 @@
     {
         "path": "feed.json",
         "type": "file",
-        "md5": "878af2f4583d2e86eace61b5da30836b"
+        "md5": "b07d2c9b64c64dda6e60b38eb5de535c"
     },
     {
         "path": "feed.xml",
         "type": "file",
-        "md5": "26d7db1ca2ffae1998472a4d67a98a96"
+        "md5": "529a6a6b0159cd1caec07e8cd91c1531"
     },
     {
         "path": "index.html",
@@ -167,7 +167,7 @@
     {
         "path": "kombi-quick-canoe-build.html",
         "type": "file",
-        "md5": "61050b7da70e8f11a2813521c1833ac4"
+        "md5": "4599aa72f4919acdd675a668c72af000"
     },
     {
         "path": "media",
@@ -2017,7 +2017,7 @@
     {
         "path": "sitemap.xml",
         "type": "file",
-        "md5": "41b61c5e86a840b278488c3c367c083c"
+        "md5": "ca85e27f48a866d25462c88a5c4d154b"
     },
     {
         "path": "sitemap.xsl",
@@ -2042,7 +2042,7 @@
     {
         "path": "/tags/blog/index.html",
         "type": "file",
-        "md5": "78c7254cbd1ace70296d5e8df2fe2fe1"
+        "md5": "142939623ee579bf527f6002a212556e"
     },
     {
         "path": "tags/blog/page",
@@ -2057,12 +2057,12 @@
     {
         "path": "/tags/blog/page/2/index.html",
         "type": "file",
-        "md5": "5dfc29d9f4fe5e077389139044d6f876"
+        "md5": "c9f829f853285469486cafb070bed2fb"
     },
     {
         "path": "/tags/index.html",
         "type": "file",
-        "md5": "5cd46687f3d53f99e2047a0213ab5d27"
+        "md5": "37259b851ac749efdee921ab72f5cbc8"
     },
     {
         "path": "teachers-upload.html",
@@ -2075,6 +2075,11 @@
         "md5": "c3f591605e65a4b10946912e291a575c"
     },
     {
+        "path": "the-american-dream.html",
+        "type": "file",
+        "md5": "fad5069f0ed29c4448e7352df8066e32"
+    },
+    {
         "path": "thesaurus.html",
         "type": "file",
         "md5": "6cc4a709a90540103f9f1f1fe1083f32"
@@ -2082,6 +2087,11 @@
     {
         "path": "tide-schedule.html",
         "type": "file",
-        "md5": "b52e56eaccddc7b77edd0e4a483f1fd4"
+        "md5": "557ed5c34ca9579b5cf52333a87fc1ef"
+    },
+    {
+        "path": "wind-prediction.html",
+        "type": "file",
+        "md5": "c37eb262aa94d5f7e8276921d3724a60"
     }
 ]
