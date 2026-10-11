@@ -3,7 +3,7 @@
     <title>San Juan Sail &amp; Paddle</title>
     <link href="https://gerardogala.github.io/SJSP/feed.xml" rel="self" />
     <link href="https://gerardogala.github.io/SJSP" />
-    <updated>2026-10-12T01:00:39+08:00</updated>
+    <updated>2026-10-12T06:54:21+08:00</updated>
     <author>
         <name>Gerardo Gala</name>
     </author>
@@ -34,44 +34,7 @@
 <p style="margin-bottom: 20px;">This regional hazard is magnified by an educational and regulatory vacuum. Because local registration laws historically target motorized engines, millions of smaller, human-powered watercraft effortlessly slip through the regulatory net. The very demographic experiencing the sharpest spike in risk is entirely divorced from the financial ecosystem—and the safety education—meant to keep them alive on the water. They hit the water with zero formal safety training, frequently ignoring basic life jacket requirements until sudden, afternoon thermal winds sweep over the mountains and turn a placid lake into a survival situation.</p>
 <p style="margin-bottom: 25px;">Who is navigating this risk, and who is truly at the helm? The federal data thoroughly deconstructs our cultural stereotypes of the wealthy yacht club elite, painting a much more blue-collar picture of the American boater, while carving out distinct trends based on living situations, safety awareness, and family structures.</p>
 </article>
-<!-- 2. THE VISUAL GRAPH CANVAS (Middle Section) -->
-<div id="tahoe-dashboard-container" style="max-width: 480px; margin: 0 auto; padding: 0 15px 30px 15px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; box-sizing: border-box;">
-<div class="graph-display-window" style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 20px; margin-bottom: 25px; box-sizing: border-box; box-shadow: 0 4px 6px rgba(0,0,0,0.02);">
-<h4 style="margin: 0 0 5px 0; font-size: 0.75rem; color: #6c757d; text-transform: uppercase; letter-spacing: 0.08em; font-weight: bold;">Tahoe Safety Matrix</h4>
-<p style="margin: 0 0 20px 0; font-size: 0.85rem; color: #495057;">Fatality risk level per 100 million exposure hours:</p>
-<!-- Motorized Data Bar Set (Deep Alpine Blue) -->
-<div class="vessel-bar-group" style="margin-bottom: 20px;">
-<div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 6px; color: #495057; font-weight: 500;">Motorized Vessels<span id="label-motorized-rate" style="font-weight: bold; color: #0a2342;">6.8</span></div>
-<div style="background: #e9ecef; border-radius: 4px; height: 26px; width: 100%; overflow: hidden;">
-<div id="bar-motorized" style="background: #0A2342; height: 100%; width: 34%; transition: width 0.45s cubic-bezier(0.25, 1, 0.5, 1);"></div>
-</div>
-</div>
-<!-- Human-Powered Data Bar Set (Clear Tahoe Green) -->
-<div class="vessel-bar-group">
-<div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 6px; color: #495057; font-weight: 500;">Human-Powered / Sail Craft<span id="label-human-rate" style="font-weight: bold; color: #2e8b57;">16.2</span></div>
-<div style="background: #e9ecef; border-radius: 4px; height: 26px; width: 100%; overflow: hidden;">
-<div id="bar-human" style="background: #2E8B57; height: 100%; width: 81%; transition: width 0.45s cubic-bezier(0.25, 1, 0.5, 1);"></div>
-</div>
-</div>
-</div>
-<!-- 3. THE UNIFORM THUMB-ZONE INPUT PANEL (Bottom Section) -->
-<div class="control-panel-rows" style="display: flex; flex-direction: column; gap: 10px; box-sizing: border-box;">
-<p style="font-size: 0.75rem; text-transform: uppercase; color: #6c757d; margin: 0 0 4px 0; font-weight: bold; letter-spacing: 0.05em;">Tap a demographic layer to pivot chart data:</p>
-<!-- Row 1: Household Context -->
-<div class="control-row" style="display: flex; align-items: center; background: #fff; border: 1px solid #dee2e6; border-radius: 6px; padding: 10px 12px; box-sizing: border-box;"><span style="font-size: 0.85rem; font-weight: 600; color: #495057; width: 85px; flex-shrink: 0;">Household:</span>
-<div style="display: flex; gap: 8px; flex-grow: 1;"><button class="tahoe-btn active" style="flex: 1; height: 38px; padding: 0 5px; font-size: 0.78rem; font-weight: 600; border: 1px solid #0A2342; background: #0A2342; color: #fff; border-radius: 4px; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; box-sizing: border-box; transition: all 0.2s ease;" data-category="household" data-value="single_operator">Single Operator</button> <button class="tahoe-btn" style="flex: 1; height: 38px; padding: 0 5px; font-size: 0.78rem; font-weight: 600; border: 1px solid #ced4da; background: #fff; color: #495057; border-radius: 4px; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; box-sizing: border-box; transition: all 0.2s ease;" data-category="household" data-value="family_crew">Family Crew</button></div>
-</div>
-<!-- Row 2: Safety Training Education -->
-<div class="control-row" style="display: flex; align-items: center; background: #fff; border: 1px solid #dee2e6; border-radius: 6px; padding: 10px 12px; box-sizing: border-box;"><span style="font-size: 0.85rem; font-weight: 600; color: #495057; width: 85px; flex-shrink: 0;">Education:</span>
-<div style="display: flex; gap: 8px; flex-grow: 1;"><button class="tahoe-btn" style="flex: 1; height: 38px; padding: 0 5px; font-size: 0.78rem; font-weight: 600; border: 1px solid #ced4da; background: #fff; color: #495057; border-radius: 4px; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; box-sizing: border-box; transition: all 0.2s ease;" data-category="education" data-value="certified_safe">Certified Safe</button> <button class="tahoe-btn" style="flex: 1; height: 38px; padding: 0 5px; font-size: 0.78rem; font-weight: 600; border: 1px solid #ced4da; background: #fff; color: #495057; border-radius: 4px; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; box-sizing: border-box; transition: all 0.2s ease;" data-category="education" data-value="no_safety_course">No Safety Course</button></div>
-</div>
-<!-- Row 3: Diversity Matrix -->
-<div class="control-row" style="display: flex; align-items: center; background: #fff; border: 1px solid #dee2e6; border-radius: 6px; padding: 10px 12px; box-sizing: border-box;"><span style="font-size: 0.85rem; font-weight: 600; color: #495057; width: 85px; flex-shrink: 0;">Diversity:</span>
-<div style="display: flex; gap: 8px; flex-grow: 1;"><button class="tahoe-btn" style="flex: 1; height: 38px; padding: 0 5px; font-size: 0.78rem; font-weight: 600; border: 1px solid #ced4da; background: #fff; color: #495057; border-radius: 4px; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; box-sizing: border-box; transition: all 0.2s ease;" data-category="diversity" data-value="predominant">Predominant</button> <button class="tahoe-btn" style="flex: 1; height: 38px; padding: 0 5px; font-size: 0.78rem; font-weight: 600; border: 1px solid #ced4da; background: #fff; color: #495057; border-radius: 4px; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; box-sizing: border-box; transition: all 0.2s ease;" data-category="diversity" data-value="minority_owned">Minority Owned</button></div>
-</div>
-<!-- Row 4: Economic Status -->
-<div class="control-row" style="display: flex; align-items: center; background: #fff; border: 1px solid #dee2e6; border-radius: 6px; padding: 10px 12px; box-sizing: border-box;"><span style="font-size: 0.85rem; font-weight: 600; color: #495057; width: 85px; flex-shrink: 0;">Status:</span>
-<div style="display: flex; gap: 8px; flex-grow: 1;"><!-- 1. The Dynamic Visual Canvas (Middle Section) -->
+<!-- 1. The Dynamic Visual Canvas (Middle Section) -->
 <div id="tahoe-dashboard-container" style="max-width: 480px; margin: 0 auto; padding: 15px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
 <div class="graph-display-window" style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
 <h4 style="margin: 0 0 15px 0; font-size: 1rem; color: #212529; text-transform: uppercase; letter-spacing: 0.05em;">Tahoe Fatality Risk Metrics</h4>
@@ -79,124 +42,103 @@
 <div class="vessel-bar-group" style="margin-bottom: 20px;">
 <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 5px; color: #495057;">Motorized Vessels<span id="label-motorized-rate" style="font-weight: bold; color: #0a2342;">5.0</span></div>
 <div style="background: #e9ecef; border-radius: 4px; height: 24px; width: 100%; overflow: hidden;">
-<div id="bar-motorized" style="background: #0A2342; height: 100%; width: 25%; transition: width 0.4s ease-out-back;"></div>
+<div id="bar-motorized" style="background: #0A2342; height: 100%; width: 25%; transition: width 0.4s ease-out;"></div>
 </div>
 </div>
 <!-- Human-Powered Data Bar Set (Clear Tahoe Green) -->
 <div class="vessel-bar-group">
 <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 5px; color: #495057;">Human-Powered / Sail Craft<span id="label-human-rate" style="font-weight: bold; color: #2e8b57;">13.0</span></div>
 <div style="background: #e9ecef; border-radius: 4px; height: 24px; width: 100%; overflow: hidden;">
-<div id="bar-human" style="background: #2E8B57; height: 100%; width: 65%; transition: width 0.4s ease-out-back;"></div>
+<div id="bar-human" style="background: #2E8B57; height: 100%; width: 65%; transition: width 0.4s ease-out;"></div>
 </div>
 </div>
 </div>
-<!-- 2. The Thumb-Zone Interactive Input Control Panel (Updated for Uniform Sizing) -->
-<div class="control-panel-rows" style="display: flex; flex-direction: column; gap: 10px; max-width: 480px; margin: 0 auto; box-sizing: border-box;">
-<p style="font-size: 0.75rem; text-transform: uppercase; color: #6c757d; margin: 0 0 5px 0; font-weight: bold; letter-spacing: 0.03em;">Tap a demographic layer to pivot chart data:</p>
-<!-- Row 1: Household Context -->
-<div class="control-row" style="display: flex; align-items: center; background: #fff; border: 1px solid #dee2e6; border-radius: 6px; padding: 10px 12px; box-sizing: border-box;"><span style="font-size: 0.85rem; font-weight: 600; color: #495057; width: 85px; flex-shrink: 0;">Household:</span>
-<div style="display: flex; gap: 8px; flex-grow: 1;"><button class="tahoe-btn active" style="flex: 1; height: 38px; padding: 0 5px; font-size: 0.78rem; font-weight: 500; border: 1px solid #0A2342; background: #0A2342; color: #fff; border-radius: 4px; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; box-sizing: border-box;" data-category="household" data-value="single_operator">Single Operator</button> <button class="tahoe-btn" style="flex: 1; height: 38px; padding: 0 5px; font-size: 0.78rem; font-weight: 500; border: 1px solid #ced4da; background: #fff; color: #495057; border-radius: 4px; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; box-sizing: border-box;" data-category="household" data-value="family_crew">Family Crew</button></div>
-</div>
-<!-- Row 2: Safety Training Education -->
-<div class="control-row" style="display: flex; align-items: center; background: #fff; border: 1px solid #dee2e6; border-radius: 6px; padding: 10px 12px; box-sizing: border-box;"><span style="font-size: 0.85rem; font-weight: 600; color: #495057; width: 85px; flex-shrink: 0;">Education:</span>
-<div style="display: flex; gap: 8px; flex-grow: 1;"><button class="tahoe-btn" style="flex: 1; height: 38px; padding: 0 5px; font-size: 0.78rem; font-weight: 500; border: 1px solid #ced4da; background: #fff; color: #495057; border-radius: 4px; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; box-sizing: border-box;" data-category="education" data-value="certified_safe">Certified Safe</button> <button class="tahoe-btn" style="flex: 1; height: 38px; padding: 0 5px; font-size: 0.78rem; font-weight: 500; border: 1px solid #ced4da; background: #fff; color: #495057; border-radius: 4px; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; box-sizing: border-box;" data-category="education" data-value="no_safety_course">No Safety Course</button></div>
-</div>
-<!-- Row 3: Diversity Matrix -->
-<div class="control-row" style="display: flex; align-items: center; background: #fff; border: 1px solid #dee2e6; border-radius: 6px; padding: 10px 12px; box-sizing: border-box;"><span style="font-size: 0.85rem; font-weight: 600; color: #495057; width: 85px; flex-shrink: 0;">Diversity:</span>
-<div style="display: flex; gap: 8px; flex-grow: 1;"><button class="tahoe-btn" style="flex: 1; height: 38px; padding: 0 5px; font-size: 0.78rem; font-weight: 500; border: 1px solid #ced4da; background: #fff; color: #495057; border-radius: 4px; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; box-sizing: border-box;" data-category="diversity" data-value="predominant">Predominant</button> <button class="tahoe-btn" style="flex: 1; height: 38px; padding: 0 5px; font-size: 0.78rem; font-weight: 500; border: 1px solid #ced4da; background: #fff; color: #495057; border-radius: 4px; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; box-sizing: border-box;" data-category="diversity" data-value="minority_owned">Minority Owned</button></div>
-</div>
-<!-- Row 4: Economic Status -->
-<div class="control-row" style="display: flex; align-items: center; background: #fff; border: 1px solid #dee2e6; border-radius: 6px; padding: 10px 12px; box-sizing: border-box;"><span style="font-size: 0.85rem; font-weight: 600; color: #495057; width: 85px; flex-shrink: 0;">Status:</span>
-<div style="display: flex; gap: 8px; flex-grow: 1;"><button class="tahoe-btn" style="flex: 1; height: 38px; padding: 0 5px; font-size: 0.78rem; font-weight: 500; border: 1px solid #ced4da; background: #fff; color: #495057; border-radius: 4px; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; box-sizing: border-box;" data-category="status" data-value="homeowner">Homeowner</button> <button class="tahoe-btn" style="flex: 1; height: 38px; padding: 0 5px; font-size: 0.78rem; font-weight: 500; border: 1px solid #ced4da; background: #fff; color: #495057; border-radius: 4px; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; box-sizing: border-box;" data-category="status" data-value="renter">Renter</button></div>
+<!-- 2. The Thumb-Zone Interactive Input Control Panel (Grid Layout) -->
+<div class="control-panel-rows">
+<p style="font-size: 0.75rem; text-transform: uppercase; color: #6c757d; margin: 0 0 10px 0; font-weight: bold; letter-spacing: 0.03em;">Tap a demographic layer to pivot chart data:</p>
+<!-- 3 Columns Layout: Labels (1 Column) + Buttons (2 Balanced Columns) -->
+<div class="control-grid" style="display: grid; grid-template-columns: auto 1fr 1fr; gap: 10px; align-items: center; background: #fff; border: 1px solid #dee2e6; border-radius: 6px; padding: 12px;"><!-- Row 1: Household Context --> <span style="font-size: 0.85rem; font-weight: 600; color: #495057; white-space: nowrap; padding-right: 5px;">Household:</span> <button class="tahoe-btn active" style="width: 100%; padding: 10px 6px; font-size: 0.8rem; border: 1px solid #0A2342; background: #0A2342; color: #fff; border-radius: 4px; cursor: pointer; text-align: center; box-sizing: border-box;" data-category="household" data-value="single_operator">Single Operator</button> <button class="tahoe-btn" style="width: 100%; padding: 10px 6px; font-size: 0.8rem; border: 1px solid #ced4da; background: #fff; color: #495057; border-radius: 4px; cursor: pointer; text-align: center; box-sizing: border-box;" data-category="household" data-value="family_crew">Family Crew</button> <!-- Row 2: Safety Training Education --> <span style="font-size: 0.85rem; font-weight: 600; color: #495057; white-space: nowrap; padding-right: 5px;">Education:</span> <button class="tahoe-btn" style="width: 100%; padding: 10px 6px; font-size: 0.8rem; border: 1px solid #ced4da; background: #fff; color: #495057; border-radius: 4px; cursor: pointer; text-align: center; box-sizing: border-box;" data-category="education" data-value="certified_safe">Certified Safe</button> <button class="tahoe-btn" style="width: 100%; padding: 10px 6px; font-size: 0.8rem; border: 1px solid #ced4da; background: #fff; color: #495057; border-radius: 4px; cursor: pointer; text-align: center; box-sizing: border-box;" data-category="education" data-value="no_safety_course">No Safety Course</button> <!-- Row 3: Diversity Matrix --> <span style="font-size: 0.85rem; font-weight: 600; color: #495057; white-space: nowrap; padding-right: 5px;">Diversity:</span> <button class="tahoe-btn" style="width: 100%; padding: 10px 6px; font-size: 0.8rem; border: 1px solid #ced4da; background: #fff; color: #495057; border-radius: 4px; cursor: pointer; text-align: center; box-sizing: border-box;" data-category="diversity" data-value="predominant">Predominant</button> <button class="tahoe-btn" style="width: 100%; padding: 10px 6px; font-size: 0.8rem; border: 1px solid #ced4da; background: #fff; color: #495057; border-radius: 4px; cursor: pointer; text-align: center; box-sizing: border-box;" data-category="diversity" data-value="minority_owned">Minority Owned</button> <!-- Row 4: Economic Status --> <span style="font-size: 0.85rem; font-weight: 600; color: #495057; white-space: nowrap; padding-right: 5px;">Status:</span> <button class="tahoe-btn" style="width: 100%; padding: 10px 6px; font-size: 0.8rem; border: 1px solid #ced4da; background: #fff; color: #495057; border-radius: 4px; cursor: pointer; text-align: center; box-sizing: border-box;" data-category="status" data-value="homeowner">Homeowner</button> <button class="tahoe-btn" style="width: 100%; padding: 10px 6px; font-size: 0.8rem; border: 1px solid #ced4da; background: #fff; color: #495057; border-radius: 4px; cursor: pointer; text-align: center; box-sizing: border-box;" data-category="status" data-value="renter">Renter</button></div>
 </div>
 </div>
-<p>
 <script>
-(function() {
-    // 1. Establish DOM Core Canvas Nodes
-    var barMotorized = document.getElementById("bar-motorized");
-    var barHuman = document.getElementById("bar-human");
-    var labelMotorized = document.getElementById("label-motorized-rate");
-    var labelHuman = document.getElementById("label-human-rate");
+document.addEventListener("DOMContentLoaded", () => {
+  const barMotorized = document.getElementById("bar-motorized");
+  const barHuman = document.getElementById("bar-human");
+  const labelMotorized = document.getElementById("label-motorized-rate");
+  const labelHuman = document.getElementById("label-human-rate");
+  const buttons = document.querySelectorAll(".tahoe-btn");
+
+  // INLINED DATA LAYER
+  const tahoeData = {
+    "demographics": {
+      "household": {
+        "single_operator": { "motorized": 5.0, "human_powered": 13.0 },
+        "family_crew": { "motorized": 3.2, "human_powered": 8.5 }
+      },
+      "education": {
+        "certified_safe": { "motorized": 1.5, "human_powered": 4.0 },
+        "no_safety_course": { "motorized": 7.8, "human_powered": 18.2 }
+      },
+      "diversity": {
+        "predominant": { "motorized": 4.8, "human_powered": 12.1 },
+        "minority_owned": { "motorized": 5.2, "human_powered": 14.3 }
+      },
+      "status": {
+        "homeowner": { "motorized": 4.1, "human_powered": 10.5 },
+        "renter": { "motorized": 6.3, "human_powered": 15.9 }
+      }
+    }
+  };
+
+  function updateGraphVisuals(category, value) {
+    if (!tahoeData) return;
     
-    // Scoped local copy of your data file schema
-    var dataset = {
-        "household": {
-            "single_operator": { "m": 6.8, "h": 16.2 },
-            "family_crew":     { "m": 4.1, "h": 9.8 }
-        },
-        "education": {
-            "certified_safe":  { "m": 2.1, "h": 5.3 },
-            "no_safety_course":{ "m": 8.9, "h": 19.5 }
-        },
-        "diversity": {
-            "predominant":     { "m": 5.1, "h": 12.8 },
-            "minority_owned":  { "m": 4.8, "h": 13.4 }
-        },
-        "status": {
-            "homeowner":       { "m": 4.5, "h": 11.2 },
-            "renter":          { "m": 5.8, "h": 15.6 }
-        }
-    };
+    const targetRates = tahoeData.demographics[category][value];
+    const motorRate = targetRates.motorized;
+    const humanRate = targetRates.human_powered;
 
-    function updateBars(category, selection) {
-        var activeNodes = dataset[category][selection];
-        
-        // Print textual values directly to screens
-        labelMotorized.innerHTML = activeNodes.m.toFixed(1);
-        labelHuman.innerHTML = activeNodes.h.toFixed(1);
-        
-        // Scale values out of a base calculation ceiling of 20
-        var motorPct = (activeNodes.m / 20) * 100;
-        var humanPct = (activeNodes.h / 20) * 100;
-        
-        barMotorized.style.width = motorPct + "%";
-        barHuman.style.width = humanPct + "%";
-    }
+    labelMotorized.innerText = motorRate.toFixed(1);
+    labelHuman.innerText = humanRate.toFixed(1);
 
-    // 2. Delegate click listeners globally from the container element
-    var interfaceWrapper = document.getElementById("tahoe-dashboard-container");
-    if (interfaceWrapper) {
-        interfaceWrapper.addEventListener("click", function(event) {
-            var clicked = event.target;
-            
-            // Validate that the target contains our specific button indicator class
-            if (clicked.classList.contains("tahoe-btn")) {
-                var cat = clicked.getAttribute("data-category");
-                var val = clicked.getAttribute("data-value");
-                
-                // Clear sibling button layouts within the targeted control row
-                var rowButtons = clicked.closest(".control-row").querySelectorAll(".tahoe-btn");
-                for (var i = 0; i < rowButtons.length; i++) {
-                    rowButtons[i].style.background = "#fff";
-                    rowButtons[i].style.color = "#495057";
-                    rowButtons[i].style.borderColor = "#ced4da";
-                    rowButtons[i].classList.remove("active");
-                }
-                
-                // Render chosen prominent styling constraints to active button
-                clicked.style.background = "#0A2342";
-                clicked.style.color = "#fff";
-                clicked.style.borderColor = "#0A2342";
-                clicked.classList.add("active");
-                
-                updateBars(cat, val);
-            }
+    const scaleFactor = 20; 
+    const motorWidth = Math.min((motorRate / scaleFactor) * 100, 100);
+    const humanWidth = Math.min((humanRate / scaleFactor) * 100, 100);
+
+    barMotorized.style.width = `${motorWidth}%`;
+    barHuman.style.width = `${humanWidth}%`;
+  }
+
+  function initializeInterfaceEngine() {
+    buttons.forEach(button => {
+      button.addEventListener("click", (e) => {
+        const selectedButton = e.currentTarget;
+        const targetCategory = selectedButton.getAttribute("data-category");
+        const targetValue = selectedButton.getAttribute("data-value");
+
+        const gridContainer = selectedButton.closest(".control-grid");
+        const categoryButtons = gridContainer.querySelectorAll(`[data-category="${targetCategory}"]`);
+        
+        categoryButtons.forEach(btn => {
+          btn.style.background = "#fff";
+          btn.style.color = "#495057";
+          btn.style.borderColor = "#ced4da";
+          btn.classList.remove("active");
         });
-    }
 
-    // 3. Fallback check to initialize the base graph proportions safely
-    setTimeout(function() {
-        updateBars("household", "single_operator");
-    }, 100);
-})();
+        selectedButton.style.background = "#0A2342";
+        selectedButton.style.color = "#fff";
+        selectedButton.style.borderColor = "#0A2342";
+        selectedButton.classList.add("active");
+
+        updateGraphVisuals(targetCategory, targetValue);
+      });
+    });
+  }
+
+  initializeInterfaceEngine();
+  updateGraphVisuals("household", "single_operator");
+});
 </script>
-</p>
-</div>
-</div>
-</div>
-</div>
-</div>
             ]]>
         </content>
     </entry>

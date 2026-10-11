@@ -1,125 +1,132 @@
 <!-- 1. The Dynamic Visual Canvas (Middle Section) -->
 <div id="tahoe-dashboard-container" style="max-width: 480px; margin: 0 auto; padding: 15px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
-<div class="graph-display-window" style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
-<h4 style="margin: 0 0 15px 0; font-size: 1rem; color: #212529; text-transform: uppercase; letter-spacing: 0.05em;">Tahoe Fatality Risk Metrics</h4>
-<!-- Motorized Data Bar Set (Deep Alpine Blue) -->
-<div class="vessel-bar-group" style="margin-bottom: 20px;">
-<div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 5px; color: #495057;">Motorized Vessels<span id="label-motorized-rate" style="font-weight: bold; color: #0a2342;">5.0</span></div>
-<div style="background: #e9ecef; border-radius: 4px; height: 24px; width: 100%; overflow: hidden;">
-<div id="bar-motorized" style="background: #0A2342; height: 100%; width: 25%; transition: width 0.4s ease-out-back;"></div>
+  <div class="graph-display-window" style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+    <h4 style="margin: 0 0 15px 0; font-size: 1rem; color: #212529; text-transform: uppercase; letter-spacing: 0.05em;">Tahoe Fatality Risk Metrics</h4>
+
+    <!-- Motorized Data Bar Set (Deep Alpine Blue) -->
+    <div class="vessel-bar-group" style="margin-bottom: 20px;">
+      <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 5px; color: #495057;">Motorized Vessels<span id="label-motorized-rate" style="font-weight: bold; color: #0a2342;">5.0</span></div>
+      <div style="background: #e9ecef; border-radius: 4px; height: 24px; width: 100%; overflow: hidden;">
+        <div id="bar-motorized" style="background: #0A2342; height: 100%; width: 25%; transition: width 0.4s ease-out;"></div>
+      </div>
+    </div>
+
+    <!-- Human-Powered Data Bar Set (Clear Tahoe Green) -->
+    <div class="vessel-bar-group">
+      <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 5px; color: #495057;">Human-Powered / Sail Craft<span id="label-human-rate" style="font-weight: bold; color: #2e8b57;">13.0</span></div>
+      <div style="background: #e9ecef; border-radius: 4px; height: 24px; width: 100%; overflow: hidden;">
+        <div id="bar-human" style="background: #2E8B57; height: 100%; width: 65%; transition: width 0.4s ease-out;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. The Thumb-Zone Interactive Input Control Panel (Grid Layout) -->
+  <div class="control-panel-rows">
+    <p style="font-size: 0.75rem; text-transform: uppercase; color: #6c757d; margin: 0 0 10px 0; font-weight: bold; letter-spacing: 0.03em;">Tap a demographic layer to pivot chart data:</p>
+    
+    <!-- 3 Columns Layout: Labels (1 Column) + Buttons (2 Balanced Columns) -->
+    <div class="control-grid" style="display: grid; grid-template-columns: auto 1fr 1fr; gap: 10px; align-items: center; background: #fff; border: 1px solid #dee2e6; border-radius: 6px; padding: 12px;">
+      
+      <!-- Row 1: Household Context -->
+      <span style="font-size: 0.85rem; font-weight: 600; color: #495057; white-space: nowrap; padding-right: 5px;">Household:</span>
+      <button class="tahoe-btn active" style="width: 100%; padding: 10px 6px; font-size: 0.8rem; border: 1px solid #0A2342; background: #0A2342; color: #fff; border-radius: 4px; cursor: pointer; text-align: center; box-sizing: border-box;" data-category="household" data-value="single_operator">Single Operator</button>
+      <button class="tahoe-btn" style="width: 100%; padding: 10px 6px; font-size: 0.8rem; border: 1px solid #ced4da; background: #fff; color: #495057; border-radius: 4px; cursor: pointer; text-align: center; box-sizing: border-box;" data-category="household" data-value="family_crew">Family Crew</button>
+
+      <!-- Row 2: Safety Training Education -->
+      <span style="font-size: 0.85rem; font-weight: 600; color: #495057; white-space: nowrap; padding-right: 5px;">Education:</span>
+      <button class="tahoe-btn" style="width: 100%; padding: 10px 6px; font-size: 0.8rem; border: 1px solid #ced4da; background: #fff; color: #495057; border-radius: 4px; cursor: pointer; text-align: center; box-sizing: border-box;" data-category="education" data-value="certified_safe">Certified Safe</button>
+      <button class="tahoe-btn" style="width: 100%; padding: 10px 6px; font-size: 0.8rem; border: 1px solid #ced4da; background: #fff; color: #495057; border-radius: 4px; cursor: pointer; text-align: center; box-sizing: border-box;" data-category="education" data-value="no_safety_course">No Safety Course</button>
+
+      <!-- Row 3: Diversity Matrix -->
+      <span style="font-size: 0.85rem; font-weight: 600; color: #495057; white-space: nowrap; padding-right: 5px;">Diversity:</span>
+      <button class="tahoe-btn" style="width: 100%; padding: 10px 6px; font-size: 0.8rem; border: 1px solid #ced4da; background: #fff; color: #495057; border-radius: 4px; cursor: pointer; text-align: center; box-sizing: border-box;" data-category="diversity" data-value="predominant">Predominant</button>
+      <button class="tahoe-btn" style="width: 100%; padding: 10px 6px; font-size: 0.8rem; border: 1px solid #ced4da; background: #fff; color: #495057; border-radius: 4px; cursor: pointer; text-align: center; box-sizing: border-box;" data-category="diversity" data-value="minority_owned">Minority Owned</button>
+
+      <!-- Row 4: Economic Status -->
+      <span style="font-size: 0.85rem; font-weight: 600; color: #495057; white-space: nowrap; padding-right: 5px;">Status:</span>
+      <button class="tahoe-btn" style="width: 100%; padding: 10px 6px; font-size: 0.8rem; border: 1px solid #ced4da; background: #fff; color: #495057; border-radius: 4px; cursor: pointer; text-align: center; box-sizing: border-box;" data-category="status" data-value="homeowner">Homeowner</button>
+      <button class="tahoe-btn" style="width: 100%; padding: 10px 6px; font-size: 0.8rem; border: 1px solid #ced4da; background: #fff; color: #495057; border-radius: 4px; cursor: pointer; text-align: center; box-sizing: border-box;" data-category="status" data-value="renter">Renter</button>
+      
+    </div>
+  </div>
 </div>
-</div>
-<!-- Human-Powered Data Bar Set (Clear Tahoe Green) -->
-<div class="vessel-bar-group">
-<div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 5px; color: #495057;">Human-Powered / Sail Craft<span id="label-human-rate" style="font-weight: bold; color: #2e8b57;">13.0</span></div>
-<div style="background: #e9ecef; border-radius: 4px; height: 24px; width: 100%; overflow: hidden;">
-<div id="bar-human" style="background: #2E8B57; height: 100%; width: 65%; transition: width 0.4s ease-out-back;"></div>
-</div>
-</div>
-</div>
-<!-- 2. The Thumb-Zone Interactive Input Control Panel (Bottom Section) -->
-<div class="control-panel-rows" style="display: flex; flex-direction: column; gap: 10px;">
-<p style="font-size: 0.75rem; text-transform: uppercase; color: #6c757d; margin: 0; font-weight: bold; letter-spacing: 0.03em;">Tap a demographic layer to pivot chart data:</p>
-<!-- Row 1: Household Context -->
-<div class="control-row" style="display: flex; align-items: center; justify-content: space-between; background: #fff; border: 1px solid #dee2e6; border-radius: 6px; padding: 8px 12px;"><span style="font-size: 0.85rem; font-weight: 600; color: #495057;">Household:</span>
-<div style="display: flex; gap: 8px;"><button class="tahoe-btn active" style="padding: 6px 12px; font-size: 0.8rem; border: 1px solid #0A2342; background: #0A2342; color: #fff; border-radius: 4px; cursor: pointer;" data-category="household" data-value="single_operator">Single Operator</button> <button class="tahoe-btn" style="padding: 6px 12px; font-size: 0.8rem; border: 1px solid #ced4da; background: #fff; color: #495057; border-radius: 4px; cursor: pointer;" data-category="household" data-value="family_crew">Family Crew</button></div>
-</div>
-<!-- Row 2: Safety Training Education -->
-<div class="control-row" style="display: flex; align-items: center; justify-content: space-between; background: #fff; border: 1px solid #dee2e6; border-radius: 6px; padding: 8px 12px;"><span style="font-size: 0.85rem; font-weight: 600; color: #495057;">Education:</span>
-<div style="display: flex; gap: 8px;"><button class="tahoe-btn" style="padding: 6px 12px; font-size: 0.8rem; border: 1px solid #ced4da; background: #fff; color: #495057; border-radius: 4px; cursor: pointer;" data-category="education" data-value="certified_safe">Certified Safe</button> <button class="tahoe-btn" style="padding: 6px 12px; font-size: 0.8rem; border: 1px solid #ced4da; background: #fff; color: #495057; border-radius: 4px; cursor: pointer;" data-category="education" data-value="no_safety_course">No Safety Course</button></div>
-</div>
-<!-- Row 3: Diversity Matrix -->
-<div class="control-row" style="display: flex; align-items: center; justify-content: space-between; background: #fff; border: 1px solid #dee2e6; border-radius: 6px; padding: 8px 12px;"><span style="font-size: 0.85rem; font-weight: 600; color: #495057;">Diversity:</span>
-<div style="display: flex; gap: 8px;"><button class="tahoe-btn" style="padding: 6px 12px; font-size: 0.8rem; border: 1px solid #ced4da; background: #fff; color: #495057; border-radius: 4px; cursor: pointer;" data-category="diversity" data-value="predominant">Predominant</button> <button class="tahoe-btn" style="padding: 6px 12px; font-size: 0.8rem; border: 1px solid #ced4da; background: #fff; color: #495057; border-radius: 4px; cursor: pointer;" data-category="diversity" data-value="minority_owned">Minority Owned</button></div>
-</div>
-<!-- Row 4: Economic Status -->
-<div class="control-row" style="display: flex; align-items: center; justify-content: space-between; background: #fff; border: 1px solid #dee2e6; border-radius: 6px; padding: 8px 12px;"><span style="font-size: 0.85rem; font-weight: 600; color: #495057;">Status:</span>
-<div style="display: flex; gap: 8px;"><button class="tahoe-btn" style="padding: 6px 12px; font-size: 0.8rem; border: 1px solid #ced4da; background: #fff; color: #495057; border-radius: 4px; cursor: pointer;" data-category="status" data-value="homeowner">Homeowner</button> <button class="tahoe-btn" style="padding: 6px 12px; font-size: 0.8rem; border: 1px solid #ced4da; background: #fff; color: #495057; border-radius: 4px; cursor: pointer;" data-category="status" data-value="renter">Renter</button></div>
-</div>
-</div>
-</div>
+
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-    // 1. Establish DOM Interface Canvas Nodes
-    const barMotorized = document.getElementById("bar-motorized");
-    const barHuman = document.getElementById("bar-human");
-    const labelMotorized = document.getElementById("label-motorized-rate");
-    const labelHuman = document.getElementById("label-human-rate");
-    const buttons = document.querySelectorAll(".tahoe-btn");
+  const barMotorized = document.getElementById("bar-motorized");
+  const barHuman = document.getElementById("bar-human");
+  const labelMotorized = document.getElementById("label-motorized-rate");
+  const labelHuman = document.getElementById("label-human-rate");
+  const buttons = document.querySelectorAll(".tahoe-btn");
 
-    let tahoeData = null;
+  // INLINED DATA LAYER
+  const tahoeData = {
+    "demographics": {
+      "household": {
+        "single_operator": { "motorized": 5.0, "human_powered": 13.0 },
+        "family_crew": { "motorized": 3.2, "human_powered": 8.5 }
+      },
+      "education": {
+        "certified_safe": { "motorized": 1.5, "human_powered": 4.0 },
+        "no_safety_course": { "motorized": 7.8, "human_powered": 18.2 }
+      },
+      "diversity": {
+        "predominant": { "motorized": 4.8, "human_powered": 12.1 },
+        "minority_owned": { "motorized": 5.2, "human_powered": 14.3 }
+      },
+      "status": {
+        "homeowner": { "motorized": 4.1, "human_powered": 10.5 },
+        "renter": { "motorized": 6.3, "human_powered": 15.9 }
+      }
+    }
+  };
 
-    // 2. Fetch the Data File Asynchronously via the verified path
-    fetch('/media/files/tahoe-boating-data.json')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP network error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            tahoeData = data;
-            
-            // 3. Bind UI Click Management safely AFTER data layer is active
-            initializeInterfaceEngine();
-            
-            // Render baseline visualization grid default state
-            updateGraphVisuals("household", "single_operator");
-        })
-        .catch(error => {
-            console.error("Error fetching or parsing the Tahoe JSON resource:", error);
+  function updateGraphVisuals(category, value) {
+    if (!tahoeData) return;
+    
+    const targetRates = tahoeData.demographics[category][value];
+    const motorRate = targetRates.motorized;
+    const humanRate = targetRates.human_powered;
+
+    labelMotorized.innerText = motorRate.toFixed(1);
+    labelHuman.innerText = humanRate.toFixed(1);
+
+    const scaleFactor = 20; 
+    const motorWidth = Math.min((motorRate / scaleFactor) * 100, 100);
+    const humanWidth = Math.min((humanRate / scaleFactor) * 100, 100);
+
+    barMotorized.style.width = `${motorWidth}%`;
+    barHuman.style.width = `${humanWidth}%`;
+  }
+
+  function initializeInterfaceEngine() {
+    buttons.forEach(button => {
+      button.addEventListener("click", (e) => {
+        const selectedButton = e.currentTarget;
+        const targetCategory = selectedButton.getAttribute("data-category");
+        const targetValue = selectedButton.getAttribute("data-value");
+
+        const gridContainer = selectedButton.closest(".control-grid");
+        const categoryButtons = gridContainer.querySelectorAll(`[data-category="${targetCategory}"]`);
+        
+        categoryButtons.forEach(btn => {
+          btn.style.background = "#fff";
+          btn.style.color = "#495057";
+          btn.style.borderColor = "#ced4da";
+          btn.classList.remove("active");
         });
 
-    // 4. Dynamic Visual Graph Transformation Calculation Engine
-    function updateGraphVisuals(category, value) {
-        if (!tahoeData) return;
+        selectedButton.style.background = "#0A2342";
+        selectedButton.style.color = "#fff";
+        selectedButton.style.borderColor = "#0A2342";
+        selectedButton.classList.add("active");
 
-        // Extract targeted data matrix coordinates
-        const targetRates = tahoeData.demographics[category][value];
-        const motorRate = targetRates.motorized;
-        const humanRate = targetRates.human_powered;
+        updateGraphVisuals(targetCategory, targetValue);
+      });
+    });
+  }
 
-        // Paint numeric values directly to screen text slots
-        labelMotorized.innerText = motorRate.toFixed(1);
-        labelHuman.innerText = humanRate.toFixed(1);
-
-        // Convert raw value nodes into relative width percentages 
-        const scaleFactor = 20; 
-        const motorWidth = Math.min((motorRate / scaleFactor) * 100, 100);
-        const humanWidth = Math.min((humanRate / scaleFactor) * 100, 100);
-
-        // Update CSS bindings to execute hardware-accelerated animations
-        barMotorized.style.width = `${motorWidth}%`;
-        barHuman.style.width = `${humanWidth}%`;
-    }
-
-    // 5. Setup Touch Event Management Loop
-    function initializeInterfaceEngine() {
-        buttons.forEach(button => {
-            button.addEventListener("click", (e) => {
-                const selectedButton = e.currentTarget;
-                const targetCategory = selectedButton.getAttribute("data-category");
-                const targetValue = selectedButton.getAttribute("data-value");
-
-                // Restructure active/inactive styles only within the current tapped container row
-                const siblingButtons = selectedButton.closest(".control-row").querySelectorAll(".tahoe-btn");
-                siblingButtons.forEach(btn => {
-                    btn.style.background = "#fff";
-                    btn.style.color = "#495057";
-                    btn.style.borderColor = "#ced4da";
-                    btn.classList.remove("active");
-                });
-
-                // Apply prominent active color palette states to selected button
-                selectedButton.style.background = "#0A2342";
-                selectedButton.style.color = "#fff";
-                selectedButton.style.borderColor = "#0A2342";
-                selectedButton.classList.add("active");
-
-                // Trigger visual state change mutation
-                updateGraphVisuals(targetCategory, targetValue);
-            });
-        });
-    }
+  initializeInterfaceEngine();
+  updateGraphVisuals("household", "single_operator");
 });
 </script>
