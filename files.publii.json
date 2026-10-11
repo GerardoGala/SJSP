@@ -142,12 +142,12 @@
     {
         "path": "feed.json",
         "type": "file",
-        "md5": "b07d2c9b64c64dda6e60b38eb5de535c"
+        "md5": "2c0559c486e2fbe5da46aaacd1cdcfa3"
     },
     {
         "path": "feed.xml",
         "type": "file",
-        "md5": "529a6a6b0159cd1caec07e8cd91c1531"
+        "md5": "700ffab5c662e50f897ddbffb0941886"
     },
     {
         "path": "index.html",
@@ -167,7 +167,12 @@
     {
         "path": "kombi-quick-canoe-build.html",
         "type": "file",
-        "md5": "4599aa72f4919acdd675a668c72af000"
+        "md5": "8034c86210f9fc67d4559261f612dab8"
+    },
+    {
+        "path": "lake-tahoe-paradox.html",
+        "type": "file",
+        "md5": "c511718ad014e95b75a8b94fdc303d50"
     },
     {
         "path": "media",
@@ -188,6 +193,11 @@
         "path": "/media/files/HugomVideo.mp4",
         "type": "file",
         "md5": "5af692b045b60711c202fc60b85a7976"
+    },
+    {
+        "path": "/media/files/tahoe-boating-data.json",
+        "type": "file",
+        "md5": "5b6a560e10d6e9aeeedc3ad401d88440"
     },
     {
         "path": "media/posts",
@@ -2017,7 +2027,7 @@
     {
         "path": "sitemap.xml",
         "type": "file",
-        "md5": "ca85e27f48a866d25462c88a5c4d154b"
+        "md5": "c03b0032cabddfc675d6524b1a5492fd"
     },
     {
         "path": "sitemap.xsl",
@@ -2042,7 +2052,7 @@
     {
         "path": "/tags/blog/index.html",
         "type": "file",
-        "md5": "142939623ee579bf527f6002a212556e"
+        "md5": "a52ff05a563d7b762f93f80383980cee"
     },
     {
         "path": "tags/blog/page",
@@ -2073,11 +2083,6 @@
         "path": "test.html",
         "type": "file",
         "md5": "c3f591605e65a4b10946912e291a575c"
-    },
-    {
-        "path": "the-american-dream.html",
-        "type": "file",
-        "md5": "fad5069f0ed29c4448e7352df8066e32"
     },
     {
         "path": "thesaurus.html",
