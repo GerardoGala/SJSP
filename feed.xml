@@ -3,7 +3,7 @@
     <title>San Juan Sail &amp; Paddle</title>
     <link href="https://gerardogala.github.io/SJSP/feed.xml" rel="self" />
     <link href="https://gerardogala.github.io/SJSP" />
-    <updated>2026-10-12T11:10:05+08:00</updated>
+    <updated>2026-10-12T11:38:10+08:00</updated>
     <author>
         <name>Gerardo Gala</name>
     </author>
@@ -72,13 +72,14 @@
 </div>
 </div>
 </div>
+<p>
 <script>
-document.addEventListener("DOMContentLoaded", () => { 
+ document.addEventListener("DOMContentLoaded", () => { 
     const barMotorized = document.getElementById("bar-motorized"); 
     const labelMotorized = document.getElementById("label-motorized-rate"); 
     const buttons = document.querySelectorAll(".tahoe-btn"); 
     
-    // NEW VISUAL STATE: Global, unfiltered average metrics when all filters are toggled OFF
+    // Core baseline constants when NO filters are active in a row
     const BASELINE_MOTORIZED = 3.5;
     const BASELINE_HUMAN_POWERED = 9.0;
 
@@ -103,7 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } 
     }; 
     
-    // Directly updates DOM nodes and layout visual widths
+    // Updates graph layout widths and numbers
     function renderChart(motorRate, humanRate) {
         labelMotorized.innerText = motorRate.toFixed(1); 
         document.getElementById("label-human-rate").innerText = humanRate.toFixed(1); 
@@ -116,20 +117,47 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("bar-human").style.width = `${humanWidth}%`; 
     }
 
-    // Helper to painlessly clear custom colors off unselected options
-    function clearElementStyle(element) {
-        element.style.background = "#fff"; 
-        element.style.color = "#495057"; 
-        element.style.borderColor = "#ced4da"; 
-        element.classList.remove("active");
+    // Dynamic Style Painters
+    function setElementOff(btn) {
+        btn.style.background = "#fff"; 
+        btn.style.color = "#495057"; 
+        btn.style.borderColor = "#ced4da"; 
+        btn.classList.remove("active");
     }
 
-    // Helper to paint a button element into its active deep blue on-state
-    function setActiveStyle(element) {
-        element.style.background = "#0A2342"; 
-        element.style.color = "#fff"; 
-        element.style.borderColor = "#0A2342"; 
-        element.classList.add("active");
+    function setElementOn(btn) {
+        btn.style.background = "#0A2342"; 
+        btn.style.color = "#fff"; 
+        btn.style.borderColor = "#0A2342"; 
+        btn.classList.add("active");
+    }
+
+    // Scans all active rows and averages their active data contributions together
+    function calculateActiveFiltersAndRefresh() {
+        let totalMotor = 0;
+        let totalHuman = 0;
+        let activeCount = 0;
+
+        // Check each category independently
+        const categories = ["household", "education", "diversity", "status"];
+        
+        categories.forEach(cat => {
+            const activeBtn = document.querySelector(`.tahoe-btn.active[data-category="${cat}"]`);
+            if (activeBtn) {
+                const val = activeBtn.getAttribute("data-value");
+                totalMotor += tahoeData.demographics[cat][val].motorized;
+                totalHuman += tahoeData.demographics[cat][val].human_powered;
+                activeCount++;
+            }
+        });
+
+        // If NO filters are enabled anywhere (0 buttons), load absolute baseline constants
+        if (activeCount === 0) {
+            renderChart(BASELINE_MOTORIZED, BASELINE_HUMAN_POWERED);
+        } else {
+            // Symmetrically combine the values of all active row selections
+            renderChart(totalMotor / activeCount, totalHuman / activeCount);
+        }
     }
     
     function initializeInterfaceEngine() { 
@@ -137,42 +165,39 @@ document.addEventListener("DOMContentLoaded", () => {
             button.addEventListener("click", (e) => { 
                 const selectedButton = e.currentTarget; 
                 const targetCategory = selectedButton.getAttribute("data-category"); 
-                const targetValue = selectedButton.getAttribute("data-value"); 
                 const isCurrentlyActive = selectedButton.classList.contains("active");
                 
-                // Clear out styling for all buttons across the entire control panel
-                buttons.forEach(btn => clearElementStyle(btn));
+                // Find only the buttons belonging to THIS specific clicked row
+                const rowButtons = document.querySelectorAll(`.tahoe-btn[data-category="${targetCategory}"]`);
                 
-                // Toggle Behavior
-                if (isCurrentlyActive) {
-                    // Turn OFF: Return chart to unselected baseline metrics (3.5 / 9.0)
-                    renderChart(BASELINE_MOTORIZED, BASELINE_HUMAN_POWERED);
-                } else {
-                    // Turn ON: Highlight choice and update graph with demographic subset numbers
-                    setActiveStyle(selectedButton);
-                    const targetRates = tahoeData.demographics[targetCategory][targetValue];
-                    renderChart(targetRates.motorized, targetRates.human_powered);
+                // Clear the rest of the options in this row first (Rule: One or Less per row)
+                rowButtons.forEach(btn => setElementOff(btn));
+                
+                // Toggle state switch logic
+                if (!isCurrentlyActive) {
+                    setElementOn(selectedButton);
                 }
+                
+                // Evaluate all active rows together to update graph
+                calculateActiveFiltersAndRefresh();
             }); 
         }); 
     } 
     
     initializeInterfaceEngine(); 
     
-    // Page Load Setup: Initialize the dashboard with "Single Operator" filter active
-    const firstButton = document.querySelector('.tahoe-btn[data-value="single_operator"]');
-    if (firstButton) {
-        setActiveStyle(firstButton);
-        const initialRates = tahoeData.demographics["household"]["single_operator"];
-        renderChart(initialRates.motorized, initialRates.human_powered); // Loads 5.0 / 13.0
-    } else {
-        renderChart(BASELINE_MOTORIZED, BASELINE_HUMAN_POWERED); 
+    // Page Load State initialization: Select "Single Operator" as default active choice
+    const defaultBtn = document.querySelector('.tahoe-btn[data-value="single_operator"]');
+    if (defaultBtn) {
+        setElementOn(defaultBtn);
     }
+    calculateActiveFiltersAndRefresh(); 
 });
 
-
+    
 
     </script>
+</p>
             ]]>
         </content>
     </entry>
