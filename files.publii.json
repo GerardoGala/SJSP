@@ -175,6 +175,11 @@
         "md5": "a3a5a7126c7673d33164805fdd5a8194"
     },
     {
+        "path": "login.html",
+        "type": "file",
+        "md5": "20395bdb457c9d78d194578430372709"
+    },
+    {
         "path": "media",
         "type": "directory",
         "md5": false
@@ -2072,7 +2077,7 @@
     {
         "path": "sitemap.xml",
         "type": "file",
-        "md5": "00a9639e38a4ea238ce5f834aca47062"
+        "md5": "7a525f8a95d8e741ebe7e97da93b351e"
     },
     {
         "path": "sitemap.xsl",
