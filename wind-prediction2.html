@@ -1,0 +1,185 @@
+<!-- Main System Interface Wrapper -->
+<div id="scrolly-workspace" style="position: relative; max-width: 720px; margin: 1.5rem auto; font-family: 'Roboto', -apple-system, sans-serif; background: #ffffff; color: #111111; box-sizing: border-box;"><!-- 10:90 GRAPHIC INTERACTIVE SCROLLYTELLING FIELD -->
+<div style="display: flex; gap: 12px; width: 100%; border-top: 2px solid #111; padding-top: 16px;"><!-- COLUMN A: THE 10% WIDE FOOTBALL YARD TIMELINE LINE -->
+<div id="yard-timeline-track" style="width: 10%; flex-shrink: 0; background: #fcfcfc; border-right: 2px dashed #cbd5e1; padding-bottom: 200px; box-sizing: border-box;"><!-- YARD MARKER: 2000 (The Trade Kickoff) -->
+<div class="field-yard-marker" style="height: 380px; position: relative; border-bottom: 2px solid #111;" data-year="2000"><span style="position: absolute; bottom: 6px; left: 2px; font-size: 18px; font-weight: 900; color: #64748b; font-variant-numeric: tabular-nums;">'00</span> <span style="position: absolute; top: 4px; left: 2px; font-size: 9px; text-transform: uppercase; color: #94a3b8; font-weight: bold; tracking: 0.05em; writing-mode: vertical-lr;">KICKOFF</span>
+<div style="position: absolute; right: 0; bottom: 50%; width: 10px; height: 1px; background: #64748b;"> </div>
+</div>
+<!-- YARD MARKER: 2008 -->
+<div class="field-yard-marker" style="height: 380px; position: relative; border-bottom: 1px solid #e2e8f0;" data-year="2008"><span style="position: absolute; bottom: 6px; left: 2px; font-size: 18px; font-weight: 900; color: #64748b; font-variant-numeric: tabular-nums;">'08</span>
+<div style="position: absolute; right: 0; bottom: 50%; width: 10px; height: 1px; background: #64748b;"> </div>
+</div>
+<!-- YARD MARKER: 2018 -->
+<div class="field-yard-marker" style="height: 380px; position: relative; border-bottom: 1px solid #e2e8f0;" data-year="2018"><span style="position: absolute; bottom: 6px; left: 2px; font-size: 18px; font-weight: 900; color: #64748b; font-variant-numeric: tabular-nums;">'18</span>
+<div style="position: absolute; right: 0; bottom: 50%; width: 10px; height: 1px; background: #64748b;"> </div>
+</div>
+<!-- YARD MARKER: Latest Dataset (Goal Line) -->
+<div class="field-yard-marker" style="height: 300px; position: relative; border-bottom: 3px double #111;" data-year="2026"><span style="position: absolute; bottom: 6px; left: 2px; font-size: 18px; font-weight: 900; color: #dc2626; font-variant-numeric: tabular-nums;">'26</span> <span style="position: absolute; bottom: -18px; left: 2px; font-size: 8px; text-transform: uppercase; color: #dc2626; font-weight: bold; writing-mode: vertical-lr;">GOAL</span></div>
+</div>
+<!-- COLUMN B: THE 90% FLOATING FLOATING DASHBOARD PANEL -->
+<div id="dashboard-sticky-space" style="width: 90%; position: sticky; top: 16px; height: 420px; z-index: 10; background: #ffffff; border: 1px solid #e4e4e7; border-radius: 8px; padding: 12px; box-sizing: border-box; box-shadow: 0 8px 24px rgba(0,0,0,0.06); display: flex; flex-direction: column; justify-content: space-between;"><!-- Dynamic Micro Meta Readouts -->
+<div>
+<div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f4f4f5; padding-bottom: 6px; margin-bottom: 10px;"><span id="meta-epoch-title" style="font-size: 11px; text-transform: uppercase; font-weight: bold; color: #71717a; letter-spacing: 0.03em;">The Baseline Matrix</span> <span id="meta-year-badge" style="font-size: 24px; font-weight: 900; color: #111111; font-variant-numeric: tabular-nums;">2000</span></div>
+<!-- Macro demographic filter switchboard arrays -->
+<div id="filter-switchboard" style="display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 12px;"><button class="macro-filter-btn active-filter" style="background: #111; color: #fff; border: 1px solid #111; padding: 4px 8px; font-size: 10px; font-weight: bold; text-transform: uppercase; border-radius: 4px; cursor: pointer; font-family: 'Roboto', sans-serif;" data-metric="housing">Shelter Tenure</button> <button class="macro-filter-btn" style="background: #fff; color: #444; border: 1px solid #e4e4e7; padding: 4px 8px; font-size: 10px; font-weight: bold; text-transform: uppercase; border-radius: 4px; cursor: pointer; font-family: 'Roboto', sans-serif;" data-metric="race">Socio-Identity</button> <button class="macro-filter-btn" style="background: #fff; color: #444; border: 1px solid #e4e4e7; padding: 4px 8px; font-size: 10px; font-weight: bold; text-transform: uppercase; border-radius: 4px; cursor: pointer; font-family: 'Roboto', sans-serif;" data-metric="marriage">Domestic Structure</button> <button class="macro-filter-btn" style="background: #fff; color: #444; border: 1px solid #e4e4e7; padding: 4px 8px; font-size: 10px; font-weight: bold; text-transform: uppercase; border-radius: 4px; cursor: pointer; font-family: 'Roboto', sans-serif;" data-metric="children">Dependency Burden</button></div>
+</div>
+<!-- Dynamic Graphic Target Workspace Rendering Area -->
+<div style="flex-grow: 1; display: flex; flex-direction: column; justify-content: flex-end;">
+<div style="font-size: 11px; font-weight: bold; text-transform: uppercase; margin-bottom: 4px; color: #2563eb; letter-spacing: 0.02em;">Effective Discretionary Margin Left</div>
+<div id="scrolly-logic-canvas" style="width: 100%; height: 210px;"></div>
+</div>
+<!-- Context Info Footer Text Zone -->
+<div style="border-top: 1px dashed #e4e4e7; padding-top: 6px; margin-top: 6px;">
+<p id="meta-narrative-box" style="margin: 0; font-size: 12px; color: #4b5563; line-height: 1.4;">Initializing timeline matrix logic nodes...</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Load standard open-source Apache ECharts dependency via high-availability CDN -->
+<p>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const canvasNode = document.getElementById('scrolly-logic-canvas');
+    const yearDisplay = document.getElementById('meta-year-badge');
+    const epochDisplay = document.getElementById('meta-epoch-title');
+    const narrativeDisplay = document.getElementById('meta-narrative-box');
+    const filterButtons = document.querySelectorAll('.macro-filter-btn');
+    
+    let chartCoreInstance = echarts.init(canvasNode);
+    let activeYearGlobal = "2000";
+    let activeMetricGlobal = "housing"; // Tracks current cross-tab toggle segment
+
+    // Complete micro-segmented structural data matrices
+    const structuredMatrix = {
+        "2000": {
+            epoch: "The Trade Bill Handshake",
+            narrative: "US manufacturing baseline remains intact. Discretionary breathing room is wide and distributed equitably across cohorts.",
+            housing: { cohorts: ['Renters', 'Homeowners'], values: [55, 78] },
+            race: { cohorts: ['Black Households', 'White Households'], values: [48, 69] },
+            marriage: { cohorts: ['Divorced', 'Married Pairs'], values: [51, 82] },
+            children: { cohorts: ['Child Count > 2', 'Infants < 3 Years'], values: [58, 64] }
+        },
+        "2008": {
+            epoch: "The Great Decoupling Acceleration",
+            narrative: "Offshoring factory centers triggers domestic stagnation. The divergence opens as shelter overhead swallows margins.",
+            housing: { cohorts: ['Renters', 'Homeowners'], values: [42, 71] },
+            race: { cohorts: ['Black Households', 'White Households'], values: [36, 62] },
+            marriage: { cohorts: ['Divorced', 'Married Pairs'], values: [40, 75] },
+            children: { cohorts: ['Child Count > 2', 'Infants < 3 Years'], values: [46, 53] }
+        },
+        "2018": {
+            epoch: "The Peak Consumer Shift",
+            narrative: "Supply networks consolidate in global hubs. Unprotected demographic assets hit acute affordability ceilings.",
+            housing: { cohorts: ['Renters', 'Homeowners'], values: [31, 65] },
+            race: { cohorts: ['Black Households', 'White Households'], values: [25, 54] },
+            marriage: { cohorts: ['Divorced', 'Married Pairs'], values: [29, 68] },
+            children: { cohorts: ['Child Count > 2', 'Infants < 3 Years'], values: [33, 41] }
+        },
+        "2026": {
+            epoch: "The Discretionary Breakdown",
+            narrative: "Latest Census release patterns. Financial breathing room drops critically for renting and single-income archetypes.",
+            housing: { cohorts: ['Renters', 'Homeowners'], values: [18, 58] },
+            race: { cohorts: ['Black Households', 'White Households'], values: [12, 46] },
+            marriage: { cohorts: ['Divorced', 'Married Pairs'], values: [15, 60] },
+            children: { cohorts: ['Child Count > 2', 'Infants < 3 Years'], values: [21, 30] }
+        }
+    };
+
+    // 1. Core Graphic Engine Translation Draw Function
+    function syncDashboardView(year, selectedMetric) {
+        if (!chartCoreInstance) return;
+        
+        const timeframeData = structuredMatrix[year];
+        const dataProfile = timeframeData[selectedMetric];
+
+        // Update textual metadata nodes instantly
+        yearDisplay.innerText = year;
+        epochDisplay.innerText = timeframeData.epoch;
+        narrativeDisplay.innerText = timeframeData.narrative;
+
+        const dynamicOptions = {
+            grid: { top: '10%', left: '3%', right: '12%', bottom: '5%', containLabel: true },
+            xAxis: {
+                type: 'value',
+                max: 100, // Fixed 0-100% capacity tracking boundary matrix
+                axisLabel: { color: '#666', fontFamily: 'Roboto', fontSize: 10, formatter: '{value}%' },
+                splitLine: { lineStyle: { color: '#f3f4f6', type: 'dashed' } }
+            },
+            yAxis: {
+                type: 'category',
+                data: dataProfile.cohorts,
+                axisLabel: { color: '#111111', fontWeight: 700, fontFamily: 'Roboto', fontSize: 11 }
+            },
+            series: [{
+                type: 'bar',
+                data: [
+                    { value: dataProfile.values[0], itemStyle: { color: '#dc2626' } }, // Disadvantaged Alert Crimson
+                    { value: dataProfile.values[1], itemStyle: { color: '#4b5563' } }  // Advantaged Neutral Charcoal
+                ],
+                barMaxWidth: 22,
+                label: { 
+                    show: true, 
+                    position: 'right', 
+                    formatter: '{c}%', 
+                    color: '#111', 
+                    fontWeight: 700, 
+                    fontFamily: 'Roboto',
+                    fontSize: 12
+                },
+                animationDuration: 300,
+                animationEasing: 'quadraticOut'
+            }]
+        };
+
+        chartCoreInstance.setOption(dynamicOptions, true);
+    }
+
+    // Default initialization cycle parameter execution
+    syncDashboardView(activeYearGlobal, activeMetricGlobal);
+
+    // 2. INTERACTION EVENT: MANUAL MATRIX CROSS-TAB FILTERS (Tapping Switchboard Buttons)
+    filterButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            // Repaint control focus indicators
+            filterButtons.forEach(b => {
+                b.style.background = '#fff';
+                b.style.color = '#444';
+                b.style.borderColor = '#e4e4e7';
+            });
+            this.style.background = '#111';
+            this.style.color = '#fff';
+            this.style.borderColor = '#111';
+
+            activeMetricGlobal = this.getAttribute('data-metric');
+            syncDashboardView(activeYearGlobal, activeMetricGlobal);
+        });
+    });
+
+    // 3. INTERACTION EVENT: SCROLL FOCUS DETECTOR (Intersection Observer Engine)
+    const yardMarkers = document.querySelectorAll('.field-yard-marker');
+    
+    const trackingConfiguration = {
+        root: null,
+        rootMargin: '-30% 0px -45% 0px', // Narrows focus capture parameters to screen heartcenter
+        threshold: 0.1
+    };
+
+    const intersectionObserverNode = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                activeYearGlobal = entry.target.getAttribute('data-year');
+                syncDashboardView(activeYearGlobal, activeMetricGlobal);
+            }
+        });
+    }, trackingConfiguration);
+
+    yardMarkers.forEach(marker => intersectionObserverNode.observe(marker));
+
+    // Handle responsive dimension calculations across viewport turns seamlessly
+    window.addEventListener('resize', function() {
+        if (chartCoreInstance) chartCoreInstance.resize();
+    });
+});
+</script>
+</p>

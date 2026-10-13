@@ -1,0 +1,222 @@
+<div id="student-app-container">
+<div id="targetArea" class="responsive-scroll-box"></div>
+<script type="module">
+
+        import {
+            initializeApp
+        } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+
+        import {
+            getAuth,
+            onAuthStateChanged
+        } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+
+        // ========================================
+        // FIREBASE CONFIGURATION
+        // Use the SAME configuration as login.html
+        // ========================================
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCsVFxlWhfnogijECMRgsUBFDGPyi4LjVo",
+            authDomain: "san-juan-academy.firebaseapp.com",
+            projectId: "san-juan-academy",
+            appId: "1:579054522531:web:1b03832b8c43042e79af16"
+        };
+
+
+        // Initialize Firebase
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+
+        // ========================================
+        // AUTHENTICATION CHECK
+        // ========================================
+
+        onAuthStateChanged(auth, (user) => {
+
+            if (user) {
+
+                // Authenticated: load the student report.
+     			console.error("User is Logged in", user);
+    			
+                loadStudentData();
+
+            } else {
+
+                // Not authenticated: return to login.
+                window.location.replace(
+                    "https://gerardogala.github.io/SJSP/login.html"
+                );
+
+            }
+
+        });
+
+
+        // ========================================
+        // EXISTING STUDENT REPORT CODE
+        // ========================================
+
+        let masterRows = [];
+        let ascending = Array(7).fill(true);
+
+        const keys = [
+            "ID",
+            "Name",
+            "Department",
+            "Major",
+            "Enrollment Date",
+            "GPA",
+            "Status"
+        ];
+
+
+        // Fetch data and build UI
+
+        function loadStudentData() {
+
+            fetch("students.json")
+
+                .then(res => res.ok ? res.json() : Promise.reject())
+
+                .then(data => {
+
+                    masterRows = data;
+
+                    setupTableFramework();
+
+                })
+
+                .catch(() => {
+
+                    console.error("Failed to load students.json");
+
+                });
+
+        }
+
+
+        // Generate UI shell
+
+        function setupTableFramework() {
+
+            const target = document.getElementById("targetArea");
+
+            if (!target) return;
+
+            let headerCells = "";
+
+            for (let i = 0; i < keys.length; i++) {
+
+                headerCells +=
+                    '<th data-index="' + i +
+                    '" style="cursor:pointer; border-bottom: 2px solid #e5e7eb; border-right: 1px solid #e5e7eb; font-weight: 600;">' +
+                    keys[i] + ' ↕</th>';
+
+            }
+
+            target.innerHTML = `
+                <table class="report-table" style="width:100%; border-collapse: collapse; text-align: left; background-color: #ffffff;">
+                    <thead>
+                        <tr style="background-color: #f9fafb;">
+                            ${headerCells}
+                        </tr>
+                    </thead>
+                    <tbody id="table-rows-body"></tbody>
+                </table>`;
+
+
+            // Event delegation for table header clicks
+
+            target.querySelector("thead").addEventListener("click", (e) => {
+
+                const th = e.target.closest("th");
+
+                if (th) {
+
+                    const index = parseInt(
+                        th.getAttribute("data-index"),
+                        10
+                    );
+
+                    sortColumn(index);
+
+                }
+
+            });
+
+
+            renderTableRows();
+
+        }
+
+
+        // Render table rows
+
+        function renderTableRows() {
+
+            const tbody = document.getElementById("table-rows-body");
+
+            if (!tbody) return;
+
+            tbody.innerHTML = masterRows.map(row => `
+                <tr style="border-bottom: 1px solid #e5e7eb;">
+                    <td style="border-right: 1px solid #e5e7eb;">${row.ID ?? ""}</td>
+                    <td style="border-right: 1px solid #e5e7eb;"><strong>${row.Name ?? ""}</strong></td>
+                    <td style="border-right: 1px solid #e5e7eb;">${row.Department ?? ""}</td>
+                    <td style="border-right: 1px solid #e5e7eb;">${row.Major ?? ""}</td>
+                    <td style="border-right: 1px solid #e5e7eb;">${row["Enrollment Date"] ?? ""}</td>
+                    <td style="border-right: 1px solid #e5e7eb;">${row.GPA !== undefined ? Number(row.GPA).toFixed(2) : ""}</td>
+                    <td>${row.Status ?? ""}</td>
+                </tr>
+            `).join("");
+
+        }
+
+
+        // Sort columns
+
+        function sortColumn(index) {
+
+            const key = keys[index];
+
+            const isAsc = ascending[index];
+
+            masterRows.sort((a, b) => {
+
+                const valA = a[key] ?? "";
+                const valB = b[key] ?? "";
+
+                if (key === "GPA") {
+
+                    return isAsc
+                        ? Number(valA) - Number(valB)
+                        : Number(valB) - Number(valA);
+
+                }
+
+                return isAsc
+                    ? String(valA).localeCompare(
+                        String(valB),
+                        undefined,
+                        { numeric: true }
+                    )
+                    : String(valB).localeCompare(
+                        String(valA),
+                        undefined,
+                        { numeric: true }
+                    );
+
+            });
+
+            ascending[index] = !isAsc;
+
+            renderTableRows();
+
+        }
+
+    </script>
+</div>

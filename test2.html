@@ -1,0 +1,136 @@
+<style>
+    #student-login-container h2 {
+        color: #1565a1;
+        font-size: 1.7rem;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 8px;
+    }
+
+    #student-login-container .login-subtitle {
+        color: #6c757d;
+        font-size: 0.95rem;
+        text-align: center;
+        margin-bottom: 26px;
+    }
+
+    #student-login-form label {
+        display: block;
+        color: #344054;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin: 18px 0 7px;
+    }
+
+    #student-login-form input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 13px 14px;
+        border: 1px solid #d0d5dd;
+        border-radius: 8px;
+        background: #fff;
+        font-size: 1rem;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    #student-login-form input:focus {
+        outline: none;
+        border-color: #1565a1;
+        box-shadow: 0 0 0 3px rgba(21, 101, 161, 0.15);
+    }
+
+    #student-login-button {
+        width: 100%;
+        margin-top: 26px;
+        padding: 13px;
+        border: none;
+        border-radius: 8px;
+        background: #1565a1;
+        color: #fff;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s, transform 0.2s;
+    }
+
+    #student-login-button:hover:not(:disabled) {
+        background: #104d7b;
+        transform: translateY(-1px);
+    }
+
+    #student-login-button:disabled {
+        opacity: 0.65;
+        cursor: wait;
+    }
+
+    #student-reset-button {
+        display: block;
+        margin: 16px auto 0;
+        padding: 6px 10px;
+        border: none;
+        background: transparent;
+        color: #1565a1;
+        font-size: 0.9rem;
+        cursor: pointer;
+    }
+
+    #student-reset-button:hover {
+        color: #104d7b;
+        text-decoration: underline;
+    }
+
+    #student-login-message {
+        margin-top: 16px;
+        text-align: center;
+        font-size: 0.9rem;
+        line-height: 1.5;
+        overflow-wrap: anywhere;
+    }
+
+    #student-login-message.error {
+        color: #b42318;
+    }
+
+    #student-login-message.success {
+        color: #067647;
+    }
+</style>
+
+<h2>Welcome Back</h2>
+
+<p class="login-subtitle">
+    Sign in to access the Student Report.
+</p>
+
+<form id="student-login-form">
+
+<label for="student-email">Email Address</label>
+<input
+    type="email"
+    id="student-email"
+    placeholder="you@example.com"
+    autocomplete="username"
+    required>
+
+<label for="student-password">Password</label>
+<input
+    type="password"
+    id="student-password"
+    placeholder="Enter your password"
+    autocomplete="current-password"
+    required>
+
+<button id="student-login-button" type="submit">
+    Log In
+</button>
+</form>
+
+<button id="student-reset-button" type="button">
+    Forgot your password?
+</button>
+
+<div
+    id="student-login-message"
+    role="status"
+    aria-live="polite">
+</div>
