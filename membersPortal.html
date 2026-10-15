@@ -1,62 +1,39 @@
-<!-- Load the official Google Authentication library -->
-<script src="https://google.com" async defer></script>
+<!-- 1. Load the official Firebase SDK Modules from a CDN -->
+<script type="module">
+  import { initializeApp } from "https://gstatic.com";
+  import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://gstatic.com";
 
-<div id="admin-gate">
-  <h2>SJSail Membership Admin Panel</h2>
-  <!-- The official Google Sign-In Button Component -->
-  <div id="buttonDiv"></div>
-</div>
+  // 2. Paste your exact configuration details here
+  const firebaseConfig = {
+    apiKey: "AIzaSyCsVFxlWhfnogijECMRgsUBFDGPyi4LjVo",
+    authDomain: "san-juan-academy.firebaseapp.com",
+    projectId: "san-juan-academy",
+    appId: "1:579054522531:web:1b03832b8c43042e79af16"
+  };
 
-<!-- This hidden dashboard layout only displays after a successful secure login -->
-<div id="secure-dashboard" style="display: none;">
-  <h3>Active Membership List</h3>
-  <table id="users-table">
-    <thead>
-      <tr><th>Name</th><th>Email</th><th>Join Date</th></tr>
-    </thead>
-    <tbody id="user-rows">
-      <!-- Your JavaScript API call will dynamically dump user rows here -->
-    </tbody>
-  </table>
-</div>
+  // 3. Initialize Firebase and Google Authentication
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
 
-<script>
-  // 1. Initialize the Google Auth popup
-  window.onload = function () {
-    google.accounts.id.initialize({
-      client_id: "YOUR_GOOGLE_CLIENT_://googleusercontent.com",
-      callback: handleCredentialResponse
-    });
-    google.accounts.id.renderButton(
-      document.getElementById("buttonDiv"),
-      { theme: "outline", size: "large" }
-    );
-  }
-
-  // 2. Handle the secure token validation
-  async function handleCredentialResponse(response) {
-    // Validate user identity token with Google
-    const userData = parseJwt(response.credential);
-    
-    // Check if the logging-in email matches your admin email address
-    if (userData.email === "gerardo@yourdomain.com") {
-      document.getElementById("admin-gate").style.display = "none";
-      document.getElementById("secure-dashboard").style.display = "block";
-      
-      // 3. Trigger the Magic API call to pull the membership database list
-      fetchMembershipList();
-    } else {
-      alert("Unauthorized Access!");
-    }
-  }
-
-  async function fetchMembershipList() {
-    // Call Google's Identity User management endpoint
-    const res = await fetch('https://googleapis.com', {
-      headers: { 'Authorization': 'Bearer YOUR_API_ACCESS_TOKEN' }
-    });
-    const data = await res.json();
-    
-    // Loop and dump data arrays into your HTML table rows...
+  // 4. Create your login function for your button click
+  window.loginWithGoogle = function() {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        const user = result.user;
+        console.log("Successfully logged in:", user.displayName);
+        
+        // Check if the logging-in user is YOU (the admin)
+        if (user.email === "YOUR_ADMIN_EMAIL@gmail.com") {
+          alert("Welcome Admin! Access Granted.");
+          // Trigger your function to load the membership list here
+        }
+      })
+      .catch((error) => {
+        console.error("Login failed:", error.message);
+      });
   }
 </script>
+
+<!-- 5. Your visual button in HTML -->
+<button onclick="loginWithGoogle()">Sign in with Google</button>
