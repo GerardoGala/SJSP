@@ -1,0 +1,62 @@
+<!-- Load the official Google Authentication library -->
+<script src="https://google.com" async defer></script>
+
+<div id="admin-gate">
+  <h2>SJSail Membership Admin Panel</h2>
+  <!-- The official Google Sign-In Button Component -->
+  <div id="buttonDiv"></div>
+</div>
+
+<!-- This hidden dashboard layout only displays after a successful secure login -->
+<div id="secure-dashboard" style="display: none;">
+  <h3>Active Membership List</h3>
+  <table id="users-table">
+    <thead>
+      <tr><th>Name</th><th>Email</th><th>Join Date</th></tr>
+    </thead>
+    <tbody id="user-rows">
+      <!-- Your JavaScript API call will dynamically dump user rows here -->
+    </tbody>
+  </table>
+</div>
+
+<script>
+  // 1. Initialize the Google Auth popup
+  window.onload = function () {
+    google.accounts.id.initialize({
+      client_id: "YOUR_GOOGLE_CLIENT_://googleusercontent.com",
+      callback: handleCredentialResponse
+    });
+    google.accounts.id.renderButton(
+      document.getElementById("buttonDiv"),
+      { theme: "outline", size: "large" }
+    );
+  }
+
+  // 2. Handle the secure token validation
+  async function handleCredentialResponse(response) {
+    // Validate user identity token with Google
+    const userData = parseJwt(response.credential);
+    
+    // Check if the logging-in email matches your admin email address
+    if (userData.email === "gerardo@yourdomain.com") {
+      document.getElementById("admin-gate").style.display = "none";
+      document.getElementById("secure-dashboard").style.display = "block";
+      
+      // 3. Trigger the Magic API call to pull the membership database list
+      fetchMembershipList();
+    } else {
+      alert("Unauthorized Access!");
+    }
+  }
+
+  async function fetchMembershipList() {
+    // Call Google's Identity User management endpoint
+    const res = await fetch('https://googleapis.com', {
+      headers: { 'Authorization': 'Bearer YOUR_API_ACCESS_TOKEN' }
+    });
+    const data = await res.json();
+    
+    // Loop and dump data arrays into your HTML table rows...
+  }
+</script>
