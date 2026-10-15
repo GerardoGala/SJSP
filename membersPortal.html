@@ -1,7 +1,8 @@
 <!-- 1. Load the official Firebase SDK Modules from a CDN -->
 <script type="module">
-  import { initializeApp } from "https://gstatic.com";
-  import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://gstatic.com";
+import { initializeApp } from "https://firebase-app.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://firebase-auth.js";
+
 
   // 2. Paste your exact configuration details here
   const firebaseConfig = {
@@ -24,7 +25,7 @@
         console.log("Successfully logged in:", user.displayName);
         
         // Check if the logging-in user is YOU (the admin)
-        if (user.email === "YOUR_ADMIN_EMAIL@gmail.com") {
+        if (user.email === "gerardogala1959@gmail.com") {
           alert("Welcome Admin! Access Granted.");
           // Trigger your function to load the membership list here
         }
