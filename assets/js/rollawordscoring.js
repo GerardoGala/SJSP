@@ -3,6 +3,8 @@
 // Board analysis, word discovery, and score display
 // =========================================================================
 
+
+
 async function processEndgameScoring(timeBonus = 0) {
   await dictionaryLoadingPromise;
 
@@ -146,9 +148,16 @@ async function processEndgameScoring(timeBonus = 0) {
     });
   });
 
-  // CALCULATE THE BEST WORD SCORES
 
-  const bestResult = calculateBestWordScores(rawWords, blankTiles);
+
+  // CHECK THE MOAT RULE BEFORE SCORING
+  if (!hasSingleIsland(boardMatrix)) {
+    scoreArea.innerHTML = "";
+    alert("Invalid game. Only one island is allowed.");
+    return;
+  }
+
+const bestResult = calculateBestWordScores(rawWords, blankTiles);
 
   // DISPLAY THE SELECTED LETTERS ON BLANK TILES
 

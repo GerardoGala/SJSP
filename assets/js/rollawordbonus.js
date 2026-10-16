@@ -139,7 +139,7 @@ function applyScoreBonuses(
     const timeBonusDiv = document.createElement("div");
 
     timeBonusDiv.textContent =
-      `Time bonus = ${awardedTimeBonus / 5} x 5 = ` +
+      `Time bonus = ${awardedTimeBonus / 2} x 2 = ` +
       `${awardedTimeBonus}`;
 
     scoreArea.appendChild(timeBonusDiv);
