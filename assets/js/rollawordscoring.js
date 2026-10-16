@@ -66,7 +66,7 @@ const dictionaryLoadingPromise = loadLocalDictionary();
 // ENDGAME SCORING
 // =========================================================================
 
-async function processEndgameScoring() {
+async function processEndgameScoring(timeBonus = 0) {
 
   // Ensure the dictionary has finished loading before scoring.
   await dictionaryLoadingPromise;
@@ -321,21 +321,45 @@ async function processEndgameScoring() {
     scoreArea.appendChild(jackpotDiv);
   }
 
-  // =======================================================================
-  // DISPLAY FINAL SCORE
-  // =======================================================================
+  
+// =======================================================================
+// TIME BONUS
+// =======================================================================
 
-  const finalDiv = document.createElement("div");
+const allWordsValid = validatedWords.every(word => word.isValid);
 
-  finalDiv.classList.add("total-line");
-  finalDiv.textContent = `TOTAL = ${finalScore}`;
+const awardedTimeBonus =
+  totalDicePlaced === 8 && allWordsValid
+    ? timeBonus
+    : 0;
 
-  scoreArea.appendChild(finalDiv);
+finalScore += awardedTimeBonus;
 
-  console.log("RollaWord scoring complete.");
-  console.log("Dice placed in playing area:", totalDicePlaced);
-  console.log("Words checked:", validatedWords.length);
-  console.log("Final score:", finalScore);
+if (awardedTimeBonus > 0) {
+  const timeBonusDiv = document.createElement("div");
+
+  timeBonusDiv.textContent =
+    `Time bonus = ${awardedTimeBonus / 5} x 5 = ${awardedTimeBonus}`;
+
+  scoreArea.appendChild(timeBonusDiv);
+}
+
+// =======================================================================
+// DISPLAY FINAL SCORE
+// =======================================================================
+
+const finalDiv = document.createElement("div");
+
+finalDiv.classList.add("total-line");
+finalDiv.textContent = `TOTAL = ${finalScore}`;
+
+scoreArea.appendChild(finalDiv);
+
+console.log("RollaWord scoring complete.");
+console.log("Dice placed in playing area:", totalDicePlaced);
+console.log("Words checked:", validatedWords.length);
+console.log("Time bonus:", timeBonus);
+console.log("Final score:", finalScore);
 }
 
 // =========================================================================

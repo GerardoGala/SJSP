@@ -133,9 +133,12 @@ const countdownTicker = setInterval(() => {
 
 function clearTimeoutEngine() {
   clearInterval(countdownTicker);
-  timerDisplay.textContent = "0:00";
+
   document.getElementById('done-btn').disabled = true;
-  processEndgameScoring();
+
+  const timeBonus = timeRemaining * 5;
+
+  processEndgameScoring(timeBonus);
 }
 
 document.getElementById('done-btn').addEventListener('click', () => {
