@@ -1,12 +1,8 @@
+/* =========================================================================
+   ROLLAWORD THEME BRIDGE LAYER - INTEGRATED WITH PUBLII TOKENS
+   ========================================================================= */
 :root {
-  /* Clean, Light Publii-Inspired Palette */
-  --bg-main: #ffffff;
-  --bg-panel: #f8f9fa;
-  --border-color: #e5e7eb;
-  --text-main: #1f2937;
-  --text-muted: #4b5563;
-  
-  /* Vibrant Multi-Color Dice System */
+  /* Inherit custom palette allocations while binding custom point elements */
   --color-blue: #2563eb;
   --color-yellow: #ca8a04;
   --color-red: #dc2626;
@@ -21,121 +17,188 @@
 }
 
 body {
-  background-color: var(--bg-main);
-  color: var(--text-main);
-  /* Professional, highly readable Publii typographic stack */
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+  /* Inherit absolute typographic rules mapped from site theme */
+  background: var(--page-bg);
+  color: var(--text-color);
+  font-family: var(--body-font);
+  font-variation-settings: "wght" var(--font-weight-normal);
+  letter-spacing: var(--letter-spacing);
+  line-height: var(--line-height);
   display: flex;
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
-  padding: 20px;
+  padding: 40px 20px;
 }
 
 header {
+  margin-bottom: 30px;
   text-align: center;
-  margin-bottom: 25px;
 }
 
-h1 {
-  font-size: 2.4rem;
-  font-weight: 800;
-  letter-spacing: -0.5px;
-  color: #111827;
-  margin-bottom: 8px;
-}
-
-/* 1) Count-Down Timer Style */
+/* 1) Dynamic Countdown Timer Clock style */
 #timer-container {
   font-size: 2.2rem;
   font-weight: 700;
-  font-family: monospace;
+  font-family: Menlo, Monaco, Consolas, monospace;
   color: var(--color-red);
-  background: var(--bg-panel);
-  padding: 8px 25px;
-  border-radius: 8px;
-  border: 1px solid var(--border-color);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  background: var(--lighter);
+  padding: 10px 30px;
+  border-radius: calc(var(--border-radius) * 4);
+  border: 1px solid var(--light);
   display: inline-block;
+  margin-top: 15px;
 }
 
-/* 2) Static 8x8 Grid Layout */
+/* Structural horizontal grid box grouping to hold score output and grid mesh safely */
+#game-container {
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 35px;
+}
+
+/* 2) Top-Left Plain Text Scoring Formulation Workspace Panel */
+#score-output-area {
+  flex: 1;
+  min-width: 220px;
+  font-family: Menlo, Monaco, Consolas, monospace;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--text-color);
+  text-align: left;
+  background: var(--lighter);
+  padding: 20px;
+  border-radius: calc(var(--border-radius) * 4);
+  border: 1px solid var(--light);
+}
+
+#score-output-area div {
+  margin-bottom: 6px;
+}
+
+#score-output-area .total-line {
+  font-weight: 800;
+  margin-top: 12px;
+  border-top: 2px solid var(--text-color);
+  padding-top: 8px;
+}
+
+/* 3) Playfield Mesh Container */
 #grid-container {
   display: grid;
   grid-template-columns: repeat(8, var(--cell-size));
   grid-template-rows: repeat(8, var(--cell-size));
   gap: 2px;
-  background-color: var(--border-color);
+  background-color: var(--light);
   padding: 3px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-  margin-bottom: 35px;
+  border-radius: calc(var(--border-radius) * 4);
 }
 
+/* Update this block to lock structural sizes open against layout collapses */
 .grid-cell {
-  background-color: #ffffff;
-  border-radius: 4px;
+  background-color: var(--page-bg);
+  width: var(--cell-size);
+  height: var(--cell-size);
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: background-color 0.15s;
+  transition: background-color 0.15s ease-out;
+  
+  /* OVERRIDE OVERLAY LAYER COLLAPSE: Force grid blocks to render fully open */
+  flex-shrink: 0 !important;
+  min-width: var(--cell-size) !important;
+  min-height: var(--cell-size) !important;
+  border: 1px solid var(--light); /* Subtle box line indicators to make cells pop */
 }
 
+
 .grid-cell.drag-over {
-  background-color: #eff6ff;
+  background-color: var(--lighter);
   border: 1px dashed var(--color-blue);
 }
 
-/* 3) Draggable Dice Tray Elements */
+/* 4) Draggable Hand Rack Tray Base Elements */
 #dice-tray {
   display: flex;
   gap: 15px;
-  background: var(--bg-panel);
+  background: var(--lighter);
   padding: 20px;
-  border-radius: 12px;
-  border: 1px solid var(--border-color);
-  min-width: 520px;
+  border-radius: calc(var(--border-radius) * 6);
+  border: 1px solid var(--light);
   min-height: 95px;
   justify-content: center;
   align-items: center;
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+  width: 100%;
 }
 
-/* Draggable Dice with Embedded Scoring Badge Mechanics */
+/* Interactive Draggable Tile Elements */
 .die {
   position: relative;
   width: 52px;
   height: 52px;
-  border-radius: 8px;
+  border-radius: calc(var(--border-radius) * 3);
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   font-weight: 700;
-  color: white;
+  color: #ffffff;
   cursor: grab;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  transition: transform 0.1s, box-shadow 0.1s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
+  transition: transform 0.1s ease-out, box-shadow 0.1s ease-out;
 }
 
 .die:active {
   cursor: grabbing;
   transform: scale(1.05);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.12);
 }
 
-/* Embedded Scrabble Value Subscript Point Badge */
+/* Scrabble point notation sub-integer badge styling values */
 .die-value {
   position: absolute;
-  bottom: 3px;
-  right: 5px;
+  bottom: 4px;
+  right: 6px;
   font-size: 0.65rem;
   font-weight: 800;
   opacity: 0.85;
   line-height: 1;
 }
 
-/* Custom Dice Color Profiles */
+/* Dynamic Multi-Color Dice Profiles allocation rules */
 .die.blue { background-color: var(--color-blue); }
 .die.yellow { background-color: var(--color-yellow); }
 .die.red { background-color: var(--color-red); }
+
+/* Crossword line strikethrough layout mechanics */
+.word-strike-line {
+  position: absolute;
+  height: 5px;
+  border-radius: 2px;
+  z-index: 10;
+  transform-origin: left center;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.word-strike-line.red { background-color: rgba(220, 38, 38, 0.85); }
+.word-strike-line.blue { background-color: rgba(37, 99, 235, 0.85); }
+.word-strike-line.yellow { background-color: rgba(202, 138, 4, 0.85); }
+
+.multiplier-tag {
+  position: absolute;
+  top: -22px;
+  background: var(--dark);
+  color: #ffffff;
+  padding: 2px 6px;
+  border-radius: 2px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  white-space: nowrap;
+}

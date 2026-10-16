@@ -4,24 +4,33 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RollaWord - Game Engine Prototype</title>
-  <!-- Link to the separated CSS asset asset -->
+  <!-- Native path synchronization matching flat Publii theme workspace asset directory -->
   <link rel="stylesheet" href="assets/css/rollaword.css">
 </head>
 <body>
 
-  <header>
-    <h1>ROLLAWORD</h1>
-    <!-- 1) Countdown Timer Display Window -->
-    <div id="timer-container"><span id="timer-display">1:00</span></div>
+  <header class="hero__content hero__content--centered">
+    <h1 class="h1">ROLLAWORD</h1>
+    <!-- Timer utilizes standard countdown block constraints -->
+    <div id="timer-container"><span id="timer-display">3:00</span></div>
   </header>
 
-  <!-- 2) Static 8x8 Playfield Grid Area -->
-  <div id="grid-container"></div>
+  <!-- Clean flex configuration framework matching site layout widths -->
+  <div id="game-container" class="entry-wrapper">
+    <!-- Dynamic Top-Left Plain Text Scoring Output Formula Field -->
+    <div id="score-output-area">
+      <div>Game Active...</div>
+    </div>
 
-  <!-- 3) Draggable Dice Rack Tray Area -->
-  <div id="dice-tray"></div>
+    <!-- 8x8 Playfield Mesh Grid Area -->
+    <div id="grid-container" style="position: relative;"></div>
+  </div>
 
-  <!-- Link to the separated JavaScript application logic -->
-  <script src="assets/js/rollaword.js"></script>
+  <!-- Draggable Core Dice Handling Rack Tray Area -->
+  <div id="dice-tray" class="entry-wrapper"></div>
+
+  <!-- Execution scripts order sequence parameters -->
+  <script src="assets/js/rollaWordScoring.js"></script>
+  <script src="assets/js/rollaWord.js"></script>
 </body>
 </html>
