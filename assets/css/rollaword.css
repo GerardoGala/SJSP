@@ -1,0 +1,141 @@
+:root {
+  /* Clean, Light Publii-Inspired Palette */
+  --bg-main: #ffffff;
+  --bg-panel: #f8f9fa;
+  --border-color: #e5e7eb;
+  --text-main: #1f2937;
+  --text-muted: #4b5563;
+  
+  /* Vibrant Multi-Color Dice System */
+  --color-blue: #2563eb;
+  --color-yellow: #ca8a04;
+  --color-red: #dc2626;
+  --cell-size: 55px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  /* Professional, highly readable Publii typographic stack */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+h1 {
+  font-size: 2.4rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: #111827;
+  margin-bottom: 8px;
+}
+
+/* 1) Count-Down Timer Style */
+#timer-container {
+  font-size: 2.2rem;
+  font-weight: 700;
+  font-family: monospace;
+  color: var(--color-red);
+  background: var(--bg-panel);
+  padding: 8px 25px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  display: inline-block;
+}
+
+/* 2) Static 8x8 Grid Layout */
+#grid-container {
+  display: grid;
+  grid-template-columns: repeat(8, var(--cell-size));
+  grid-template-rows: repeat(8, var(--cell-size));
+  gap: 2px;
+  background-color: var(--border-color);
+  padding: 3px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  margin-bottom: 35px;
+}
+
+.grid-cell {
+  background-color: #ffffff;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.15s;
+}
+
+.grid-cell.drag-over {
+  background-color: #eff6ff;
+  border: 1px dashed var(--color-blue);
+}
+
+/* 3) Draggable Dice Tray Elements */
+#dice-tray {
+  display: flex;
+  gap: 15px;
+  background: var(--bg-panel);
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  min-width: 520px;
+  min-height: 95px;
+  justify-content: center;
+  align-items: center;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+}
+
+/* Draggable Dice with Embedded Scoring Badge Mechanics */
+.die {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: white;
+  cursor: grab;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.die:active {
+  cursor: grabbing;
+  transform: scale(1.05);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Embedded Scrabble Value Subscript Point Badge */
+.die-value {
+  position: absolute;
+  bottom: 3px;
+  right: 5px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  opacity: 0.85;
+  line-height: 1;
+}
+
+/* Custom Dice Color Profiles */
+.die.blue { background-color: var(--color-blue); }
+.die.yellow { background-color: var(--color-yellow); }
+.die.red { background-color: var(--color-red); }
