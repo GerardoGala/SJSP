@@ -93,7 +93,7 @@ async function processEndgameScoring(timeBonus = 0) {
 
   // =======================================================================
   // BUILD THE BOARD MATRIX
-  // Row index 7 is the dice tray and must NEVER be scored.
+  // All 8 rows are part of the playing field and must be scored.
   // =======================================================================
 
   const boardMatrix = Array(GRID_ROWS)
@@ -107,9 +107,7 @@ async function processEndgameScoring(timeBonus = 0) {
     const row = parseInt(cell.dataset.row, 10);
     const col = parseInt(cell.dataset.col, 10);
 
-    // Ignore every die remaining in the eighth row.
-    if (row === 7) return;
-
+ 
     if (cell.hasChildNodes()) {
 
       const die = cell.querySelector(".die");
@@ -134,7 +132,7 @@ async function processEndgameScoring(timeBonus = 0) {
 
   const rawWords = [];
 
-  for (let r = 0; r < 7; r++) {
+  for (let r = 0; r < GRID_ROWS; r++) {
 
     let currentWord = [];
 
@@ -171,7 +169,7 @@ async function processEndgameScoring(timeBonus = 0) {
 
     let currentWord = [];
 
-    for (let r = 0; r < 7; r++) {
+for (let r = 0; r < GRID_ROWS; r++) {
 
       if (boardMatrix[r][c]) {
 
