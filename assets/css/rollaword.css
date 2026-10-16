@@ -1,12 +1,13 @@
 /* =========================================================================
-   ROLLAWORD THEME BRIDGE LAYER - INTEGRATED WITH PUBLII TOKENS
+   ROLLAWORD THEME BRIDGE LAYER - MOBILE-FIRST COHESIVE SYSTEM
    ========================================================================= */
 :root {
-  /* Inherit custom palette allocations while binding custom point elements */
   --color-blue: #2563eb;
   --color-yellow: #ca8a04;
   --color-red: #dc2626;
-  --cell-size: 55px;
+  
+  /* Scale dynamically based on screen real estate (approx 44px tiles on narrow viewports) */
+  --cell-size: clamp(40px, 11vw, 55px);
 }
 
 * {
@@ -17,54 +18,142 @@
 }
 
 body {
-  /* Inherit absolute typographic rules mapped from site theme */
   background: var(--page-bg);
   color: var(--text-color);
   font-family: var(--body-font);
   font-variation-settings: "wght" var(--font-weight-normal);
   letter-spacing: var(--letter-spacing);
   line-height: var(--line-height);
+  
+  /* Strict mobile single-column stacking container blueprint */
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 100vh;
-  padding: 40px 20px;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  padding: 15px 10px;
 }
 
 header {
-  margin-bottom: 30px;
+  margin-bottom: 15px;
   text-align: center;
 }
 
-/* 1) Dynamic Countdown Timer Clock style */
+/* 1) Timer Clock Module Wrapper styling rules */
 #timer-container {
-  font-size: 2.2rem;
+  font-size: 1.8rem;
   font-weight: 700;
   font-family: Menlo, Monaco, Consolas, monospace;
   color: var(--color-red);
   background: var(--lighter);
-  padding: 10px 30px;
+  padding: 6px 20px;
   border-radius: calc(var(--border-radius) * 4);
   border: 1px solid var(--light);
   display: inline-block;
-  margin-top: 15px;
+  margin-top: 8px;
 }
 
-/* Structural horizontal grid box grouping to hold score output and grid mesh safely */
-#game-container {
+/* 2) 8x8 Responsive Grid Constraints */
+#grid-container {
+  display: grid;
+  grid-template-columns: repeat(8, var(--cell-size));
+  grid-template-rows: repeat(8, var(--cell-size));
+  gap: 1px;
+  background-color: var(--dark, #71717a);
+  padding: 1px;
+  border-radius: calc(var(--border-radius) * 4);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
+}
+
+.grid-cell {
+  background-color: var(--page-bg);
+  width: var(--cell-size);
+  height: var(--cell-size);
   display: flex;
-  flex-direction: row;
-  gap: 40px;
-  align-items: flex-start;
   justify-content: center;
-  width: 100%;
-  margin-bottom: 35px;
+  align-items: center;
+  transition: background-color 0.15s ease-out;
+  
+  flex-shrink: 0 !important;
+  min-width: var(--cell-size) !important;
+  min-height: var(--cell-size) !important;
+  border: 1px solid var(--light, #e4e4e7);
 }
 
-/* 2) Top-Left Plain Text Scoring Formulation Workspace Panel */
+.grid-cell.drag-over {
+  background-color: var(--lighter);
+  border: 1px dashed var(--color-blue);
+}
+
+/* 3) Flexible Letters Tray Rack Area Box mapping rules */
+#dice-tray {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  background: var(--lighter);
+  padding: 15px;
+  border-radius: calc(var(--border-radius) * 4);
+  border: 1px solid var(--light);
+  min-height: 80px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: calc(var(--cell-size) * 8 + 6px);
+  margin-bottom: 20px;
+}
+
+/* Draggable Tile Dimension properties scaling with viewports */
+.die {
+  position: relative;
+  width: calc(var(--cell-size) - 2px);
+  height: calc(var(--cell-size) - 2px);
+  border-radius: calc(var(--border-radius) * 3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: clamp(1.1rem, 4vw, 1.5rem);
+  font-weight: 700;
+  color: #ffffff;
+  cursor: grab;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.die-value {
+  position: absolute;
+  bottom: 2px;
+  right: 4px;
+  font-size: 0.55rem;
+  font-weight: 800;
+  opacity: 0.85;
+  line-height: 1;
+}
+
+.die.blue { background-color: var(--color-blue); }
+.die.yellow { background-color: var(--color-yellow); }
+.die.red { background-color: var(--color-red); }
+
+/* 4) Action Submission Button Panel Formatting */
+#action-panel {
+  width: 100%;
+  max-width: calc(var(--cell-size) * 8 + 6px);
+  margin-bottom: 25px;
+}
+
+#done-btn {
+  width: 100% !important;
+  justify-content: center;
+  font-size: 1.1rem;
+  padding: 12px 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* 5) Bottom Score Evaluation Box Structure placement rules */
 #score-output-area {
-  flex: 1;
-  min-width: 220px;
+  width: 100%;
+  max-width: calc(var(--cell-size) * 8 + 6px);
   font-family: Menlo, Monaco, Consolas, monospace;
   font-size: 1.1rem;
   line-height: 1.8;
@@ -87,103 +176,14 @@ header {
   padding-top: 8px;
 }
 
-/* 3) Playfield Mesh Container */
-#grid-container {
-  display: grid;
-  grid-template-columns: repeat(8, var(--cell-size));
-  grid-template-rows: repeat(8, var(--cell-size));
-  gap: 1px; /* The gap acts as our crisp border line background */
-  background-color: var(--dark, #71717a); /* Dark base to fill the gaps */
-  padding: 1px;
-  border-radius: calc(var(--border-radius) * 4);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-}
-
-.grid-cell {
-  background-color: var(--page-bg);
-  width: var(--cell-size);
-  height: var(--cell-size);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: background-color 0.15s ease-out;
-  
-  /* Overrides layout collapses and makes sure outer cell borders appear clearly */
-  flex-shrink: 0 !important;
-  min-width: var(--cell-size) !important;
-  min-height: var(--cell-size) !important;
-  border: 1px solid var(--light, #e4e4e7); 
-}
-
-.grid-cell.drag-over {
-  background-color: var(--lighter);
-  border: 1px dashed var(--color-blue);
-}
-
-/* 4) Draggable Hand Rack Tray Base Elements */
-#dice-tray {
-  display: flex;
-  gap: 15px;
-  background: var(--lighter);
-  padding: 20px;
-  border-radius: calc(var(--border-radius) * 6);
-  border: 1px solid var(--light);
-  min-height: 95px;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-}
-
-/* Interactive Draggable Tile Elements */
-.die {
-  position: relative;
-  width: 52px;
-  height: 52px;
-  border-radius: calc(var(--border-radius) * 3);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #ffffff;
-  cursor: grab;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
-  transition: transform 0.1s ease-out, box-shadow 0.1s ease-out;
-}
-
-.die:active {
-  cursor: grabbing;
-  transform: scale(1.05);
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.12);
-}
-
-/* Scrabble point notation sub-integer badge styling values */
-.die-value {
-  position: absolute;
-  bottom: 4px;
-  right: 6px;
-  font-size: 0.65rem;
-  font-weight: 800;
-  opacity: 0.85;
-  line-height: 1;
-}
-
-/* Dynamic Multi-Color Dice Profiles allocation rules */
-.die.blue { background-color: var(--color-blue); }
-.die.yellow { background-color: var(--color-yellow); }
-.die.red { background-color: var(--color-red); }
-
-/* Crossword line strikethrough layout mechanics */
+/* Overlay Line Strikethroughs physics arrays configurations */
 .word-strike-line {
   position: absolute;
-  height: 5px;
+  height: 4px;
   border-radius: 2px;
   z-index: 10;
   transform-origin: left center;
   pointer-events: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .word-strike-line.red { background-color: rgba(220, 38, 38, 0.85); }
@@ -192,12 +192,12 @@ header {
 
 .multiplier-tag {
   position: absolute;
-  top: -22px;
+  top: -20px;
   background: var(--dark);
   color: #ffffff;
-  padding: 2px 6px;
+  padding: 1px 4px;
   border-radius: 2px;
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   font-weight: 800;
   white-space: nowrap;
 }

@@ -1,5 +1,5 @@
 // =========================================================================
-// INITIALIZER CORE MODULE LOOP
+// INITIALIZER CORE MODULE LOOP - RESPONSIVE ACTIONS HOIST
 // =========================================================================
 const GRID_ROWS = 8;
 const GRID_COLS = 8;
@@ -114,14 +114,13 @@ function handleTrayDrop(e) {
   if (dieElement && e.target.closest('#dice-tray')) diceTray.appendChild(dieElement);
 }
 
+// Countdown Clock Runner module
 let timeRemaining = INITIAL_TIME_SECONDS;
 const timerDisplay = document.getElementById('timer-display');
 
 const countdownTicker = setInterval(() => {
   if (timeRemaining <= 0) {
-    clearInterval(countdownTicker);
-    timerDisplay.textContent = "0:00";
-    processEndgameScoring();
+    clearTimeoutEngine();
     return;
   }
   timeRemaining--;
@@ -129,3 +128,15 @@ const countdownTicker = setInterval(() => {
   const seconds = timeRemaining % 60;
   timerDisplay.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 }, 1000);
+
+function clearTimeoutEngine() {
+  clearInterval(countdownTicker);
+  timerDisplay.textContent = "0:00";
+  document.getElementById('done-btn').disabled = true;
+  processEndgameScoring();
+}
+
+// Business Rule Implementation: Manual Early Scoring Hook listener entry
+document.getElementById('done-btn').addEventListener('click', () => {
+  clearTimeoutEngine();
+});
