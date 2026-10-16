@@ -71,15 +71,7 @@ async function processEndgameScoring() {
     if (currentWord.length >= 2) rawWords.push({ tiles: currentWord });
   }
 
-  const validationPromises = rawWords.map(async (wordObj) => {
-    const textString = wordObj.tiles.map(t => t.letter.toLowerCase()).join("");
-    try {
-      const response = await fetch(`https://dictionaryapi.dev{textString}`);
-      return { ...wordObj, text: textString, isValid: response.ok };
-    } catch (err) {
-      return { ...wordObj, text: textString, isValid: BACKUP_DICTIONARY.has(textString) };
-    }
-  });
+
 
   const validatedWords = await Promise.all(validationPromises);
   scoreArea.innerHTML = ""; 
