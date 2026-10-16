@@ -6,6 +6,7 @@
 
 
 async function processEndgameScoring(timeBonus = 0) {
+  const gridContainer = document.getElementById("game-board");
   await dictionaryLoadingPromise;
 
   if (!dictionaryReady) {
@@ -28,17 +29,16 @@ async function processEndgameScoring(timeBonus = 0) {
   const scoreArea = document.getElementById("score-output-area");
   scoreArea.innerHTML = "<div>Checking words...</div>";
 
-  // THE LAST ROW IS RESERVED FOR UNUSED DICE.
-
-  const playableRows = GRID_ROWS - 1;
+  // The separate dice tray is not part of the playing board.
+  const playableRows = 6;
 
   // BUILD THE COMPLETE BOARD.
   // Only dice in playable rows are counted.
-
   const boardMatrix = Array.from(
-    { length: GRID_ROWS },
+    { length: playableRows },
     () => Array(GRID_COLS).fill(null)
   );
+
 
   let totalDicePlaced = 0;
 
@@ -59,6 +59,17 @@ async function processEndgameScoring(timeBonus = 0) {
 
     const originalLetter = (die.dataset.letter || "").toUpperCase();
     const isBlank = originalLetter === "*";
+    if (!boardMatrix[row]) {
+      console.error("Row outside boardMatrix:", {
+        row,
+        col,
+        GRID_ROWS,
+        GRID_COLS,
+        boardMatrixRows: boardMatrix.length,
+        cell: cell
+      });
+      return;
+    }
 
     boardMatrix[row][col] = {
       id: die.id,

@@ -1,8 +1,8 @@
 // =========================================================================
-// INITIALIZER CORE MODULE LOOP - COMPACT 8x8 REAL ESTATE MODEL
+// ROLLAWORD - TWO-COLOR, TWO-GRID LAYOUT
 // =========================================================================
 
-const GRID_ROWS = 8;
+const GRID_ROWS = 6;
 const GRID_COLS = 8;
 const INITIAL_TIME_SECONDS = 180;
 
@@ -18,21 +18,26 @@ const SCRABBLE_SCORE_MAP = {
 };
 
 const PHYSICAL_DICE_ROSTER = [
-  [ {L:"A", C:"BLUE"}, {L:"E", C:"YELLOW"}, {L:"I", C:"BLUE"}, {L:"O", C:"YELLOW"}, {L:"U", C:"RED"}, {L:"T", C:"BLUE"} ],
-  [ {L:"A", C:"YELLOW"}, {L:"E", C:"BLUE"}, {L:"I", C:"YELLOW"}, {L:"O", C:"BLUE"}, {L:"N", C:"RED"}, {L:"R", C:"YELLOW"} ],
-  [ {L:"A", C:"BLUE"}, {L:"E", C:"YELLOW"}, {L:"I", C:"BLUE"}, {L:"O", C:"YELLOW"}, {L:"S", C:"RED"}, {L:"L", C:"BLUE"} ],
-  [ {L:"A", C:"YELLOW"}, {L:"E", C:"BLUE"}, {L:"Y", C:"YELLOW"}, {L:"D", C:"BLUE"}, {L:"G", C:"RED"}, {L:"M", C:"YELLOW"} ],
-  [ {L:"B", C:"BLUE"}, {L:"C", C:"YELLOW"}, {L:"D", C:"BLUE"}, {L:"F", C:"YELLOW"}, {L:"H", C:"RED"}, {L:"P", C:"BLUE"} ],
-  [ {L:"L", C:"YELLOW"}, {L:"N", C:"BLUE"}, {L:"R", C:"YELLOW"}, {L:"S", C:"BLUE"}, {L:"T", C:"RED"}, {L:"W", C:"YELLOW"} ],
-  [ {L:"G", C:"BLUE"}, {L:"H", C:"YELLOW"}, {L:"M", C:"BLUE"}, {L:"V", C:"YELLOW"}, {L:"K", C:"RED"}, {L:"*", C:"BLUE"} ],
-  [ {L:"J", C:"YELLOW"}, {L:"K", C:"BLUE"}, {L:"Q", C:"YELLOW"}, {L:"X", C:"BLUE"}, {L:"Z", C:"RED"}, {L:"*", C:"YELLOW"} ]
+  [ {L:"A", C:"BLUE"}, {L:"E", C:"RED"},  {L:"I", C:"BLUE"}, {L:"O", C:"RED"},  {L:"U", C:"RED"},  {L:"T", C:"BLUE"} ],
+  [ {L:"A", C:"RED"},  {L:"E", C:"BLUE"}, {L:"I", C:"RED"},  {L:"O", C:"BLUE"}, {L:"N", C:"RED"}, {L:"R", C:"RED"} ],
+  [ {L:"A", C:"BLUE"}, {L:"E", C:"RED"},  {L:"I", C:"BLUE"}, {L:"O", C:"RED"},  {L:"S", C:"RED"},  {L:"L", C:"BLUE"} ],
+  [ {L:"A", C:"RED"},  {L:"E", C:"BLUE"}, {L:"Y", C:"RED"},  {L:"D", C:"BLUE"}, {L:"G", C:"RED"},  {L:"M", C:"RED"} ],
+  [ {L:"B", C:"BLUE"}, {L:"C", C:"RED"},  {L:"D", C:"BLUE"}, {L:"F", C:"RED"},  {L:"H", C:"RED"},  {L:"P", C:"BLUE"} ],
+  [ {L:"L", C:"RED"},  {L:"N", C:"BLUE"}, {L:"R", C:"RED"},  {L:"S", C:"BLUE"}, {L:"T", C:"RED"},  {L:"W", C:"RED"} ],
+  [ {L:"G", C:"BLUE"}, {L:"H", C:"RED"},  {L:"M", C:"BLUE"}, {L:"V", C:"RED"},  {L:"K", C:"RED"},  {L:"*", C:"BLUE"} ],
+  [ {L:"J", C:"RED"},  {L:"K", C:"BLUE"}, {L:"Q", C:"RED"},  {L:"X", C:"BLUE"}, {L:"Z", C:"RED"},  {L:"*", C:"RED"} ]
 ];
 
 // =========================================================================
-// PHASE 1: BUILD THE 8x8 PLAYGROUND GRID
+// PHASE 1: BUILD THE 6x8 PLAYING BOARD
 // =========================================================================
 
-const gridContainer = document.getElementById("grid-container");
+const gameBoard = document.getElementById("game-board");
+const diceTray = document.getElementById("dice-tray");
+
+if (!gameBoard || !diceTray) {
+  throw new Error("RollaWord requires #game-board and #dice-tray containers.");
+}
 
 for (let r = 0; r < GRID_ROWS; r++) {
   for (let c = 0; c < GRID_COLS; c++) {
@@ -46,12 +51,30 @@ for (let r = 0; r < GRID_ROWS; r++) {
     cell.addEventListener("dragleave", handleDragLeave);
     cell.addEventListener("drop", handleDrop);
 
-    gridContainer.appendChild(cell);
+    gameBoard.appendChild(cell);
   }
 }
 
 // =========================================================================
-// PHASE 2: RANDOMIZE DICE WITH Q/U PROTECTION
+// PHASE 2: BUILD THE 1x8 DICE TRAY
+// =========================================================================
+
+for (let c = 0; c < GRID_COLS; c++) {
+  const cell = document.createElement("div");
+
+  cell.classList.add("grid-cell", "tray-cell");
+  cell.dataset.row = "tray";
+  cell.dataset.col = c;
+
+  cell.addEventListener("dragover", handleDragOver);
+  cell.addEventListener("dragleave", handleDragLeave);
+  cell.addEventListener("drop", handleDrop);
+
+  diceTray.appendChild(cell);
+}
+
+// =========================================================================
+// PHASE 3: RANDOMIZE DICE WITH Q/U PROTECTION
 // =========================================================================
 
 const initialRollResult = PHYSICAL_DICE_ROSTER.map(physicalDie => {
@@ -82,7 +105,7 @@ if (hasQ && !hasU) {
 }
 
 // =========================================================================
-// PHASE 3: PLACE THE ROLLED DICE IN ROW 7 (THE 8TH ROW)
+// PHASE 4: PLACE THE EIGHT DICE IN THE SEPARATE TRAY
 // =========================================================================
 
 verifiedRollResult.forEach((chosenFace, index) => {
@@ -104,11 +127,11 @@ verifiedRollResult.forEach((chosenFace, index) => {
   dieElement.appendChild(valueBadge);
 
   dieElement.addEventListener("dragstart", e => {
-    e.dataTransfer.setData("text/plain", e.target.id);
+    e.dataTransfer.setData("text/plain", e.currentTarget.id);
   });
 
-  const targetTrayCell = gridContainer.querySelector(
-    `.grid-cell[data-row="7"][data-col="${index}"]`
+  const targetTrayCell = diceTray.querySelector(
+    `.grid-cell[data-col="${index}"]`
   );
 
   if (targetTrayCell) {
@@ -123,17 +146,18 @@ verifiedRollResult.forEach((chosenFace, index) => {
 function handleDragOver(e) {
   e.preventDefault();
 
-  if (
-    e.target.classList.contains("grid-cell") &&
-    !e.target.hasChildNodes()
-  ) {
-    e.target.classList.add("drag-over");
+  const cell = e.target.closest(".grid-cell");
+
+  if (cell && !cell.hasChildNodes()) {
+    cell.classList.add("drag-over");
   }
 }
 
 function handleDragLeave(e) {
-  if (e.target.classList.contains("grid-cell")) {
-    e.target.classList.remove("drag-over");
+  const cell = e.target.closest(".grid-cell");
+
+  if (cell) {
+    cell.classList.remove("drag-over");
   }
 }
 
@@ -161,6 +185,9 @@ function handleDrop(e) {
 let timeRemaining = INITIAL_TIME_SECONDS;
 
 const timerDisplay = document.getElementById("timer-display");
+const doneButton = document.getElementById("done-btn");
+
+let gameEnded = false;
 
 const countdownTicker = setInterval(() => {
   if (timeRemaining <= 0) {
@@ -178,15 +205,16 @@ const countdownTicker = setInterval(() => {
 }, 1000);
 
 function clearTimeoutEngine() {
+  if (gameEnded) return;
+
+  gameEnded = true;
   clearInterval(countdownTicker);
 
-  document.getElementById("done-btn").disabled = true;
+  doneButton.disabled = true;
 
   const timeBonus = timeRemaining * 5;
 
   processEndgameScoring(timeBonus);
 }
 
-document.getElementById("done-btn").addEventListener("click", () => {
-  clearTimeoutEngine();
-});
+doneButton.addEventListener("click", clearTimeoutEngine);

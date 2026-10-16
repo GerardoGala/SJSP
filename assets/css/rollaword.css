@@ -1,11 +1,11 @@
 /* =========================================================================
-   ROLLAWORD THEME BRIDGE LAYER - COMPACT INTEGRATED MOBILE MODEL
+   ROLLAWORD THEME BRIDGE LAYER - TWO-COLOR, TWO-GRID LAYOUT
    ========================================================================= */
+
 :root {
   --color-blue: #2563eb;
-  --color-yellow: #ca8a04;
   --color-red: #dc2626;
-  
+
   /* Fits beautifully within a normal mobile frame width */
   --cell-size: clamp(38px, 11.5vw, 50px);
 }
@@ -24,7 +24,7 @@ body {
   font-variation-settings: "wght" var(--font-weight-normal);
   letter-spacing: var(--letter-spacing);
   line-height: var(--line-height);
-  
+
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -52,11 +52,41 @@ header {
   margin-top: 4px;
 }
 
-/* FIXED: Reverted back to a perfect, strict 8x8 layout framework */
-#grid-container {
+/* =========================================================================
+   PLAYING BOARD: 6 ROWS x 8 COLUMNS
+   ========================================================================= */
+
+#game-board {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(8, var(--cell-size));
-  grid-template-rows: repeat(8, var(--cell-size));
+  grid-template-rows: repeat(6, var(--cell-size));
+  gap: 1px;
+  background-color: var(--dark, #71717a);
+  padding: 1px;
+  border-radius: calc(var(--border-radius) * 4);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+/* =========================================================================
+   WHITE SEPARATOR BETWEEN PLAYING BOARD AND DICE TRAY
+   ========================================================================= */
+
+#board-separator {
+  width: calc(var(--cell-size) * 8 + 2px);
+  height: 18px;
+  flex-shrink: 0;
+  background-color: #ffffff;
+}
+
+/* =========================================================================
+   DICE TRAY: 1 ROW x 8 COLUMNS
+   ========================================================================= */
+
+#dice-tray {
+  display: grid;
+  grid-template-columns: repeat(8, var(--cell-size));
+  grid-template-rows: var(--cell-size);
   gap: 1px;
   background-color: var(--dark, #71717a);
   padding: 1px;
@@ -64,6 +94,10 @@ header {
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
   margin-bottom: 12px;
 }
+
+/* =========================================================================
+   GRID CELLS
+   ========================================================================= */
 
 .grid-cell {
   background-color: var(--page-bg);
@@ -73,7 +107,7 @@ header {
   justify-content: center;
   align-items: center;
   transition: background-color 0.15s ease-out;
-  
+
   flex-shrink: 0 !important;
   min-width: var(--cell-size) !important;
   min-height: var(--cell-size) !important;
@@ -85,7 +119,10 @@ header {
   border: 1px dashed var(--color-blue);
 }
 
-/* Interactive Draggable Tile Elements */
+/* =========================================================================
+   INTERACTIVE DRAGGABLE DICE
+   ========================================================================= */
+
 .die {
   position: relative;
   width: calc(var(--cell-size) - 2px);
@@ -111,9 +148,18 @@ header {
   line-height: 1;
 }
 
-.die.blue { background-color: var(--color-blue); }
-.die.yellow { background-color: var(--color-yellow); }
-.die.red { background-color: var(--color-red); }
+/* Only two dice colors */
+.die.blue {
+  background-color: var(--color-blue);
+}
+
+.die.red {
+  background-color: var(--color-red);
+}
+
+/* =========================================================================
+   ACTION PANEL
+   ========================================================================= */
 
 #action-panel {
   width: 100%;
@@ -129,6 +175,10 @@ header {
   text-transform: uppercase;
   letter-spacing: 1px;
 }
+
+/* =========================================================================
+   SCORING OUTPUT
+   ========================================================================= */
 
 #score-output-area {
   width: 100%;
@@ -155,6 +205,10 @@ header {
   padding-top: 6px;
 }
 
+/* =========================================================================
+   WORD STRIKE LINES
+   ========================================================================= */
+
 .word-strike-line {
   position: absolute;
   height: 4px;
@@ -164,9 +218,17 @@ header {
   pointer-events: none;
 }
 
-.word-strike-line.red { background-color: rgba(220, 38, 38, 0.85); }
-.word-strike-line.blue { background-color: rgba(37, 99, 235, 0.85); }
-.word-strike-line.yellow { background-color: rgba(202, 138, 4, 0.85); }
+.word-strike-line.red {
+  background-color: rgba(220, 38, 38, 0.85);
+}
+
+.word-strike-line.blue {
+  background-color: rgba(37, 99, 235, 0.85);
+}
+
+/* =========================================================================
+   MULTIPLIER TAGS
+   ========================================================================= */
 
 .multiplier-tag {
   position: absolute;

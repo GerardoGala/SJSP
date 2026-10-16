@@ -218,6 +218,7 @@ function drawVisualStrikethrough(tiles, colorClass, factor) {
 
   const rectStart = firstCell.getBoundingClientRect();
   const rectEnd = lastCell.getBoundingClientRect();
+  const gridContainer = document.getElementById("game-board");
   const containerRect = gridContainer.getBoundingClientRect();
 
   const startX =
