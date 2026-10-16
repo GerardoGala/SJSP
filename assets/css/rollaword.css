@@ -1,13 +1,13 @@
 /* =========================================================================
-   ROLLAWORD THEME BRIDGE LAYER - MOBILE-FIRST COHESIVE SYSTEM
+   ROLLAWORD THEME BRIDGE LAYER - COMPACT INTEGRATED MOBILE MODEL
    ========================================================================= */
 :root {
   --color-blue: #2563eb;
   --color-yellow: #ca8a04;
   --color-red: #dc2626;
   
-  /* Scale dynamically based on screen real estate (approx 44px tiles on narrow viewports) */
-  --cell-size: clamp(40px, 11vw, 55px);
+  /* Fits beautifully within a normal mobile frame width */
+  --cell-size: clamp(38px, 11.5vw, 50px);
 }
 
 * {
@@ -25,36 +25,34 @@ body {
   letter-spacing: var(--letter-spacing);
   line-height: var(--line-height);
   
-  /* Strict mobile single-column stacking container blueprint */
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
   max-width: 100vw;
   overflow-x: hidden;
-  padding: 15px 10px;
+  padding: 10px 5px;
 }
 
 header {
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   text-align: center;
 }
 
-/* 1) Timer Clock Module Wrapper styling rules */
 #timer-container {
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   font-weight: 700;
   font-family: Menlo, Monaco, Consolas, monospace;
   color: var(--color-red);
   background: var(--lighter);
-  padding: 6px 20px;
+  padding: 4px 16px;
   border-radius: calc(var(--border-radius) * 4);
   border: 1px solid var(--light);
   display: inline-block;
-  margin-top: 8px;
+  margin-top: 4px;
 }
 
-/* 2) 8x8 Responsive Grid Constraints */
+/* FIXED: Reverted back to a perfect, strict 8x8 layout framework */
 #grid-container {
   display: grid;
   grid-template-columns: repeat(8, var(--cell-size));
@@ -64,7 +62,7 @@ header {
   padding: 1px;
   border-radius: calc(var(--border-radius) * 4);
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 }
 
 .grid-cell {
@@ -87,24 +85,7 @@ header {
   border: 1px dashed var(--color-blue);
 }
 
-/* 3) Flexible Letters Tray Rack Area Box mapping rules */
-#dice-tray {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  background: var(--lighter);
-  padding: 15px;
-  border-radius: calc(var(--border-radius) * 4);
-  border: 1px solid var(--light);
-  min-height: 80px;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  max-width: calc(var(--cell-size) * 8 + 6px);
-  margin-bottom: 20px;
-}
-
-/* Draggable Tile Dimension properties scaling with viewports */
+/* Interactive Draggable Tile Elements */
 .die {
   position: relative;
   width: calc(var(--cell-size) - 2px);
@@ -113,7 +94,7 @@ header {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: clamp(1.1rem, 4vw, 1.5rem);
+  font-size: clamp(1rem, 4vw, 1.4rem);
   font-weight: 700;
   color: #ffffff;
   cursor: grab;
@@ -134,49 +115,46 @@ header {
 .die.yellow { background-color: var(--color-yellow); }
 .die.red { background-color: var(--color-red); }
 
-/* 4) Action Submission Button Panel Formatting */
 #action-panel {
   width: 100%;
-  max-width: calc(var(--cell-size) * 8 + 6px);
-  margin-bottom: 25px;
+  max-width: calc(var(--cell-size) * 8 + 2px);
+  margin-bottom: 12px;
 }
 
 #done-btn {
   width: 100% !important;
   justify-content: center;
-  font-size: 1.1rem;
-  padding: 12px 0;
+  font-size: 1.05rem;
+  padding: 10px 0;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
 
-/* 5) Bottom Score Evaluation Box Structure placement rules */
 #score-output-area {
   width: 100%;
-  max-width: calc(var(--cell-size) * 8 + 6px);
+  max-width: calc(var(--cell-size) * 8 + 2px);
   font-family: Menlo, Monaco, Consolas, monospace;
   font-size: 1.1rem;
   line-height: 1.8;
   color: var(--text-color);
   text-align: left;
   background: var(--lighter);
-  padding: 20px;
+  padding: 15px;
   border-radius: calc(var(--border-radius) * 4);
   border: 1px solid var(--light);
 }
 
 #score-output-area div {
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 #score-output-area .total-line {
   font-weight: 800;
-  margin-top: 12px;
+  margin-top: 10px;
   border-top: 2px solid var(--text-color);
-  padding-top: 8px;
+  padding-top: 6px;
 }
 
-/* Overlay Line Strikethroughs physics arrays configurations */
 .word-strike-line {
   position: absolute;
   height: 4px;

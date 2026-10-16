@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RollaWord - Mobile Prototype</title>
+  <title>RollaWord - Ultra Compact Mobile</title>
   <link rel="stylesheet" href="assets/css/rollaword.css">
 </head>
 <body>
@@ -14,23 +14,19 @@
     <div id="timer-container"><span id="timer-display">3:00</span></div>
   </header>
 
-  <!-- 2) Centered 8x8 Board Playfield Mesh Grid -->
+  <!-- 2) Centered Grid (8x8 Playfield + 1x8 Dice Tray Row integrated at bottom) -->
   <div id="grid-container" style="position: relative;"></div>
 
-  <!-- 3) Draggable Letter Dice Tray -->
-  <div id="dice-tray"></div>
-
-  <!-- 4) Instant Scoring Submission Button -->
+  <!-- 3) Instant Scoring Submission Button -->
   <div id="action-panel">
     <button id="done-btn" class="btn">Done</button>
   </div>
 
-  <!-- 5) Bottom Plain Text Formula Scoring Output Box -->
+  <!-- 4) Bottom Plain Text Formula Scoring Output Box -->
   <div id="score-output-area">
     <div>Game Active...</div>
   </div>
 
-  <!-- Script compilation layout load sequences -->
   <script src="assets/js/rollaWordScoring.js"></script>
   <script src="assets/js/rollaWord.js"></script>
 </body>

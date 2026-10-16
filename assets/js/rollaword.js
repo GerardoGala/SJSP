@@ -1,5 +1,5 @@
 // =========================================================================
-// INITIALIZER CORE MODULE LOOP - RESPONSIVE ACTIONS HOIST
+// INITIALIZER CORE MODULE LOOP - COMPACT 8x8 REAL ESTATE MODEL
 // =========================================================================
 const GRID_ROWS = 8;
 const GRID_COLS = 8;
@@ -27,6 +27,7 @@ const PHYSICAL_DICE_ROSTER = [
   [ {L:"J", C:"YELLOW"}, {L:"K", C:"BLUE"}, {L:"Q", C:"YELLOW"}, {L:"X", C:"BLUE"}, {L:"Z", C:"RED"}, {L:"*", C:"YELLOW"} ]
 ];
 
+// Phase 1: Build a clean, standard 8x8 playground grid area
 const gridContainer = document.getElementById('grid-container');
 for (let r = 0; r < GRID_ROWS; r++) {
   for (let c = 0; c < GRID_COLS; c++) {
@@ -41,7 +42,7 @@ for (let r = 0; r < GRID_ROWS; r++) {
   }
 }
 
-const diceTray = document.getElementById('dice-tray');
+// Phase 2: Compute randomized dice faces with Q validation protection rules
 const initialRollResult = PHYSICAL_DICE_ROSTER.map(physicalDie => {
   const randomIndex = Math.floor(Math.random() * physicalDie.length);
   return { ...physicalDie[randomIndex] }; 
@@ -60,6 +61,7 @@ const verifiedRollResult = initialRollResult.map((face, index) => {
   return face;
 });
 
+// Phase 3: Insert the rolled dice directly into Row 7 (the 8th row) cells
 verifiedRollResult.forEach((chosenFace, index) => {
   const dieElement = document.createElement('div');
   dieElement.classList.add('die', chosenFace.C.toLowerCase());
@@ -81,12 +83,16 @@ verifiedRollResult.forEach((chosenFace, index) => {
     e.dataTransfer.setData('text/plain', e.target.id);
   });
   
-  diceTray.appendChild(dieElement);
+  // FIXED: Seat the tiles directly in Row 7 (the 8th line) across columns 0-7
+  const targetTrayCell = gridContainer.querySelector(`.grid-cell[data-row="7"][data-col="${index}"]`);
+  if (targetTrayCell) {
+    targetTrayCell.appendChild(dieElement);
+  }
 });
 
-diceTray.addEventListener('dragover', handleDragOver);
-diceTray.addEventListener('drop', handleTrayDrop);
-
+// =========================================================================
+// INTERACTION DRAG COORD CONTROL RULES
+// =========================================================================
 function handleDragOver(e) {
   e.preventDefault();
   if (e.target.classList.contains('grid-cell') && !e.target.hasChildNodes()) {
@@ -107,14 +113,10 @@ function handleDrop(e) {
   const dieElement = document.getElementById(dieId);
   if (dieElement) cell.appendChild(dieElement);
 }
-function handleTrayDrop(e) {
-  e.preventDefault();
-  const dieId = e.dataTransfer.getData('text/plain');
-  const dieElement = document.getElementById(dieId);
-  if (dieElement && e.target.closest('#dice-tray')) diceTray.appendChild(dieElement);
-}
 
-// Countdown Clock Runner module
+// =========================================================================
+// TIMER CLOCK SEQUENCES
+// =========================================================================
 let timeRemaining = INITIAL_TIME_SECONDS;
 const timerDisplay = document.getElementById('timer-display');
 
@@ -136,7 +138,6 @@ function clearTimeoutEngine() {
   processEndgameScoring();
 }
 
-// Business Rule Implementation: Manual Early Scoring Hook listener entry
 document.getElementById('done-btn').addEventListener('click', () => {
   clearTimeoutEngine();
 });
