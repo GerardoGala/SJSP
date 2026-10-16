@@ -3,7 +3,7 @@
 // Blank-tile optimization, word scoring, jackpot, and time bonus
 // =========================================================================
 
-// SCORE A PARTICULAR ASSIGNMENT OF BLANK LETTERS
+
 // SCORE A PARTICULAR ASSIGNMENT OF BLANK LETTERS
 
 function scoreAssignment(rawWords, assignments) {
@@ -38,13 +38,15 @@ function scoreAssignment(rawWords, assignments) {
       ...wordObj,
       text,
       isValid,
+      isDisqualified: false,
       baseScore,
       multiplier,
       score: 0
     };
   });
 
-  // IDENTIFY TILES THAT BELONG TO INVALID WORDS
+
+  // IDENTIFY ALL TILES THAT BELONG TO INVALID WORDS
 
   const disqualifiedDiceIds = new Set();
 
@@ -56,8 +58,8 @@ function scoreAssignment(rawWords, assignments) {
     }
   });
 
-  // SCORE ONLY VALID WORDS THAT DO NOT SHARE
-  // ANY TILES WITH INVALID WORDS
+
+  // DISQUALIFY VALID WORDS THAT SHARE TILES WITH INVALID WORDS
 
   words.forEach(word => {
     const sharesInvalidTile = word.tiles.some(
@@ -66,11 +68,21 @@ function scoreAssignment(rawWords, assignments) {
 
     word.isDisqualified =
       word.isValid && sharesInvalidTile;
+  });
 
+
+  // SCORE ONLY VALID, NON-DISQUALIFIED WORDS
+
+  words.forEach(word => {
     if (word.isValid && !word.isDisqualified) {
       word.score = word.baseScore * word.multiplier;
+    } else {
+      word.score = 0;
     }
   });
+
+
+  // CALCULATE TOTAL FROM ELIGIBLE WORDS ONLY
 
   const total = words.reduce(
     (sum, word) => sum + word.score,
@@ -85,7 +97,9 @@ function scoreAssignment(rawWords, assignments) {
 }
 
 
+// =========================================================================
 // FIND THE HIGHEST-SCORING BLANK-TILE ASSIGNMENT
+// =========================================================================
 
 function calculateBestWordScores(rawWords, blankTiles) {
   let bestResult = null;
@@ -121,7 +135,10 @@ function calculateBestWordScores(rawWords, blankTiles) {
   return bestResult;
 }
 
+
+// =========================================================================
 // APPLY JACKPOT, TIME BONUS, AND FINAL SCORE
+// =========================================================================
 
 function applyScoreBonuses(
   bestResult,
@@ -132,6 +149,8 @@ function applyScoreBonuses(
   scoreArea
 ) {
   let finalScore = grandBaseTotal;
+
+  // JACKPOT: ALL EIGHT PLAYABLE DICE MUST SCORE
 
   const triggeredJackpot =
     totalDicePlaced === 8 &&
@@ -150,8 +169,11 @@ function applyScoreBonuses(
     scoreArea.appendChild(jackpotDiv);
   }
 
+
+  // TIME BONUS: EVERY WORD MUST BE VALID AND QUALIFIED
+
   const allWordsValid = bestResult.words.every(
-    word => word.isValid
+    word => word.isValid && !word.isDisqualified
   );
 
   const awardedTimeBonus =
@@ -171,6 +193,9 @@ function applyScoreBonuses(
     scoreArea.appendChild(timeBonusDiv);
   }
 
+
+  // DISPLAY FINAL SCORE
+
   const finalDiv = document.createElement("div");
 
   finalDiv.classList.add("total-line");
@@ -182,7 +207,10 @@ function applyScoreBonuses(
   console.log("Final score:", finalScore);
 }
 
+
+// =========================================================================
 // DRAW COLOR MULTIPLIER GRAPHICS
+// =========================================================================
 
 function drawVisualStrikethrough(tiles, colorClass, factor) {
   const firstCell = tiles[0].element;

@@ -1,9 +1,10 @@
 // =========================================================================
 // INITIALIZER CORE MODULE LOOP - COMPACT 8x8 REAL ESTATE MODEL
 // =========================================================================
+
 const GRID_ROWS = 8;
 const GRID_COLS = 8;
-const INITIAL_TIME_SECONDS = 180; 
+const INITIAL_TIME_SECONDS = 180;
 
 const SCRABBLE_SCORE_MAP = {
   "A": 1, "E": 1, "I": 1, "O": 1, "U": 1, "L": 1, "N": 1, "R": 1, "S": 1, "T": 1,
@@ -13,7 +14,7 @@ const SCRABBLE_SCORE_MAP = {
   "K": 5,
   "J": 8, "X": 8,
   "Q": 10, "Z": 10,
-  "*": 0 
+  "*": 0
 };
 
 const PHYSICAL_DICE_ROSTER = [
@@ -27,120 +28,165 @@ const PHYSICAL_DICE_ROSTER = [
   [ {L:"J", C:"YELLOW"}, {L:"K", C:"BLUE"}, {L:"Q", C:"YELLOW"}, {L:"X", C:"BLUE"}, {L:"Z", C:"RED"}, {L:"*", C:"YELLOW"} ]
 ];
 
-// Phase 1: Build a clean, standard 8x8 playground grid area
-const gridContainer = document.getElementById('grid-container');
+// =========================================================================
+// PHASE 1: BUILD THE 8x8 PLAYGROUND GRID
+// =========================================================================
+
+const gridContainer = document.getElementById("grid-container");
+
 for (let r = 0; r < GRID_ROWS; r++) {
   for (let c = 0; c < GRID_COLS; c++) {
-    const cell = document.createElement('div');
-    cell.classList.add('grid-cell');
+    const cell = document.createElement("div");
+
+    cell.classList.add("grid-cell");
     cell.dataset.row = r;
     cell.dataset.col = c;
-    cell.addEventListener('dragover', handleDragOver);
-    cell.addEventListener('dragleave', handleDragLeave);
-    cell.addEventListener('drop', handleDrop);
+
+    cell.addEventListener("dragover", handleDragOver);
+    cell.addEventListener("dragleave", handleDragLeave);
+    cell.addEventListener("drop", handleDrop);
+
     gridContainer.appendChild(cell);
   }
 }
 
-// Phase 2: Compute randomized dice faces with Q validation protection rules
+// =========================================================================
+// PHASE 2: RANDOMIZE DICE WITH Q/U PROTECTION
+// =========================================================================
+
 const initialRollResult = PHYSICAL_DICE_ROSTER.map(physicalDie => {
   const randomIndex = Math.floor(Math.random() * physicalDie.length);
-  return { ...physicalDie[randomIndex] }; 
+  return { ...physicalDie[randomIndex] };
 });
 
-const hasU = initialRollResult.some(face => face.L === "U");
-const verifiedRollResult = initialRollResult.map((face, index) => {
-  if (face.L === "Q" && !hasU) {
-    const activeDiePool = PHYSICAL_DICE_ROSTER[index];
-    let reRolledFace = face;
-    while (reRolledFace.L === "Q") {
-      reRolledFace = activeDiePool[Math.floor(Math.random() * activeDiePool.length)];
-    }
-    return reRolledFace;
+const verifiedRollResult = [...initialRollResult];
+
+const hasQ = verifiedRollResult.some(face => face.L === "Q");
+const hasU = verifiedRollResult.some(face => face.L === "U");
+
+if (hasQ && !hasU) {
+  // Find a die that can produce U, without changing the Q die.
+  const uDieIndex = PHYSICAL_DICE_ROSTER.findIndex(
+    (physicalDie, index) =>
+      verifiedRollResult[index].L !== "Q" &&
+      physicalDie.some(face => face.L === "U")
+  );
+
+  if (uDieIndex !== -1) {
+    const uFace = PHYSICAL_DICE_ROSTER[uDieIndex].find(
+      face => face.L === "U"
+    );
+
+    verifiedRollResult[uDieIndex] = { ...uFace };
   }
-  return face;
-});
+}
 
-// Phase 3: Insert the rolled dice directly into Row 7 (the 8th row) cells
+// =========================================================================
+// PHASE 3: PLACE THE ROLLED DICE IN ROW 7 (THE 8TH ROW)
+// =========================================================================
+
 verifiedRollResult.forEach((chosenFace, index) => {
-  const dieElement = document.createElement('div');
-  dieElement.classList.add('die', chosenFace.C.toLowerCase());
+  const dieElement = document.createElement("div");
+
+  dieElement.classList.add("die", chosenFace.C.toLowerCase());
   dieElement.id = `die-${index}`;
   dieElement.draggable = true;
   dieElement.dataset.letter = chosenFace.L;
   dieElement.dataset.color = chosenFace.C;
 
-  const letterSpan = document.createElement('span');
+  const letterSpan = document.createElement("span");
   letterSpan.textContent = chosenFace.L === "*" ? "" : chosenFace.L;
   dieElement.appendChild(letterSpan);
 
-  const valueBadge = document.createElement('span');
-  valueBadge.classList.add('die-value');
+  const valueBadge = document.createElement("span");
+  valueBadge.classList.add("die-value");
   valueBadge.textContent = SCRABBLE_SCORE_MAP[chosenFace.L];
   dieElement.appendChild(valueBadge);
-  
-  dieElement.addEventListener('dragstart', (e) => {
-    e.dataTransfer.setData('text/plain', e.target.id);
+
+  dieElement.addEventListener("dragstart", e => {
+    e.dataTransfer.setData("text/plain", e.target.id);
   });
-  
-  // FIXED: Seat the tiles directly in Row 7 (the 8th line) across columns 0-7
-  const targetTrayCell = gridContainer.querySelector(`.grid-cell[data-row="7"][data-col="${index}"]`);
+
+  const targetTrayCell = gridContainer.querySelector(
+    `.grid-cell[data-row="7"][data-col="${index}"]`
+  );
+
   if (targetTrayCell) {
     targetTrayCell.appendChild(dieElement);
   }
 });
 
 // =========================================================================
-// INTERACTION DRAG COORD CONTROL RULES
+// INTERACTION: DRAG AND DROP
 // =========================================================================
+
 function handleDragOver(e) {
   e.preventDefault();
-  if (e.target.classList.contains('grid-cell') && !e.target.hasChildNodes()) {
-    e.target.classList.add('drag-over');
+
+  if (
+    e.target.classList.contains("grid-cell") &&
+    !e.target.hasChildNodes()
+  ) {
+    e.target.classList.add("drag-over");
   }
 }
+
 function handleDragLeave(e) {
-  if (e.target.classList.contains('grid-cell')) {
-    e.target.classList.remove('drag-over');
+  if (e.target.classList.contains("grid-cell")) {
+    e.target.classList.remove("drag-over");
   }
 }
+
 function handleDrop(e) {
   e.preventDefault();
-  const cell = e.target.closest('.grid-cell');
+
+  const cell = e.target.closest(".grid-cell");
+
   if (!cell || cell.hasChildNodes()) return;
-  cell.classList.remove('drag-over');
-  const dieId = e.dataTransfer.getData('text/plain');
+
+  cell.classList.remove("drag-over");
+
+  const dieId = e.dataTransfer.getData("text/plain");
   const dieElement = document.getElementById(dieId);
-  if (dieElement) cell.appendChild(dieElement);
+
+  if (dieElement) {
+    cell.appendChild(dieElement);
+  }
 }
 
 // =========================================================================
-// TIMER CLOCK SEQUENCES
+// TIMER
 // =========================================================================
+
 let timeRemaining = INITIAL_TIME_SECONDS;
-const timerDisplay = document.getElementById('timer-display');
+
+const timerDisplay = document.getElementById("timer-display");
 
 const countdownTicker = setInterval(() => {
   if (timeRemaining <= 0) {
     clearTimeoutEngine();
     return;
   }
+
   timeRemaining--;
+
   const minutes = Math.floor(timeRemaining / 60);
   const seconds = timeRemaining % 60;
-  timerDisplay.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+  timerDisplay.textContent =
+    `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
 }, 1000);
 
 function clearTimeoutEngine() {
   clearInterval(countdownTicker);
 
-  document.getElementById('done-btn').disabled = true;
+  document.getElementById("done-btn").disabled = true;
 
   const timeBonus = timeRemaining * 5;
 
   processEndgameScoring(timeBonus);
 }
 
-document.getElementById('done-btn').addEventListener('click', () => {
+document.getElementById("done-btn").addEventListener("click", () => {
   clearTimeoutEngine();
 });
