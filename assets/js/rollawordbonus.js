@@ -4,6 +4,7 @@
 // =========================================================================
 
 // SCORE A PARTICULAR ASSIGNMENT OF BLANK LETTERS
+// SCORE A PARTICULAR ASSIGNMENT OF BLANK LETTERS
 
 function scoreAssignment(rawWords, assignments) {
   const words = rawWords.map(wordObj => {
@@ -33,18 +34,42 @@ function scoreAssignment(rawWords, assignments) {
       ? (COLOR_MULTIPLIERS[firstColor] || 1)
       : 1;
 
-    const score = isValid
-      ? baseScore * multiplier
-      : 0;
-
     return {
       ...wordObj,
       text,
       isValid,
       baseScore,
       multiplier,
-      score
+      score: 0
     };
+  });
+
+  // IDENTIFY TILES THAT BELONG TO INVALID WORDS
+
+  const disqualifiedDiceIds = new Set();
+
+  words.forEach(word => {
+    if (!word.isValid) {
+      word.tiles.forEach(tile => {
+        disqualifiedDiceIds.add(tile.id);
+      });
+    }
+  });
+
+  // SCORE ONLY VALID WORDS THAT DO NOT SHARE
+  // ANY TILES WITH INVALID WORDS
+
+  words.forEach(word => {
+    const sharesInvalidTile = word.tiles.some(
+      tile => disqualifiedDiceIds.has(tile.id)
+    );
+
+    word.isDisqualified =
+      word.isValid && sharesInvalidTile;
+
+    if (word.isValid && !word.isDisqualified) {
+      word.score = word.baseScore * word.multiplier;
+    }
   });
 
   const total = words.reduce(
@@ -58,6 +83,7 @@ function scoreAssignment(rawWords, assignments) {
     assignments: new Map(assignments)
   };
 }
+
 
 // FIND THE HIGHEST-SCORING BLANK-TILE ASSIGNMENT
 

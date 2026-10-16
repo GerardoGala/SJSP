@@ -28,7 +28,12 @@ async function processEndgameScoring(timeBonus = 0) {
   const scoreArea = document.getElementById("score-output-area");
   scoreArea.innerHTML = "<div>Checking words...</div>";
 
-  // BUILD THE COMPLETE 8x8 BOARD
+  // THE LAST ROW IS RESERVED FOR UNUSED DICE.
+
+  const playableRows = GRID_ROWS - 1;
+
+  // BUILD THE COMPLETE BOARD.
+  // Only dice in playable rows are counted.
 
   const boardMatrix = Array.from(
     { length: GRID_ROWS },
@@ -45,7 +50,7 @@ async function processEndgameScoring(timeBonus = 0) {
     if (
       !die ||
       row < 0 ||
-      row >= GRID_ROWS ||
+      row >= playableRows ||
       col < 0 ||
       col >= GRID_COLS
     ) {
@@ -70,11 +75,11 @@ async function processEndgameScoring(timeBonus = 0) {
     totalDicePlaced++;
   });
 
-  // FIND HORIZONTAL AND VERTICAL WORDS
+  // FIND HORIZONTAL WORDS IN PLAYABLE ROWS.
 
   const rawWords = [];
 
-  for (let r = 0; r < GRID_ROWS; r++) {
+  for (let r = 0; r < playableRows; r++) {
     let run = [];
 
     for (let c = 0; c < GRID_COLS; c++) {
@@ -104,10 +109,12 @@ async function processEndgameScoring(timeBonus = 0) {
     }
   }
 
+  // FIND VERTICAL WORDS IN PLAYABLE ROWS.
+
   for (let c = 0; c < GRID_COLS; c++) {
     let run = [];
 
-    for (let r = 0; r < GRID_ROWS; r++) {
+    for (let r = 0; r < playableRows; r++) {
       if (boardMatrix[r][c]) {
         run.push({
           r,
@@ -134,7 +141,7 @@ async function processEndgameScoring(timeBonus = 0) {
     }
   }
 
-  // IDENTIFY BLANK TILES
+  // IDENTIFY BLANK TILES.
 
   const blankTiles = [];
   const seenBlankIds = new Set();
@@ -148,18 +155,19 @@ async function processEndgameScoring(timeBonus = 0) {
     });
   });
 
+  // CHECK THE MOAT RULE BEFORE SCORING.
 
-
-  // CHECK THE MOAT RULE BEFORE SCORING
   if (!hasSingleIsland(boardMatrix)) {
     scoreArea.innerHTML = "";
     alert("Invalid game. Only one island is allowed.");
     return;
   }
 
-const bestResult = calculateBestWordScores(rawWords, blankTiles);
+  // CALCULATE THE BEST WORD SCORES.
 
-  // DISPLAY THE SELECTED LETTERS ON BLANK TILES
+  const bestResult = calculateBestWordScores(rawWords, blankTiles);
+
+  // DISPLAY THE SELECTED LETTERS ON BLANK TILES.
 
   blankTiles.forEach(tile => {
     const chosenLetter =
@@ -183,7 +191,7 @@ const bestResult = calculateBestWordScores(rawWords, blankTiles);
     }
   });
 
-  // DISPLAY WORD SCORES
+  // DISPLAY WORD SCORES.
 
   gridContainer
     .querySelectorAll(".word-strike-line")
@@ -193,7 +201,7 @@ const bestResult = calculateBestWordScores(rawWords, blankTiles);
 
   const scoreTotals = displayWordScores(bestResult.words, scoreArea);
 
-  // APPLY JACKPOT AND TIME BONUS
+  // APPLY JACKPOT AND TIME BONUS.
 
   applyScoreBonuses(
     bestResult,
