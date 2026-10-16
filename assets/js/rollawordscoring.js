@@ -18,7 +18,7 @@ let dictionaryError = null;
 
 async function loadLocalDictionary() {
   try {
-    const response = await fetch("/assets/js/dictionary.txt");
+    const response = await fetch("assets/js/dictionary.txt");
 
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}: Could not load dictionary.txt`);
