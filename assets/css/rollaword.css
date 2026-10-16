@@ -92,13 +92,13 @@ header {
   display: grid;
   grid-template-columns: repeat(8, var(--cell-size));
   grid-template-rows: repeat(8, var(--cell-size));
-  gap: 2px;
-  background-color: var(--light);
-  padding: 3px;
+  gap: 1px; /* The gap acts as our crisp border line background */
+  background-color: var(--dark, #71717a); /* Dark base to fill the gaps */
+  padding: 1px;
   border-radius: calc(var(--border-radius) * 4);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
-/* Update this block to lock structural sizes open against layout collapses */
 .grid-cell {
   background-color: var(--page-bg);
   width: var(--cell-size);
@@ -108,13 +108,12 @@ header {
   align-items: center;
   transition: background-color 0.15s ease-out;
   
-  /* OVERRIDE OVERLAY LAYER COLLAPSE: Force grid blocks to render fully open */
+  /* Overrides layout collapses and makes sure outer cell borders appear clearly */
   flex-shrink: 0 !important;
   min-width: var(--cell-size) !important;
   min-height: var(--cell-size) !important;
-  border: 1px solid var(--light); /* Subtle box line indicators to make cells pop */
+  border: 1px solid var(--light, #e4e4e7); 
 }
-
 
 .grid-cell.drag-over {
   background-color: var(--lighter);
