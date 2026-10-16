@@ -1,172 +1,391 @@
-const COLOR_MULTIPLIERS = { "RED": 2, "BLUE": 3, "YELLOW": 4 };
+// =========================================================================
+// ROLLAWORD SCORING ENGINE
+// Version: Local Dictionary
+// =========================================================================
+
+// COLOR MULTIPLIERS
+const COLOR_MULTIPLIERS = {
+  "RED": 2,
+  "BLUE": 3,
+  "YELLOW": 4
+};
+
 const ALL_DICE_JACKPOT_MULTIPLIER = 2;
 
-const BACKUP_DICTIONARY = new Set([
-  "aa", "ab", "ad", "ae", "ag", "ah", "ai", "al", "am", "an", "ar", "as", "at", "aw", "ax", "ay",
-  "ba", "be", "bi", "bo", "by", "da", "de", "do", "ed", "ef", "eh", "el", "em", "en", "er", "es",
-  "et", "ex", "fa", "fe", "go", "ha", "he", "hi", "hm", "ho", "id", "if", "in", "is", "it", "jo",
-  "ka", "ki", "la", "li", "lo", "ma", "me", "mi", "mm", "mo", "mu", "my", "na", "ne", "no", "nu",
-  "od", "oe", "of", "oh", "oi", "ok", "om", "on", "op", "or", "os", "ow", "ox", "oy", "pa", "pe",
-  "pi", "po", "qi", "re", "sh", "si", "so", "ta", "te", "ti", "to", "uh", "um", "un", "up", "us",
-  "ut", "we", "wo", "xi", "xu", "ya", "ye", "yo", "za", "awe", "ax", "act", "add", "ado", "aft", 
-  "age", "ago", "aid", "ail", "aim", "air", "ale", "all", "and", "bad", "bag", "ball", "beach", "dime", "is", "joe"
-]);
+// =========================================================================
+// LOCAL DICTIONARY
+// Loads dictionary.txt once and stores words in a Set for fast lookup.
+// =========================================================================
+
+let LOCAL_DICTIONARY = new Set();
+let dictionaryReady = false;
+let dictionaryError = null;
+
+async function loadLocalDictionary() {
+  try {
+    const response = await fetch("/assets/js/dictionary.txt");
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: Could not load dictionary.txt`);
+    }
+
+    const contents = await response.text();
+
+    LOCAL_DICTIONARY = new Set(
+      contents
+        .split(/\s+/)
+        .map(word => word.trim().toLowerCase())
+        .filter(word => word.length > 0)
+    );
+
+    dictionaryReady = true;
+
+    console.log(
+      `RollaWord dictionary loaded: ${LOCAL_DICTIONARY.size} words.`
+    );
+
+  } catch (error) {
+    dictionaryError = error;
+    dictionaryReady = false;
+
+    console.error("RollaWord dictionary loading failed:", error);
+
+    const scoreArea = document.getElementById("score-output-area");
+
+    if (scoreArea) {
+      scoreArea.textContent =
+        "Dictionary failed to load. Please refresh the game and try again.";
+    }
+  }
+}
+
+// Begin loading the dictionary immediately.
+const dictionaryLoadingPromise = loadLocalDictionary();
+
+// =========================================================================
+// ENDGAME SCORING
+// =========================================================================
 
 async function processEndgameScoring() {
-  const allDice = document.querySelectorAll('.die');
-  allDice.forEach(die => die.draggable = false);
-  
-  gridContainer.querySelectorAll('.grid-cell').forEach(cell => {
-    cell.removeAttribute('dragover');
-    cell.removeAttribute('drop');
+
+  // Ensure the dictionary has finished loading before scoring.
+  await dictionaryLoadingPromise;
+
+  if (!dictionaryReady) {
+    console.error("Scoring cancelled: dictionary is unavailable.");
+    return;
+  }
+
+  // Disable further dice movement.
+  const allDice = document.querySelectorAll(".die");
+
+  allDice.forEach(die => {
+    die.draggable = false;
   });
 
-  const scoreArea = document.getElementById('score-output-area');
-  scoreArea.innerHTML = "<div>Checking live dictionary...</div>";
+  gridContainer.querySelectorAll(".grid-cell").forEach(cell => {
+    cell.classList.remove("drag-over");
+  });
 
-  const boardMatrix = Array(GRID_ROWS).fill(null).map(() => Array(GRID_COLS).fill(null));
+  const scoreArea = document.getElementById("score-output-area");
+
+  scoreArea.innerHTML = "<div>Checking words...</div>";
+
+  // =======================================================================
+  // BUILD THE BOARD MATRIX
+  // Row index 7 is the dice tray and must NEVER be scored.
+  // =======================================================================
+
+  const boardMatrix = Array(GRID_ROWS)
+    .fill(null)
+    .map(() => Array(GRID_COLS).fill(null));
+
   let totalDicePlaced = 0;
 
-  document.querySelectorAll('.grid-cell').forEach(cell => {
-    if (parseInt(cell.dataset.row) === 7) return;
+  document.querySelectorAll(".grid-cell").forEach(cell => {
 
-    const row = parseInt(cell.dataset.row);
-    const col = parseInt(cell.dataset.col);
+    const row = parseInt(cell.dataset.row, 10);
+    const col = parseInt(cell.dataset.col, 10);
+
+    // Ignore every die remaining in the eighth row.
+    if (row === 7) return;
+
     if (cell.hasChildNodes()) {
-      const die = cell.firstChild;
+
+      const die = cell.querySelector(".die");
+
+      if (!die) return;
+
       boardMatrix[row][col] = {
-        id: die.id, 
+        id: die.id,
         letter: die.dataset.letter,
         color: die.dataset.color,
         score: SCRABBLE_SCORE_MAP[die.dataset.letter],
         element: cell
       };
+
       totalDicePlaced++;
     }
   });
 
+  // =======================================================================
+  // FIND HORIZONTAL WORDS
+  // =======================================================================
+
   const rawWords = [];
 
-  for (let r = 0; r < GRID_ROWS; r++) {
+  for (let r = 0; r < 7; r++) {
+
     let currentWord = [];
+
     for (let c = 0; c < GRID_COLS; c++) {
+
       if (boardMatrix[r][c]) {
-        currentWord.push({ r, c, ...boardMatrix[r][c] });
+
+        currentWord.push({
+          r,
+          c,
+          ...boardMatrix[r][c]
+        });
+
       } else {
-        if (currentWord.length >= 2) rawWords.push({ tiles: currentWord });
+
+        if (currentWord.length >= 2) {
+          rawWords.push({ tiles: currentWord });
+        }
+
         currentWord = [];
       }
     }
-    if (currentWord.length >= 2) rawWords.push({ tiles: currentWord });
+
+    if (currentWord.length >= 2) {
+      rawWords.push({ tiles: currentWord });
+    }
   }
+
+  // =======================================================================
+  // FIND VERTICAL WORDS
+  // =======================================================================
 
   for (let c = 0; c < GRID_COLS; c++) {
+
     let currentWord = [];
-    for (let r = 0; r < GRID_ROWS; r++) {
+
+    for (let r = 0; r < 7; r++) {
+
       if (boardMatrix[r][c]) {
-        currentWord.push({ r, c, ...boardMatrix[r][c] });
+
+        currentWord.push({
+          r,
+          c,
+          ...boardMatrix[r][c]
+        });
+
       } else {
-        if (currentWord.length >= 2) rawWords.push({ tiles: currentWord });
+
+        if (currentWord.length >= 2) {
+          rawWords.push({ tiles: currentWord });
+        }
+
         currentWord = [];
       }
     }
-    if (currentWord.length >= 2) rawWords.push({ tiles: currentWord });
+
+    if (currentWord.length >= 2) {
+      rawWords.push({ tiles: currentWord });
+    }
   }
 
-  const validationPromises = rawWords.map(async (wordObj) => {
-    const textString = wordObj.tiles.map(t => t.letter.toLowerCase()).join("");
-    try {
-      const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${textString}`);
-      return { ...wordObj, text: textString, isValid: response.ok };
-    } catch (err) {
-      return { ...wordObj, text: textString, isValid: BACKUP_DICTIONARY.has(textString) };
-    }
+  // =======================================================================
+  // VALIDATE WORDS AGAINST THE LOCAL DICTIONARY
+  // No external API calls and no CORS problems.
+  // =======================================================================
+
+  const validatedWords = rawWords.map(wordObj => {
+
+    const textString = wordObj.tiles
+      .map(tile => tile.letter.toLowerCase())
+      .join("");
+
+    return {
+      ...wordObj,
+      text: textString,
+      isValid: LOCAL_DICTIONARY.has(textString)
+    };
   });
 
-  const validatedWords = await Promise.all(validationPromises);
-  scoreArea.innerHTML = ""; 
+  // =======================================================================
+  // SCORE VALID WORDS
+  // =======================================================================
+
+  scoreArea.innerHTML = "";
 
   let grandBaseTotal = 0;
-  const validDiceIds = new Set(); 
 
-  validatedWords.forEach((wordObj) => {
+  const validDiceIds = new Set();
+
+  // Clear any previous multiplier graphics.
+  gridContainer.querySelectorAll(".word-strike-line").forEach(line => {
+    line.remove();
+  });
+
+  validatedWords.forEach(wordObj => {
+
+    // Invalid words score zero.
     if (!wordObj.isValid) {
-      const invalidDiv = document.createElement('div');
+
+      const invalidDiv = document.createElement("div");
+
       invalidDiv.style.color = "var(--text-muted, #a1a1aa)";
       invalidDiv.style.textDecoration = "line-through";
+
       invalidDiv.textContent = `${wordObj.text} = 0 (invalid)`;
+
       scoreArea.appendChild(invalidDiv);
+
       return;
     }
 
-    wordObj.tiles.forEach(t => validDiceIds.add(t.id));
+    // Record dice belonging to valid words.
+    wordObj.tiles.forEach(tile => {
+      validDiceIds.add(tile.id);
+    });
 
-    let baseWordScore = wordObj.tiles.reduce((acc, t) => acc + t.score, 0);
+    // Calculate the base word score.
+    const baseWordScore = wordObj.tiles.reduce(
+      (total, tile) => total + tile.score,
+      0
+    );
+
+    // Check whether every die in the word has the same color.
     const initialColor = wordObj.tiles[0].color;
-    const isPureColor = wordObj.tiles.every(t => t.color === initialColor);
+
+    const isPureColor = wordObj.tiles.every(
+      tile => tile.color === initialColor
+    );
+
     let activeMultiplier = 1;
 
     if (isPureColor && COLOR_MULTIPLIERS[initialColor]) {
+
       activeMultiplier = COLOR_MULTIPLIERS[initialColor];
-      drawVisualStrikethrough(wordObj.tiles, initialColor.toLowerCase(), activeMultiplier);
+
+      drawVisualStrikethrough(
+        wordObj.tiles,
+        initialColor.toLowerCase(),
+        activeMultiplier
+      );
     }
 
     const calculatedWordFinal = baseWordScore * activeMultiplier;
+
     grandBaseTotal += calculatedWordFinal;
 
-    const lineDiv = document.createElement('div');
+    const lineDiv = document.createElement("div");
+
     if (activeMultiplier > 1) {
-      lineDiv.textContent = `${wordObj.text} = ${baseWordScore} x ${activeMultiplier} = ${calculatedWordFinal}`;
+
+      lineDiv.textContent =
+        `${wordObj.text} = ${baseWordScore} x ${activeMultiplier} = ${calculatedWordFinal}`;
+
     } else {
-      lineDiv.textContent = `${wordObj.text} = ${baseWordScore}`;
+
+      lineDiv.textContent =
+        `${wordObj.text} = ${baseWordScore}`;
     }
+
     scoreArea.appendChild(lineDiv);
   });
 
+  // =======================================================================
+  // EIGHT-DICE JACKPOT
+  // =======================================================================
+
   let finalScore = grandBaseTotal;
-  const triggeredJackpot = totalDicePlaced === 8 && validDiceIds.size === 8;
+
+  const triggeredJackpot =
+    totalDicePlaced === 8 &&
+    validDiceIds.size === 8;
 
   if (triggeredJackpot) {
+
     finalScore = grandBaseTotal * ALL_DICE_JACKPOT_MULTIPLIER;
-    const jackpotDiv = document.createElement('div');
+
+    const jackpotDiv = document.createElement("div");
+
     jackpotDiv.style.color = "var(--color-yellow)";
-    jackpotDiv.textContent = `8-dice bonus = x${ALL_DICE_JACKPOT_MULTIPLIER}`;
+
+    jackpotDiv.textContent =
+      `8-dice bonus = x${ALL_DICE_JACKPOT_MULTIPLIER}`;
+
     scoreArea.appendChild(jackpotDiv);
   }
 
-  const finalDiv = document.createElement('div');
-  finalDiv.classList.add('total-line');
+  // =======================================================================
+  // DISPLAY FINAL SCORE
+  // =======================================================================
+
+  const finalDiv = document.createElement("div");
+
+  finalDiv.classList.add("total-line");
   finalDiv.textContent = `TOTAL = ${finalScore}`;
+
   scoreArea.appendChild(finalDiv);
+
+  console.log("RollaWord scoring complete.");
+  console.log("Dice placed in playing area:", totalDicePlaced);
+  console.log("Words checked:", validatedWords.length);
+  console.log("Final score:", finalScore);
 }
 
+// =========================================================================
+// DRAW COLOR MULTIPLIER GRAPHICS
+// =========================================================================
+
 function drawVisualStrikethrough(tiles, colorClass, factor) {
+
   const firstCell = tiles[0].element;
   const lastCell = tiles[tiles.length - 1].element;
-  
+
   const rectStart = firstCell.getBoundingClientRect();
   const rectEnd = lastCell.getBoundingClientRect();
   const containerRect = gridContainer.getBoundingClientRect();
 
-  const startX = (rectStart.left + rectStart.width / 2) - containerRect.left;
-  const startY = (rectStart.top + rectStart.height / 2) - containerRect.top;
-  const endX = (rectEnd.left + rectEnd.width / 2) - containerRect.left;
-  const endY = (rectEnd.top + rectEnd.height / 2) - containerRect.top;
+  const startX =
+    (rectStart.left + rectStart.width / 2) - containerRect.left;
 
-  const length = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
-  const angle = Math.atan2(endY - startY, endX - startX) * (180 / Math.PI);
+  const startY =
+    (rectStart.top + rectStart.height / 2) - containerRect.top;
 
-  const strikeLine = document.createElement('div');
-  strikeLine.classList.add('word-strike-line', colorClass);
+  const endX =
+    (rectEnd.left + rectEnd.width / 2) - containerRect.left;
+
+  const endY =
+    (rectEnd.top + rectEnd.height / 2) - containerRect.top;
+
+  const length = Math.sqrt(
+    Math.pow(endX - startX, 2) +
+    Math.pow(endY - startY, 2)
+  );
+
+  const angle =
+    Math.atan2(endY - startY, endX - startX) * (180 / Math.PI);
+
+  const strikeLine = document.createElement("div");
+
+  strikeLine.classList.add("word-strike-line", colorClass);
+
   strikeLine.style.width = `${length}px`;
   strikeLine.style.left = `${startX}px`;
   strikeLine.style.top = `${startY}px`;
   strikeLine.style.transform = `rotate(${angle}deg)`;
 
-  const tag = document.createElement('span');
-  tag.classList.add('multiplier-tag');
+  const tag = document.createElement("span");
+
+  tag.classList.add("multiplier-tag");
   tag.textContent = `${factor}x Multiplier`;
   tag.style.transform = `rotate(${-angle}deg)`;
+
   strikeLine.appendChild(tag);
 
   gridContainer.appendChild(strikeLine);
