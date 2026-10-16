@@ -28,6 +28,8 @@ async function processEndgameScoring() {
   let totalDicePlaced = 0;
 
   document.querySelectorAll('.grid-cell').forEach(cell => {
+    if (parseInt(cell.dataset.row) === 7) return;
+
     const row = parseInt(cell.dataset.row);
     const col = parseInt(cell.dataset.col);
     if (cell.hasChildNodes()) {
@@ -74,7 +76,7 @@ async function processEndgameScoring() {
   const validationPromises = rawWords.map(async (wordObj) => {
     const textString = wordObj.tiles.map(t => t.letter.toLowerCase()).join("");
     try {
-      const response = await fetch(`https://dictionaryapi.dev{textString}`);
+      const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${textString}`);
       return { ...wordObj, text: textString, isValid: response.ok };
     } catch (err) {
       return { ...wordObj, text: textString, isValid: BACKUP_DICTIONARY.has(textString) };
