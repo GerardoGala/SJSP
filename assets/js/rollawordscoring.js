@@ -1,18 +1,18 @@
-// =========================================================================
-// IMMUTABLE SCORING LAYER (Dictionary Map & Math Formulas)
-// =========================================================================
-const COLOR_MULTIPLIERS = {
-  "RED": 2,
-  "BLUE": 3,
-  "YELLOW": 4
-};
-
+const COLOR_MULTIPLIERS = { "RED": 2, "BLUE": 3, "YELLOW": 4 };
 const ALL_DICE_JACKPOT_MULTIPLIER = 2;
 
-// =========================================================================
-// PRODUCTION SCORING & DYNAMIC LINE OVERLAY
-// =========================================================================
-function processEndgameScoring() {
+const BACKUP_DICTIONARY = new Set([
+  "aa", "ab", "ad", "ae", "ag", "ah", "ai", "al", "am", "an", "ar", "as", "at", "aw", "ax", "ay",
+  "ba", "be", "bi", "bo", "by", "da", "de", "do", "ed", "ef", "eh", "el", "em", "en", "er", "es",
+  "et", "ex", "fa", "fe", "go", "ha", "he", "hi", "hm", "ho", "id", "if", "in", "is", "it", "jo",
+  "ka", "ki", "la", "li", "lo", "ma", "me", "mi", "mm", "mo", "mu", "my", "na", "ne", "no", "nu",
+  "od", "oe", "of", "oh", "oi", "ok", "om", "on", "op", "or", "os", "ow", "ox", "oy", "pa", "pe",
+  "pi", "po", "qi", "re", "sh", "si", "so", "ta", "te", "ti", "to", "uh", "um", "un", "up", "us",
+  "ut", "we", "wo", "xi", "xu", "ya", "ye", "yo", "za", "awe", "ax", "act", "add", "ado", "aft", 
+  "age", "ago", "aid", "ail", "aim", "air", "ale", "all", "and", "bad", "bag", "ball", "beach", "dime", "is", "joe"
+]);
+
+async function processEndgameScoring() {
   const allDice = document.querySelectorAll('.die');
   allDice.forEach(die => die.draggable = false);
   
@@ -20,6 +20,9 @@ function processEndgameScoring() {
     cell.removeAttribute('dragover');
     cell.removeAttribute('drop');
   });
+
+  const scoreArea = document.getElementById('score-output-area');
+  scoreArea.innerHTML = "<div>Checking live dictionary...</div>";
 
   const boardMatrix = Array(GRID_ROWS).fill(null).map(() => Array(GRID_COLS).fill(null));
   let totalDicePlaced = 0;
@@ -30,6 +33,7 @@ function processEndgameScoring() {
     if (cell.hasChildNodes()) {
       const die = cell.firstChild;
       boardMatrix[row][col] = {
+        id: die.id, 
         letter: die.dataset.letter,
         color: die.dataset.color,
         score: SCRABBLE_SCORE_MAP[die.dataset.letter],
@@ -39,44 +43,63 @@ function processEndgameScoring() {
     }
   });
 
-  const discoveredWords = [];
+  const rawWords = [];
 
-  // Parse horizontal rows
   for (let r = 0; r < GRID_ROWS; r++) {
     let currentWord = [];
     for (let c = 0; c < GRID_COLS; c++) {
       if (boardMatrix[r][c]) {
         currentWord.push({ r, c, ...boardMatrix[r][c] });
       } else {
-        if (currentWord.length >= 2) discoveredWords.push({ type: 'H', tiles: currentWord });
+        if (currentWord.length >= 2) rawWords.push({ tiles: currentWord });
         currentWord = [];
       }
     }
-    if (currentWord.length >= 2) discoveredWords.push({ type: 'H', tiles: currentWord });
+    if (currentWord.length >= 2) rawWords.push({ tiles: currentWord });
   }
 
-  // Parse vertical columns
   for (let c = 0; c < GRID_COLS; c++) {
     let currentWord = [];
     for (let r = 0; r < GRID_ROWS; r++) {
       if (boardMatrix[r][c]) {
         currentWord.push({ r, c, ...boardMatrix[r][c] });
       } else {
-        if (currentWord.length >= 2) discoveredWords.push({ type: 'V', tiles: currentWord });
+        if (currentWord.length >= 2) rawWords.push({ tiles: currentWord });
         currentWord = [];
       }
     }
-    if (currentWord.length >= 2) discoveredWords.push({ type: 'V', tiles: currentWord });
+    if (currentWord.length >= 2) rawWords.push({ tiles: currentWord });
   }
 
-  let grandBaseTotal = 0;
-  const scoreArea = document.getElementById('score-output-area');
+  const validationPromises = rawWords.map(async (wordObj) => {
+    const textString = wordObj.tiles.map(t => t.letter.toLowerCase()).join("");
+    try {
+      const response = await fetch(`https://dictionaryapi.dev{textString}`);
+      return { ...wordObj, text: textString, isValid: response.ok };
+    } catch (err) {
+      return { ...wordObj, text: textString, isValid: BACKUP_DICTIONARY.has(textString) };
+    }
+  });
+
+  const validatedWords = await Promise.all(validationPromises);
   scoreArea.innerHTML = ""; 
 
-  discoveredWords.forEach((wordObj) => {
-    const textString = wordObj.tiles.map(t => t.letter.toLowerCase()).join("");
+  let grandBaseTotal = 0;
+  const validDiceIds = new Set(); 
+
+  validatedWords.forEach((wordObj) => {
+    if (!wordObj.isValid) {
+      const invalidDiv = document.createElement('div');
+      invalidDiv.style.color = "var(--text-muted, #a1a1aa)";
+      invalidDiv.style.textDecoration = "line-through";
+      invalidDiv.textContent = `${wordObj.text} = 0 (invalid)`;
+      scoreArea.appendChild(invalidDiv);
+      return;
+    }
+
+    wordObj.tiles.forEach(t => validDiceIds.add(t.id));
+
     let baseWordScore = wordObj.tiles.reduce((acc, t) => acc + t.score, 0);
-    
     const initialColor = wordObj.tiles[0].color;
     const isPureColor = wordObj.tiles.every(t => t.color === initialColor);
     let activeMultiplier = 1;
@@ -91,15 +114,17 @@ function processEndgameScoring() {
 
     const lineDiv = document.createElement('div');
     if (activeMultiplier > 1) {
-      lineDiv.textContent = `${textString} = ${baseWordScore} x ${activeMultiplier} = ${calculatedWordFinal}`;
+      lineDiv.textContent = `${wordObj.text} = ${baseWordScore} x ${activeMultiplier} = ${calculatedWordFinal}`;
     } else {
-      lineDiv.textContent = `${textString} = ${baseWordScore}`;
+      lineDiv.textContent = `${wordObj.text} = ${baseWordScore}`;
     }
     scoreArea.appendChild(lineDiv);
   });
 
   let finalScore = grandBaseTotal;
-  if (totalDicePlaced === 8 && discoveredWords.length > 0) {
+  const triggeredJackpot = totalDicePlaced === 8 && validDiceIds.size === 8;
+
+  if (triggeredJackpot) {
     finalScore = grandBaseTotal * ALL_DICE_JACKPOT_MULTIPLIER;
     const jackpotDiv = document.createElement('div');
     jackpotDiv.style.color = "var(--color-yellow)";
