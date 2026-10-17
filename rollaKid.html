@@ -50,11 +50,26 @@
     <div>Press Start to Play!</div>
   </div>
 
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const doneBtn = document.getElementById('done-btn');
+    
+    if (doneBtn) {
+        doneBtn.addEventListener('click', () => {
+            // Trigger the celebration UI
+            KidsCelebration.trigger();
+        });
+    }
+});
+</script>
+
+
 <script src="assets/js/rollawordbonus.js"></script>
 <script src="assets/js/rollawordisland.js"></script>
 <script src="assets/js/rollawordscoring.js"></script>
 <script src="assets/js/rollaworddictionary.js"></script>
 <script src="assets/js/rollawordkid.js"></script> <!-- Swapped in -->
+<script src="assets/js/rollawordkidcelebration.js"></script>  
 <script src="assets/js/rollaword.js"></script>
 </body>
 </html>
