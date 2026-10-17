@@ -106,7 +106,7 @@ header {
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: background-color 0.15s ease-out;
+  transition: background-color 0.15s ease-out, border-color 0.15s ease-out;
 
   flex-shrink: 0 !important;
   min-width: var(--cell-size) !important;
@@ -114,9 +114,16 @@ header {
   border: 1px solid var(--light, #e4e4e7);
 }
 
-.grid-cell.drag-over {
-  background-color: var(--lighter);
+/* 🏁 Destination Runway Cue: Lights up empty fields when a drag session begins */
+.grid-cell.valid-drop-target {
   border: 1px dashed var(--color-blue);
+  background-color: rgba(37, 99, 235, 0.03);
+}
+
+/* Enhanced Drag Over: Displays when hovering right on top of a tile target */
+.grid-cell.drag-over {
+  background-color: var(--lighter) !important;
+  border: 2px solid var(--color-blue) !important;
 }
 
 /* =========================================================================
@@ -136,6 +143,18 @@ header {
   color: #ffffff;
   cursor: grab;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  
+  /* Smooth transform transitions preventing pixelated jumps */
+  transition: transform 0.12s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.12s ease-out;
+  will-change: transform, box-shadow;
+}
+
+/* 🚀 Ready to Drag Cues: Fires both on native desktop and mobile interaction states */
+.die:active, .die.is-dragging {
+  cursor: grabbing;
+  transform: scale(1.2);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+  z-index: 50;
 }
 
 .die-value {
