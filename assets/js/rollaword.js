@@ -18,6 +18,7 @@ if (!gameBoard || !diceTray) {
   throw new Error("RollaWord requires #game-board and #dice-tray containers.");
 }
 
+// Build the standard 6x8 playing matrix layout
 for (let r = 0; r < GRID_ROWS; r++) {
   for (let c = 0; c < GRID_COLS; c++) {
     const cell = document.createElement("div");
@@ -29,11 +30,17 @@ for (let r = 0; r < GRID_ROWS; r++) {
   }
 }
 
+// Build the 1x8 tray container lane layout
 for (let c = 0; c < GRID_COLS; c++) {
   const cell = document.createElement("div");
   cell.classList.add("grid-cell", "tray-cell");
-  cell.dataset.row = "tray";
+  
+  // 🧠 THE ANTI-NAN FIX: Change "tray" to "-1"
+  // An integer like -1 ensures your scoring engine won't crash with a NaN error.
+  // It instantly tells the scoring loop: "This letter is in the tray, skip calculating points for it!"
+  cell.dataset.row = "-1"; 
   cell.dataset.col = c;
+  
   attachLayoutDragListeners(cell);
   diceTray.appendChild(cell);
 }
@@ -44,20 +51,39 @@ function attachLayoutDragListeners(cell) {
     const target = e.target.closest(".grid-cell");
     if (target && !target.hasChildNodes()) target.classList.add("drag-over");
   });
+  
   cell.addEventListener("dragleave", e => {
     const target = e.target.closest(".grid-cell");
     if (target) target.classList.remove("drag-over");
   });
+  
+  // 🏁 Corrected Drop Listener for clean boardMatrix alignment
   cell.addEventListener("drop", e => {
     e.preventDefault();
-    const target = e.target.closest(".grid-cell");
-    if (!target || target.hasChildNodes()) return;
-    target.classList.remove("drag-over");
+    
+    // 👉 CRITICAL CHANGE: e.currentTarget directly targets the element that caught the event listener.
+    // This guarantees we hook onto the parent .grid-cell container block wrapper instead of text span elements.
+    const targetCell = e.currentTarget;
+    if (!targetCell || targetCell.hasChildNodes()) return;
+    
+    targetCell.classList.remove("drag-over");
+    
     const dieId = e.dataTransfer.getData("text/plain");
-    const die = document.getElementById(dieId);
-    if (die) target.appendChild(die);
+    const dieElement = document.getElementById(dieId);
+    
+    if (dieElement) {
+      // Append the clean DOM element node directly into the verified target cell container
+      targetCell.appendChild(dieElement);
+      
+      // If your original script checked scores live on drop, trigger it safely here:
+      if (typeof checkWords === 'function') {
+        checkWords();
+      }
+    }
   });
 }
+
+
 
 // =========================================================================
 // GAME CONTROL ENGINE HOOKS

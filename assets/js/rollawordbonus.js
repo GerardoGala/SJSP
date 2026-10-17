@@ -32,9 +32,12 @@ function scoreAssignment(rawWords, assignments) {
       tile => tile.color === firstColor
     );
 
-    const multiplier = sameColor
-      ? (COLOR_MULTIPLIERS[firstColor] || 1)
-      : 1;
+  //  Safe fallback ensures the game won't crash even if scripts load out of order
+  const activeMultipliers = window.COLOR_MULTIPLIERS || { "BLUE": 2, "RED": 3 };
+
+  const multiplier = sameColor
+    ? (activeMultipliers[firstColor] || 1)
+    : 1;
 
     return {
       ...wordObj,
