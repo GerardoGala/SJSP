@@ -17,16 +17,44 @@ const SCRABBLE_SCORE_MAP = {
   "*": 0
 };
 
+// =========================================================================
+// ANTI-LUCK PHYSICALLY BALANCED DICE ROSTER
+// =========================================================================
+// =========================================================================
+// ANTI-LUCK CONSONANT TIER COMPLIANCE ROSTER
+// =========================================================================
 const PHYSICAL_DICE_ROSTER = [
-  [ {L:"A", C:"BLUE"}, {L:"E", C:"RED"},  {L:"I", C:"BLUE"}, {L:"O", C:"RED"},  {L:"U", C:"RED"},  {L:"T", C:"BLUE"} ],
-  [ {L:"A", C:"RED"},  {L:"E", C:"BLUE"}, {L:"I", C:"RED"},  {L:"O", C:"BLUE"}, {L:"N", C:"RED"}, {L:"R", C:"RED"} ],
-  [ {L:"A", C:"BLUE"}, {L:"E", C:"RED"},  {L:"I", C:"BLUE"}, {L:"O", C:"RED"},  {L:"S", C:"RED"},  {L:"L", C:"BLUE"} ],
-  [ {L:"A", C:"RED"},  {L:"E", C:"BLUE"}, {L:"Y", C:"RED"},  {L:"D", C:"BLUE"}, {L:"G", C:"RED"},  {L:"M", C:"RED"} ],
-  [ {L:"B", C:"BLUE"}, {L:"C", C:"RED"},  {L:"D", C:"BLUE"}, {L:"F", C:"RED"},  {L:"H", C:"RED"},  {L:"P", C:"BLUE"} ],
-  [ {L:"L", C:"RED"},  {L:"N", C:"BLUE"}, {L:"R", C:"RED"},  {L:"S", C:"BLUE"}, {L:"T", C:"RED"},  {L:"W", C:"RED"} ],
-  [ {L:"G", C:"BLUE"}, {L:"H", C:"RED"},  {L:"M", C:"BLUE"}, {L:"V", C:"RED"},  {L:"K", C:"RED"},  {L:"*", C:"BLUE"} ],
-  [ {L:"J", C:"RED"},  {L:"K", C:"BLUE"}, {L:"Q", C:"RED"},  {L:"X", C:"BLUE"}, {L:"Z", C:"RED"},  {L:"*", C:"RED"} ]
+  // 🔹 DIE 1: Workhorse Vowels Only (A, E, I)
+  [ {L:"A", C:"BLUE"}, {L:"E", C:"RED"},  {L:"I", C:"BLUE"}, {L:"A", C:"RED"},  {L:"E", C:"BLUE"}, {L:"I", C:"RED"} ],
+
+  // 🔹 DIE 2: Workhorse Vowels Only (A, E, I)
+  [ {L:"A", C:"RED"},  {L:"E", C:"BLUE"}, {L:"I", C:"RED"},  {L:"A", C:"BLUE"}, {L:"E", C:"RED"},  {L:"I", C:"BLUE"} ],
+
+  // 🔹 DIE 3: Limiter Vowel Die (O, U, and 1 insurance E)
+  [ {L:"O", C:"BLUE"}, {L:"U", C:"RED"},  {L:"O", C:"RED"},  {L:"U", C:"BLUE"}, {L:"O", C:"BLUE"}, {L:"E", C:"RED"} ],
+
+  // 🔸 DIE 4: Low-Value Anchors (1 & 2 Points Only)
+  // Guarantees an even 3-Blue / 3-Red split of easy tiles to kick off words
+  [ {L:"N", C:"BLUE"}, {L:"R", C:"RED"},  {L:"S", C:"BLUE"}, {L:"T", C:"RED"},  {L:"D", C:"BLUE"}, {L:"G", C:"RED"} ],
+
+  // 🔸 DIE 5: Low-Value Anchors (1 & 2 Points Only)
+  // Alternated sequence prevents duplicate consonant clamping on the tray
+  [ {L:"L", C:"RED"},  {L:"N", C:"BLUE"}, {L:"R", C:"RED"},  {L:"S", C:"BLUE"}, {L:"T", C:"RED"},  {L:"G", C:"BLUE"} ],
+
+  // 🔸 DIE 6: Medium-Value Tier (3 & 4 Points Only)
+  // 🧠 ANTI-LUCK FIX: Isolate B, C, M, P, F, H. They can no longer cluster 
+  // with each other, keeping your score chances perfectly distributed.
+  [ {L:"B", C:"BLUE"}, {L:"C", C:"RED"},  {L:"M", C:"BLUE"}, {L:"P", C:"RED"},  {L:"F", C:"BLUE"}, {L:"H", C:"RED"} ],
+
+  // 🔸 DIE 7: Rare Value Tier (4, 5 & 8 Points + Wildcard)
+  // Filters out V, W, Y, K, and J so they cannot overlap with Die 6 or Die 8
+  [ {L:"V", C:"BLUE"}, {L:"W", C:"RED"},  {L:"Y", C:"BLUE"}, {L:"K", C:"RED"},  {L:"J", C:"BLUE"}, {L:"*", C:"RED"} ],
+
+  // 🔸 DIE 8: High-Value Boss Tier (8 & 10 Points + Wildcard + Backup Consonants)
+  // Physically guarantees that X, Z, and Q can NEVER spawn together on one board!
+  [ {L:"X", C:"RED"},  {L:"Z", C:"BLUE"}, {L:"Q", C:"RED"},  {L:"M", C:"BLUE"}, {L:"P", C:"RED"},  {L:"*", C:"BLUE"} ]
 ];
+
 
 // =========================================================================
 // PHASE 1: BUILD THE 6x8 PLAYING BOARD (Runs Immediately)
