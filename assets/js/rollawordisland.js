@@ -6,6 +6,14 @@
 // =========================================================================
 
 function hasSingleIsland(boardMatrix) {
+  // -------------------------------------------------------------------------
+  // KID MODE BYPASS: If calling from rollaKid.html, skip the island check.
+  // -------------------------------------------------------------------------
+  if (window.location.pathname.toLowerCase().endsWith('rollakid.html')) {
+    console.log("rollaKid.html detected: Island check aborted.");
+    return true; 
+  }
+
   const visited = new Set();
   let islandCount = 0;
 
@@ -61,5 +69,7 @@ function hasSingleIsland(boardMatrix) {
     }
   }
 
-  return true;
+  // Returns true if there is exactly 1 island, or if the board is empty.
+  // (If an empty board should be treated as an invalid submission, change this to: return islandCount === 1;)
+  return true; 
 }
