@@ -29,7 +29,7 @@ const PHYSICAL_DICE_ROSTER = [
 ];
 
 // =========================================================================
-// PHASE 1: BUILD THE 6x8 PLAYING BOARD
+// PHASE 1: BUILD THE 6x8 PLAYING BOARD (Runs Immediately)
 // =========================================================================
 
 const gameBoard = document.getElementById("game-board");
@@ -56,7 +56,7 @@ for (let r = 0; r < GRID_ROWS; r++) {
 }
 
 // =========================================================================
-// PHASE 2: BUILD THE 1x8 DICE TRAY
+// PHASE 2: BUILD THE 1x8 DICE TRAY (Runs Immediately)
 // =========================================================================
 
 for (let c = 0; c < GRID_COLS; c++) {
@@ -74,80 +74,12 @@ for (let c = 0; c < GRID_COLS; c++) {
 }
 
 // =========================================================================
-// PHASE 3: RANDOMIZE DICE WITH Q/U PROTECTION
-// =========================================================================
-
-const initialRollResult = PHYSICAL_DICE_ROSTER.map(physicalDie => {
-  const randomIndex = Math.floor(Math.random() * physicalDie.length);
-  return { ...physicalDie[randomIndex] };
-});
-
-const verifiedRollResult = [...initialRollResult];
-
-const hasQ = verifiedRollResult.some(face => face.L === "Q");
-const hasU = verifiedRollResult.some(face => face.L === "U");
-
-if (hasQ && !hasU) {
-  // Find a die that can produce U, without changing the Q die.
-  const uDieIndex = PHYSICAL_DICE_ROSTER.findIndex(
-    (physicalDie, index) =>
-      verifiedRollResult[index].L !== "Q" &&
-      physicalDie.some(face => face.L === "U")
-  );
-
-  if (uDieIndex !== -1) {
-    const uFace = PHYSICAL_DICE_ROSTER[uDieIndex].find(
-      face => face.L === "U"
-    );
-
-    verifiedRollResult[uDieIndex] = { ...uFace };
-  }
-}
-
-// =========================================================================
-// PHASE 4: PLACE THE EIGHT DICE IN THE SEPARATE TRAY
-// =========================================================================
-
-verifiedRollResult.forEach((chosenFace, index) => {
-  const dieElement = document.createElement("div");
-
-  dieElement.classList.add("die", chosenFace.C.toLowerCase());
-  dieElement.id = `die-${index}`;
-  dieElement.draggable = true;
-  dieElement.dataset.letter = chosenFace.L;
-  dieElement.dataset.color = chosenFace.C;
-
-  const letterSpan = document.createElement("span");
-  letterSpan.textContent = chosenFace.L === "*" ? "" : chosenFace.L;
-  dieElement.appendChild(letterSpan);
-
-  const valueBadge = document.createElement("span");
-  valueBadge.classList.add("die-value");
-  valueBadge.textContent = SCRABBLE_SCORE_MAP[chosenFace.L];
-  dieElement.appendChild(valueBadge);
-
-  dieElement.addEventListener("dragstart", e => {
-    e.dataTransfer.setData("text/plain", e.currentTarget.id);
-  });
-
-  const targetTrayCell = diceTray.querySelector(
-    `.grid-cell[data-col="${index}"]`
-  );
-
-  if (targetTrayCell) {
-    targetTrayCell.appendChild(dieElement);
-  }
-});
-
-// =========================================================================
-// INTERACTION: DRAG AND DROP
+// INTERACTION: DRAG AND DROP REFERENCE HOOKS
 // =========================================================================
 
 function handleDragOver(e) {
   e.preventDefault();
-
   const cell = e.target.closest(".grid-cell");
-
   if (cell && !cell.hasChildNodes()) {
     cell.classList.add("drag-over");
   }
@@ -155,7 +87,6 @@ function handleDragOver(e) {
 
 function handleDragLeave(e) {
   const cell = e.target.closest(".grid-cell");
-
   if (cell) {
     cell.classList.remove("drag-over");
   }
@@ -163,13 +94,10 @@ function handleDragLeave(e) {
 
 function handleDrop(e) {
   e.preventDefault();
-
   const cell = e.target.closest(".grid-cell");
-
   if (!cell || cell.hasChildNodes()) return;
 
   cell.classList.remove("drag-over");
-
   const dieId = e.dataTransfer.getData("text/plain");
   const dieElement = document.getElementById(dieId);
 
@@ -179,42 +107,114 @@ function handleDrop(e) {
 }
 
 // =========================================================================
-// TIMER
+// ENGINE VARIABLES AND CLOCKWORK ACTIONS
 // =========================================================================
 
 let timeRemaining = INITIAL_TIME_SECONDS;
+let gameEnded = true; // Starts in a resting/ended state until START is clicked
+let countdownTicker = null;
 
 const timerDisplay = document.getElementById("timer-display");
-const doneButton = document.getElementById("done-btn");
 
-let gameEnded = false;
-
-const countdownTicker = setInterval(() => {
-  if (timeRemaining <= 0) {
-    clearTimeoutEngine();
-    return;
+function startGameEngine() {
+  // 1. Reset Game Cycle Variables
+  gameEnded = false;
+  timeRemaining = INITIAL_TIME_SECONDS;
+  if (timerDisplay) {
+    timerDisplay.textContent = "3:00";
   }
 
-  timeRemaining--;
+  // 2. Clear Existing Letters from prior matches
+  document.querySelectorAll('.grid-cell').forEach(cell => {
+    cell.innerHTML = '';
+  });
 
-  const minutes = Math.floor(timeRemaining / 60);
-  const seconds = timeRemaining % 60;
+  // 3. PHASE 3: RANDOMIZE DICE WITH Q/U PROTECTION
+  const initialRollResult = PHYSICAL_DICE_ROSTER.map(physicalDie => {
+    const randomIndex = Math.floor(Math.random() * physicalDie.length);
+    return { ...physicalDie[randomIndex] };
+  });
 
-  timerDisplay.textContent =
-    `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
-}, 1000);
+  const verifiedRollResult = [...initialRollResult];
+  const hasQ = verifiedRollResult.some(face => face.L === "Q");
+  const hasU = verifiedRollResult.some(face => face.L === "U");
+
+  if (hasQ && !hasU) {
+    const uDieIndex = PHYSICAL_DICE_ROSTER.findIndex(
+      (physicalDie, index) =>
+        verifiedRollResult[index].L !== "Q" &&
+        physicalDie.some(face => face.L === "U")
+    );
+    if (uDieIndex !== -1) {
+      const uFace = PHYSICAL_DICE_ROSTER[uDieIndex].find(face => face.L === "U");
+      verifiedRollResult[uDieIndex] = { ...uFace };
+    }
+  }
+
+  // 4. PHASE 4: PLACE THE EIGHT DICE IN THE SEPARATE TRAY
+  verifiedRollResult.forEach((chosenFace, index) => {
+    const dieElement = document.createElement("div");
+
+    dieElement.classList.add("die", chosenFace.C.toLowerCase());
+    dieElement.id = `die-${index}`;
+    dieElement.draggable = true;
+    dieElement.dataset.letter = chosenFace.L;
+    dieElement.dataset.color = chosenFace.C;
+
+    const letterSpan = document.createElement("span");
+    letterSpan.textContent = chosenFace.L === "*" ? "" : chosenFace.L;
+    dieElement.appendChild(letterSpan);
+
+    const valueBadge = document.createElement("span");
+    valueBadge.classList.add("die-value");
+    valueBadge.textContent = SCRABBLE_SCORE_MAP[chosenFace.L];
+    dieElement.appendChild(valueBadge);
+
+    dieElement.addEventListener("dragstart", e => {
+      e.dataTransfer.setData("text/plain", e.currentTarget.id);
+    });
+
+    const targetTrayCell = diceTray.querySelector(`.grid-cell[data-col="${index}"]`);
+    if (targetTrayCell) {
+      targetTrayCell.appendChild(dieElement);
+    }
+  });
+
+  // 5. RUN TIMER COUNTDOWN TICKER
+  clearInterval(countdownTicker);
+  countdownTicker = setInterval(() => {
+    if (timeRemaining <= 0) {
+      clearTimeoutEngine();
+      return;
+    }
+
+    timeRemaining--;
+
+    const minutes = Math.floor(timeRemaining / 60);
+    const seconds = timeRemaining % 60;
+
+    if (timerDisplay) {
+      timerDisplay.textContent = `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+    }
+  }, 1000);
+}
 
 function clearTimeoutEngine() {
   if (gameEnded) return;
-
   gameEnded = true;
   clearInterval(countdownTicker);
 
-  doneButton.disabled = true;
-
   const timeBonus = timeRemaining * 5;
 
-  processEndgameScoring(timeBonus);
+  if (typeof processEndgameScoring === 'function') {
+    processEndgameScoring(timeBonus);
+  }
 }
 
-doneButton.addEventListener("click", clearTimeoutEngine);
+// =========================================================================
+// EXPOSE ENGINE ACTIONS TO WINDOW GLOBAL SCOPE (For HTML Inline Clicks)
+// =========================================================================
+window.startGameEngine = startGameEngine;
+window.clearTimeoutEngine = clearTimeoutEngine;
+
+console.log("🚀 [RollaWord Script] Engine hooks successfully bound to window.");
