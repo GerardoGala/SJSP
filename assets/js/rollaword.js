@@ -1,65 +1,16 @@
 // =========================================================================
-// ROLLAWORD - TWO-COLOR, TWO-GRID LAYOUT
+// ROLLAWORD - INDEPENDENT COMMON CORE CONTROLLER
 // =========================================================================
 
 const GRID_ROWS = 6;
 const GRID_COLS = 8;
 const INITIAL_TIME_SECONDS = 180;
 
-const SCRABBLE_SCORE_MAP = {
-  "A": 1, "E": 1, "I": 1, "O": 1, "U": 1, "L": 1, "N": 1, "R": 1, "S": 1, "T": 1,
-  "D": 2, "G": 2,
-  "B": 3, "C": 3, "M": 3, "P": 3,
-  "F": 4, "H": 4, "V": 4, "W": 4, "Y": 4,
-  "K": 5,
-  "J": 8, "X": 8,
-  "Q": 10, "Z": 10,
-  "*": 0
-};
+const isKidsMode = window.location.pathname.includes('rollaKid.html');
 
 // =========================================================================
-// ANTI-LUCK PHYSICALLY BALANCED DICE ROSTER
+// PHASE 1 & 2: INSTANT GRID INITIALIZATION
 // =========================================================================
-// =========================================================================
-// ANTI-LUCK CONSONANT TIER COMPLIANCE ROSTER
-// =========================================================================
-const PHYSICAL_DICE_ROSTER = [
-  // 🔹 DIE 1: Workhorse Vowels Only (A, E, I)
-  [ {L:"A", C:"BLUE"}, {L:"E", C:"RED"},  {L:"I", C:"BLUE"}, {L:"A", C:"RED"},  {L:"E", C:"BLUE"}, {L:"I", C:"RED"} ],
-
-  // 🔹 DIE 2: Workhorse Vowels Only (A, E, I)
-  [ {L:"A", C:"RED"},  {L:"E", C:"BLUE"}, {L:"I", C:"RED"},  {L:"A", C:"BLUE"}, {L:"E", C:"RED"},  {L:"I", C:"BLUE"} ],
-
-  // 🔹 DIE 3: Limiter Vowel Die (O, U, and 1 insurance E)
-  [ {L:"O", C:"BLUE"}, {L:"U", C:"RED"},  {L:"O", C:"RED"},  {L:"U", C:"BLUE"}, {L:"O", C:"BLUE"}, {L:"E", C:"RED"} ],
-
-  // 🔸 DIE 4: Low-Value Anchors (1 & 2 Points Only)
-  // Guarantees an even 3-Blue / 3-Red split of easy tiles to kick off words
-  [ {L:"N", C:"BLUE"}, {L:"R", C:"RED"},  {L:"S", C:"BLUE"}, {L:"T", C:"RED"},  {L:"D", C:"BLUE"}, {L:"G", C:"RED"} ],
-
-  // 🔸 DIE 5: Low-Value Anchors (1 & 2 Points Only)
-  // Alternated sequence prevents duplicate consonant clamping on the tray
-  [ {L:"L", C:"RED"},  {L:"N", C:"BLUE"}, {L:"R", C:"RED"},  {L:"S", C:"BLUE"}, {L:"T", C:"RED"},  {L:"G", C:"BLUE"} ],
-
-  // 🔸 DIE 6: Medium-Value Tier (3 & 4 Points Only)
-  // 🧠 ANTI-LUCK FIX: Isolate B, C, M, P, F, H. They can no longer cluster 
-  // with each other, keeping your score chances perfectly distributed.
-  [ {L:"B", C:"BLUE"}, {L:"C", C:"RED"},  {L:"M", C:"BLUE"}, {L:"P", C:"RED"},  {L:"F", C:"BLUE"}, {L:"H", C:"RED"} ],
-
-  // 🔸 DIE 7: Rare Value Tier (4, 5 & 8 Points + Wildcard)
-  // Filters out V, W, Y, K, and J so they cannot overlap with Die 6 or Die 8
-  [ {L:"V", C:"BLUE"}, {L:"W", C:"RED"},  {L:"Y", C:"BLUE"}, {L:"K", C:"RED"},  {L:"J", C:"BLUE"}, {L:"*", C:"RED"} ],
-
-  // 🔸 DIE 8: High-Value Boss Tier (8 & 10 Points + Wildcard + Backup Consonants)
-  // Physically guarantees that X, Z, and Q can NEVER spawn together on one board!
-  [ {L:"X", C:"RED"},  {L:"Z", C:"BLUE"}, {L:"Q", C:"RED"},  {L:"M", C:"BLUE"}, {L:"P", C:"RED"},  {L:"*", C:"BLUE"} ]
-];
-
-
-// =========================================================================
-// PHASE 1: BUILD THE 6x8 PLAYING BOARD (Runs Immediately)
-// =========================================================================
-
 const gameBoard = document.getElementById("game-board");
 const diceTray = document.getElementById("dice-tray");
 
@@ -70,119 +21,69 @@ if (!gameBoard || !diceTray) {
 for (let r = 0; r < GRID_ROWS; r++) {
   for (let c = 0; c < GRID_COLS; c++) {
     const cell = document.createElement("div");
-
     cell.classList.add("grid-cell");
     cell.dataset.row = r;
     cell.dataset.col = c;
-
-    cell.addEventListener("dragover", handleDragOver);
-    cell.addEventListener("dragleave", handleDragLeave);
-    cell.addEventListener("drop", handleDrop);
-
+    attachLayoutDragListeners(cell);
     gameBoard.appendChild(cell);
   }
 }
 
-// =========================================================================
-// PHASE 2: BUILD THE 1x8 DICE TRAY (Runs Immediately)
-// =========================================================================
-
 for (let c = 0; c < GRID_COLS; c++) {
   const cell = document.createElement("div");
-
   cell.classList.add("grid-cell", "tray-cell");
   cell.dataset.row = "tray";
   cell.dataset.col = c;
-
-  cell.addEventListener("dragover", handleDragOver);
-  cell.addEventListener("dragleave", handleDragLeave);
-  cell.addEventListener("drop", handleDrop);
-
+  attachLayoutDragListeners(cell);
   diceTray.appendChild(cell);
 }
 
-// =========================================================================
-// INTERACTION: DRAG AND DROP REFERENCE HOOKS
-// =========================================================================
-
-function handleDragOver(e) {
-  e.preventDefault();
-  const cell = e.target.closest(".grid-cell");
-  if (cell && !cell.hasChildNodes()) {
-    cell.classList.add("drag-over");
-  }
-}
-
-function handleDragLeave(e) {
-  const cell = e.target.closest(".grid-cell");
-  if (cell) {
-    cell.classList.remove("drag-over");
-  }
-}
-
-function handleDrop(e) {
-  e.preventDefault();
-  const cell = e.target.closest(".grid-cell");
-  if (!cell || cell.hasChildNodes()) return;
-
-  cell.classList.remove("drag-over");
-  const dieId = e.dataTransfer.getData("text/plain");
-  const dieElement = document.getElementById(dieId);
-
-  if (dieElement) {
-    cell.appendChild(dieElement);
-  }
+function attachLayoutDragListeners(cell) {
+  cell.addEventListener("dragover", e => {
+    e.preventDefault();
+    const target = e.target.closest(".grid-cell");
+    if (target && !target.hasChildNodes()) target.classList.add("drag-over");
+  });
+  cell.addEventListener("dragleave", e => {
+    const target = e.target.closest(".grid-cell");
+    if (target) target.classList.remove("drag-over");
+  });
+  cell.addEventListener("drop", e => {
+    e.preventDefault();
+    const target = e.target.closest(".grid-cell");
+    if (!target || target.hasChildNodes()) return;
+    target.classList.remove("drag-over");
+    const dieId = e.dataTransfer.getData("text/plain");
+    const die = document.getElementById(dieId);
+    if (die) target.appendChild(die);
+  });
 }
 
 // =========================================================================
-// ENGINE VARIABLES AND CLOCKWORK ACTIONS
+// GAME CONTROL ENGINE HOOKS
 // =========================================================================
-
 let timeRemaining = INITIAL_TIME_SECONDS;
-let gameEnded = true; // Starts in a resting/ended state until START is clicked
+let gameEnded = true;
 let countdownTicker = null;
-
 const timerDisplay = document.getElementById("timer-display");
 
 function startGameEngine() {
-  // 1. Reset Game Cycle Variables
   gameEnded = false;
   timeRemaining = INITIAL_TIME_SECONDS;
+  
   if (timerDisplay) {
-    timerDisplay.textContent = "3:00";
+    timerDisplay.textContent = isKidsMode ? "🧒 FUN PLAY" : "3:00";
   }
 
-  // 2. Clear Existing Letters from prior matches
-  document.querySelectorAll('.grid-cell').forEach(cell => {
-    cell.innerHTML = '';
-  });
+  // Flush stale nodes
+  document.querySelectorAll('.grid-cell').forEach(cell => cell.innerHTML = '');
 
-  // 3. PHASE 3: RANDOMIZE DICE WITH Q/U PROTECTION
-  const initialRollResult = PHYSICAL_DICE_ROSTER.map(physicalDie => {
-    const randomIndex = Math.floor(Math.random() * physicalDie.length);
-    return { ...physicalDie[randomIndex] };
-  });
+  // 🔄 SWAPPABLE CALL: Automatically fires the algorithm from whichever file is loaded!
+  const verifiedRollResult = window.generateLetterPayload();
 
-  const verifiedRollResult = [...initialRollResult];
-  const hasQ = verifiedRollResult.some(face => face.L === "Q");
-  const hasU = verifiedRollResult.some(face => face.L === "U");
-
-  if (hasQ && !hasU) {
-    const uDieIndex = PHYSICAL_DICE_ROSTER.findIndex(
-      (physicalDie, index) =>
-        verifiedRollResult[index].L !== "Q" &&
-        physicalDie.some(face => face.L === "U")
-    );
-    if (uDieIndex !== -1) {
-      const uFace = PHYSICAL_DICE_ROSTER[uDieIndex].find(face => face.L === "U");
-      verifiedRollResult[uDieIndex] = { ...uFace };
-    }
-  }
-
-  // 4. PHASE 4: PLACE THE EIGHT DICE IN THE SEPARATE TRAY
+  // Unified rendering cycle
   verifiedRollResult.forEach((chosenFace, index) => {
     const dieElement = document.createElement("div");
-
     dieElement.classList.add("die", chosenFace.C.toLowerCase());
     dieElement.id = `die-${index}`;
     dieElement.draggable = true;
@@ -195,54 +96,48 @@ function startGameEngine() {
 
     const valueBadge = document.createElement("span");
     valueBadge.classList.add("die-value");
-    valueBadge.textContent = SCRABBLE_SCORE_MAP[chosenFace.L];
+    valueBadge.textContent = window.SCRABBLE_SCORE_MAP[chosenFace.L];
     dieElement.appendChild(valueBadge);
 
     dieElement.addEventListener("dragstart", e => {
       e.dataTransfer.setData("text/plain", e.currentTarget.id);
+      e.currentTarget.classList.add("is-dragging");
+      document.querySelectorAll('.grid-cell').forEach(c => { if(!c.hasChildNodes()) c.classList.add('valid-drop-target'); });
+    });
+
+    dieElement.addEventListener("dragend", e => {
+      e.currentTarget.classList.remove("is-dragging");
+      document.querySelectorAll('.grid-cell').forEach(c => c.classList.remove('valid-drop-target', 'drag-over'));
     });
 
     const targetTrayCell = diceTray.querySelector(`.grid-cell[data-col="${index}"]`);
-    if (targetTrayCell) {
-      targetTrayCell.appendChild(dieElement);
-    }
+    if (targetTrayCell) targetTrayCell.appendChild(dieElement);
   });
 
-  // 5. RUN TIMER COUNTDOWN TICKER
+  // Ticker management
   clearInterval(countdownTicker);
-  countdownTicker = setInterval(() => {
-    if (timeRemaining <= 0) {
-      clearTimeoutEngine();
-      return;
-    }
-
-    timeRemaining--;
-
-    const minutes = Math.floor(timeRemaining / 60);
-    const seconds = timeRemaining % 60;
-
-    if (timerDisplay) {
-      timerDisplay.textContent = `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
-    }
-  }, 1000);
+  if (!isKidsMode) {
+    countdownTicker = setInterval(() => {
+      if (timeRemaining <= 0) { clearTimeoutEngine(); return; }
+      timeRemaining--;
+      const mins = Math.floor(timeRemaining / 60);
+      const secs = timeRemaining % 60;
+      if (timerDisplay) timerDisplay.textContent = `${mins}:${secs < 10 ? "0" : ""}${secs}`;
+    }, 1000);
+  } else {
+    const outputBox = document.getElementById("score-output-area");
+    if (outputBox) outputBox.innerHTML = "<div style='color: #16a34a;'>Find your hidden words! You can do it! ✨</div>";
+  }
 }
 
 function clearTimeoutEngine() {
   if (gameEnded) return;
   gameEnded = true;
   clearInterval(countdownTicker);
-
-  const timeBonus = timeRemaining * 5;
-
   if (typeof processEndgameScoring === 'function') {
-    processEndgameScoring(timeBonus);
+    processEndgameScoring(timeRemaining * 5);
   }
 }
 
-// =========================================================================
-// EXPOSE ENGINE ACTIONS TO WINDOW GLOBAL SCOPE (For HTML Inline Clicks)
-// =========================================================================
 window.startGameEngine = startGameEngine;
 window.clearTimeoutEngine = clearTimeoutEngine;
-
-console.log("🚀 [RollaWord Script] Engine hooks successfully bound to window.");

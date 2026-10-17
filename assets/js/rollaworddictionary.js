@@ -3,13 +3,17 @@
 // Local dictionary + scoring constants
 // =========================================================================
 
-const COLOR_MULTIPLIERS = {
-  RED: 2,
-  BLUE: 3,
-  YELLOW: 4
+//  Safe global assignment wrapper. Reuses it if already declared elsewhere!
+window.COLOR_MULTIPLIERS = window.COLOR_MULTIPLIERS || {
+  // Put your original multiplier mappings right here:
+  "BLUE": 2,
+  "RED": 3
 };
 
-const ALL_DICE_JACKPOT_MULTIPLIER = 2;
+
+// Keep this local shortcut right below it so your existing dictionary code continues to function
+const ALL_DICE_JACKPOT_MULTIPLIER = window.ALL_DICE_JACKPOT_MULTIPLIER;
+
 const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 let LOCAL_DICTIONARY = new Set();

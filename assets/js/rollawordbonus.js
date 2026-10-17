@@ -5,6 +5,8 @@
 
 
 // SCORE A PARTICULAR ASSIGNMENT OF BLANK LETTERS
+// Add this at the absolute top of the file to safely link your snippet
+const COLOR_MULTIPLIERS = window.COLOR_MULTIPLIERS;
 
 function scoreAssignment(rawWords, assignments) {
   const words = rawWords.map(wordObj => {
