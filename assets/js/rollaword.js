@@ -106,7 +106,7 @@ function startGameEngine() {
 
   // 🔄 SWAPPABLE CALL: Automatically fires the algorithm from whichever file is loaded!
   const verifiedRollResult = window.generateLetterPayload();
-alert("Dice generated: " + verifiedRollResult.length);
+  //alert("Dice generated: " + verifiedRollResult.length);
 
   // Unified rendering cycle
   verifiedRollResult.forEach((chosenFace, index) => {
