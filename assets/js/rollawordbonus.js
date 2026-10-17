@@ -144,7 +144,6 @@ function calculateBestWordScores(rawWords, blankTiles) {
 // =========================================================================
 // APPLY JACKPOT, TIME BONUS, AND FINAL SCORE
 // =========================================================================
-
 function applyScoreBonuses(
   bestResult,
   totalDicePlaced,
@@ -153,6 +152,10 @@ function applyScoreBonuses(
   timeBonus,
   scoreArea
 ) {
+  // 🧠 THE ANTI-NAN FIX: Resolve global namespace scope safely
+  // Uses your global window declaration or defaults to a standard x2 multiplier backup
+  const jackpotMultiplier = window.ALL_DICE_JACKPOT_MULTIPLIER || 2;
+  
   let finalScore = grandBaseTotal;
 
   // JACKPOT: ALL EIGHT PLAYABLE DICE MUST SCORE
@@ -162,14 +165,16 @@ function applyScoreBonuses(
     validDiceIds.size === 8;
 
   if (triggeredJackpot) {
-    finalScore *= ALL_DICE_JACKPOT_MULTIPLIER;
+    // 👉 Updated to use the safe local variable reference for mathematical calculation
+    finalScore *= jackpotMultiplier;
 
     const jackpotDiv = document.createElement("div");
 
     jackpotDiv.style.color = "var(--color-yellow)";
 
+    // 👉 Updated string literal to read clean integers instead of printing "xundefined"
     jackpotDiv.textContent =
-      `8-dice bonus = x${ALL_DICE_JACKPOT_MULTIPLIER}`;
+      `8-dice bonus = x${jackpotMultiplier}`;
 
     scoreArea.appendChild(jackpotDiv);
   }
@@ -211,6 +216,8 @@ function applyScoreBonuses(
   console.log("Time bonus:", awardedTimeBonus);
   console.log("Final score:", finalScore);
 }
+
+
 
 
 // =========================================================================
