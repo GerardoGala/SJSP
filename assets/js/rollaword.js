@@ -6,7 +6,7 @@ const GRID_ROWS = 6;
 const GRID_COLS = 8;
 const INITIAL_TIME_SECONDS = 180;
 
-const isKidsMode = window.location.pathname.includes('rollaKid.html');
+const isKidsMode = window.location.pathname.includes('id');
 
 // =========================================================================
 // PHASE 1 & 2: INSTANT GRID INITIALIZATION
@@ -97,10 +97,6 @@ function startGameEngine() {
   gameEnded = false;
   timeRemaining = INITIAL_TIME_SECONDS;
   
-  if (timerDisplay) {
-    timerDisplay.textContent = isKidsMode ? "🧒 FUN PLAY" : "3:00";
-  }
-
   // Flush stale nodes
   document.querySelectorAll('.grid-cell').forEach(cell => cell.innerHTML = '');
 
