@@ -10,7 +10,7 @@
 
   <!-- 1) Top Count-Down Timer -->
   <header>
-    <h1 class="h1">ROLLAWORD</h1>
+    <h1 id="game-title" class="h1">ROLLAWORD</h1>
     <div id="timer-container"><span id="timer-display">3:00</span></div>
   </header>
 
@@ -26,27 +26,28 @@
 <!-- 3) Unified Game Action Control Panels -->
 <div id="action-container" style="width: 100%; max-width: calc(var(--cell-size) * 8 + 2px); margin: 10px auto;">
     
-    <!-- 🚀 Startup Selection Row (Both buttons side-by-side, taking 50% width each) -->
+    <!-- 🚀 Startup Selection Row (Both buttons side-by-side) -->
     <div id="mode-selection-row" style="display: flex; gap: 8px; width: 100%; height: 45px;">
         <button id="start-btn" class="btn" style="flex: 1; height: 100%;" 
-                onclick="document.getElementById('mode-selection-row').style.display='none'; document.getElementById('done-btn-container').style.display='block'; if(typeof startGameEngine === 'function') startGameEngine();">
+                onclick="window.isDailyChallengeMode = false; document.getElementById('game-title').textContent = 'FREE PLAY'; document.getElementById('mode-selection-row').style.display='none'; document.getElementById('done-btn-container').style.display='block'; if(typeof startGameEngine === 'function') startGameEngine();">
             FREE PLAY
         </button>
         <button id="challenge-start-btn" class="btn" style="flex: 1; height: 100%;" 
-                onclick="document.getElementById('mode-selection-row').style.display='none'; document.getElementById('done-btn-container').style.display='block'; if(typeof startChallengeEngine === 'function') startChallengeEngine();">
+                onclick="window.isDailyChallengeMode = true; document.getElementById('game-title').textContent = 'DAILY CHALLENGE'; document.getElementById('mode-selection-row').style.display='none'; document.getElementById('done-btn-container').style.display='block'; if(typeof startChallengeEngine === 'function') startChallengeEngine();">
             DAILY CHALLENGE
         </button>
     </div>
 
-    <!-- 🏁 Active Gameplay State Panel (Initially hidden, spans full width when active) -->
+    <!-- 🏁 Active Gameplay State Panel (Done Button) -->
     <div id="done-btn-container" style="display: none; width: 100%; height: 45px;">
         <button id="done-btn" class="btn" style="width: 100%; height: 100%;" 
-                onclick="document.getElementById('done-btn-container').style.display='none'; document.getElementById('mode-selection-row').style.display='flex'; if(typeof clearTimeoutEngine === 'function') clearTimeoutEngine();">
+                onclick="document.getElementById('game-title').textContent = 'ROLLAWORD'; document.getElementById('done-btn-container').style.display='none'; document.getElementById('mode-selection-row').style.display='flex'; if(typeof clearTimeoutEngine === 'function') clearTimeoutEngine();">
             Done
         </button>
     </div>
 
 </div>
+
 
  
   <!-- 4) Bottom Plain Text Formula Scoring Output Box -->
@@ -62,5 +63,8 @@
 <script src="assets/js/rollaworddictionary.js"></script>
 <script src="assets/js/rollawordadult.js"></script> <!-- Swapped in -->
 <script src="assets/js/rollaword.js"></script>
+<!-- 🏆 New Firestore Leaderboard Module Layer -->
+<script type="module" src="assets/js/rollawordleaderboard.js"></script>
 </body>
 </html>
+

@@ -9,6 +9,7 @@ const INITIAL_TIME_SECONDS = 180;
 
 const isKidsMode = window.location.pathname.includes('id');
 
+const gameTitleElement = document.getElementById("game-title");
 // =========================================================================
 // PHASE 1 & 2: INSTANT GRID INITIALIZATION
 // =========================================================================
@@ -182,6 +183,7 @@ function startGameEngine() {
  * Fetches the fixed daily pool using the user's current local date.
  */
 function startChallengeEngine() {
+  console.log("isDailyChallengeMode in rollaword.js - startChallengeEngine:", window.isDailyChallengeMode);
   isDailyChallengeMode = true;  // 👈 Set to true for Daily Challenge
   gameEnded = false;
   timeRemaining = INITIAL_TIME_SECONDS;
@@ -225,10 +227,28 @@ function clearTimeoutEngine() {
   if (gameEnded) return;
   gameEnded = true;
   clearInterval(countdownTicker);
+  
+  // Restore the original brand title when gameplay is done
+  if (gameTitleElement) gameTitleElement.textContent = "ROLLAWORD"; 
+
   if (typeof processEndgameScoring === 'function') {
     processEndgameScoring(timeRemaining * 5);
   }
+
+  // 🏆 NEW FIRESTORE LEADERBOARD PIPELINE
+  if (window.isDailyChallengeMode && typeof window.processChallengeEndgame === 'function') {
+    // Looks for the final tally printed by your scoring files
+    const calculatedScore = window.finalScore || 0;
+    
+    // 🚀 STEP 1: Process the score against the database
+    window.processChallengeEndgame(calculatedScore).then(() => {
+        // 🚀 STEP 2: Automatically redirect to your brand-new template page after prompt completion
+        window.location.href = "leaderboard.html";
+    });
+  }
 }
+
+
 
 // Global window registration map hooks
 window.startGameEngine = startGameEngine;

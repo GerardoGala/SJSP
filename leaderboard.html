@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RollaWord - Daily Rankings</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        /* Embedded architectural overrides to mirror your game grid bounds exactly */
+        .leaderboard-container {
+            width: 100%;
+            max-width: calc(var(--cell-size, 45px) * 8 + 2px);
+            margin: 0 auto;
+            padding: 0 1ch;
+            box-sizing: border-box;
+        }
+        .leaderboard-row {
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: calc(var(--baseline) * 3.5) calc(var(--baseline) * 4);
+            border-bottom: 1px solid var(--light);
+            font-family: Menlo, Monaco, Consolas, monospace;
+        }
+        .leaderboard-row:hover {
+            background-color: var(--lighter);
+        }
+        .rank-badge {
+            font-variation-settings: "wght" var(--font-weight-bold);
+            min-width: 4ch;
+            color: var(--color);
+        }
+        .player-name {
+            flex-grow: 1;
+            text-align: left;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: var(--text-color);
+        }
+        .player-score {
+            font-variation-settings: "wght" var(--font-weight-bold);
+            color: var(--success-color);
+            padding-left: 1ch;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="leaderboard-container" style="margin-top: calc(var(--baseline) * 10); text-align: center;">
+        <h1 class="h1" style="margin-top: 0; letter-spacing: 0.05em;">LEADERBOARD</h1>
+        <p style="margin-top: calc(var(--baseline) * 2); font-size: 0.9rem; color: var(--gray); text-transform: uppercase; letter-spacing: 0.1em;">
+            Daily Challenge: <span id="current-date-display">--------</span>
+        </p>
+    </header>
+
+    <hr class="separator--dot" style="margin-top: calc(var(--baseline) * 4); margin-bottom: calc(var(--baseline) * 4);">
+
+    <!-- Main Rankings Table Area -->
+    <main class="leaderboard-container">
+        <div id="leaderboard-table-wrapper" class="table-striped" style="border: 1px solid var(--light); border-radius: var(--border-radius); overflow: hidden;">
+            <div id="leaderboard-loading" style="text-align: center; padding: calc(var(--baseline) * 10); color: var(--gray); font-style: italic;">
+                Reading Firestore payloads...
+            </div>
+        </div>
+    </main>
+
+    <!-- Structural spacer line mirroring game board boundaries -->
+    <div id="board-separator" style="margin-top: calc(var(--baseline) * 8);"></div>
+
+    <!-- Navigation Control Row -->
+    <footer class="leaderboard-container" style="margin-bottom: calc(var(--baseline) * 10);">
+        <button class="btn" style="width: 100%; height: 45px; justify-content: center;" onclick="window.location.href='rollaWord.html'">
+            RETURN TO GAME
+        </button>
+    </footer>
+
+    <!-- Database Processing Core Layer -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { 
+            getFirestore, 
+            collection, 
+            query, 
+            where, 
+            orderBy, 
+            limit, 
+            getDocs 
+        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // Firebase configuration parameters matching your project instances
+        const firebaseConfig = {
+            apiKey: "AIzaSyC_ayepAzJV_vfV5Qh8m52tGnn1Iw7CRnY",
+            authDomain: "://firebaseapp.com",
+            projectId: "laser-sailing-simulator",
+            storageBucket: "laser-sailing-simulator.firebasestorage.app",
+            messagingSenderId: "45397375888",
+            appId: "1:145397375888:web:1ca8d7688170787624d115"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        function getTodayDateKey() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            return {
+                key: `${year}${month}${day}`,
+                display: `${year}-${month}-${day}`
+            };
+        }
+
+        async function renderLeaderboardView() {
+            const dateData = getTodayDateKey();
+            const dateDisplay = document.getElementById("current-date-display");
+            const wrapper = document.getElementById("leaderboard-table-wrapper");
+            
+            if (dateDisplay) dateDisplay.textContent = dateData.display;
+            if (!wrapper) return;
+
+            try {
+                // Target your fresh dedicated rollaword table path lane
+                const leaderboardRef = collection(db, "rollaword_leaderboard");
+                const q = query(
+                    leaderboardRef, 
+                    where("date", "==", dateData.key), 
+                    orderBy("score", "desc"), 
+                    limit(10)
+                );
+                
+                const querySnapshot = await getDocs(q);
+
+                if (querySnapshot.empty) {
+                    wrapper.innerHTML = `
+                        <div style="text-align: center; padding: calc(var(--baseline) * 10); color: var(--gray);">
+                            No submissions recorded yet today.<br>Be the first to secure a spot! 🏆
+                        </div>`;
+                    return;
+                }
+
+                let tableHtml = `<div style="display: flex; flex-direction: column; width: 100%;">`;
+                let rank = 1;
+
+                querySnapshot.forEach((doc) => {
+                    const entry = doc.data();
+                    tableHtml += `
+                        <div class="leaderboard-row">
+                            <span class="rank-badge">#${rank}</span>
+                            <span class="player-name">${entry.name}</span>
+                            <span class="player-score">${entry.score} pts</span>
+                        </div>
+                    `;
+                    rank++;
+                });
+
+                tableHtml += `</div>`;
+                wrapper.innerHTML = tableHtml;
+
+            } catch (error) {
+                console.error("Leaderboard component parsing exception:", error);
+                wrapper.innerHTML = `
+                    <div style="text-align: center; padding: calc(var(--baseline) * 10); color: var(--warning-color); font-variation-settings: 'wght' var(--font-weight-bold);">
+                        Failed to synchronize daily standings.
+                    </div>`;
+            }
+        }
+
+        // Initialize display composition instantly on component arrival
+        renderLeaderboardView();
+    </script>
+</body>
+</html>
