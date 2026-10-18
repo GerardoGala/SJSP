@@ -1,6 +1,7 @@
 // =========================================================================
 // ROLLAWORD - INDEPENDENT COMMON CORE CONTROLLER
 // =========================================================================
+let isDailyChallengeMode = false; // Tracks active game mode context
 
 const GRID_ROWS = 6;
 const GRID_COLS = 8;
@@ -86,26 +87,29 @@ function attachLayoutDragListeners(cell) {
 
 
 // =========================================================================
-// GAME CONTROL ENGINE HOOKS
+// GAME CONTROL ENGINE HOOKS & SHARED UTILITIES
 // =========================================================================
 let timeRemaining = INITIAL_TIME_SECONDS;
 let gameEnded = true;
 let countdownTicker = null;
 const timerDisplay = document.getElementById("timer-display");
 
-function startGameEngine() {
-  gameEnded = false;
-  timeRemaining = INITIAL_TIME_SECONDS;
-  
+/**
+ * Shared layout rendering pipeline used by both game modes.
+ * Maps array objects to uppercase properties to preserve backward-compatible game logic.
+ */
+function renderDicePayload(payload) {
   // Flush stale nodes
   document.querySelectorAll('.grid-cell').forEach(cell => cell.innerHTML = '');
 
-  // 🔄 SWAPPABLE CALL: Automatically fires the algorithm from whichever file is loaded!
-  const verifiedRollResult = window.generateLetterPayload();
-  //alert("Dice generated: " + verifiedRollResult.length);
-
   // Unified rendering cycle
-  verifiedRollResult.forEach((chosenFace, index) => {
+  payload.forEach((rawFace, index) => {
+    // Normalise casing safely so it functions perfectly with legacy code loops
+    const chosenFace = {
+      L: rawFace.L || rawFace.l,
+      C: rawFace.C || rawFace.c
+    };
+
     const dieElement = document.createElement("div");
     dieElement.classList.add("die", chosenFace.C.toLowerCase());
     dieElement.id = `die-${index}`;
@@ -119,7 +123,7 @@ function startGameEngine() {
 
     const valueBadge = document.createElement("span");
     valueBadge.classList.add("die-value");
-    valueBadge.textContent = window.SCRABBLE_SCORE_MAP[chosenFace.L];
+    valueBadge.textContent = window.SCRABBLE_SCORE_MAP[chosenFace.L] || 0;
     dieElement.appendChild(valueBadge);
 
     dieElement.addEventListener("dragstart", e => {
@@ -136,8 +140,12 @@ function startGameEngine() {
     const targetTrayCell = diceTray.querySelector(`.grid-cell[data-col="${index}"]`);
     if (targetTrayCell) targetTrayCell.appendChild(dieElement);
   });
+}
 
-  // Ticker management
+/**
+ * Shared clock ticking manager.
+ */
+function startCountdownTimer() {
   clearInterval(countdownTicker);
   if (!isKidsMode) {
     countdownTicker = setInterval(() => {
@@ -153,6 +161,66 @@ function startGameEngine() {
   }
 }
 
+/**
+ * 🚀 Mode 1: FREE PLAY Engine Initiation
+ */
+function startGameEngine() {
+  isDailyChallengeMode = false; // 👈 Set to false for Free Play
+  gameEnded = false;
+  timeRemaining = INITIAL_TIME_SECONDS;
+  
+  // Fetch a clean random letter collection from standard generators
+  const verifiedRollResult = window.generateLetterPayload();
+  
+  // Pass results straight to the rendering core
+  renderDicePayload(verifiedRollResult);
+  startCountdownTimer();
+}
+
+/**
+ * 📅 Mode 2: DAILY CHALLENGE Engine Initiation
+ * Fetches the fixed daily pool using the user's current local date.
+ */
+function startChallengeEngine() {
+  isDailyChallengeMode = true;  // 👈 Set to true for Daily Challenge
+  gameEnded = false;
+  timeRemaining = INITIAL_TIME_SECONDS;
+
+  // Generate today's local date string format matching: "YYYYMMDD"
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const todayKey = `${year}${month}${day}`;
+
+  // Fetch the dictionary array file
+  fetch('assets/js/dailychallenge.json')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Failed to load challenge file: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      const dailyLetters = data[todayKey];
+      
+      if (!dailyLetters || !Array.isArray(dailyLetters)) {
+        alert(`No puzzle data found in challenge schema for today (${todayKey}).`);
+        clearTimeoutEngine();
+        return;
+      }
+
+      // Render the extracted daily payload and trigger the clock
+      renderDicePayload(dailyLetters);
+      startCountdownTimer();
+    })
+    .catch(error => {
+      console.error("Daily Challenge initialization exception error:", error);
+      alert("Could not load today's Daily Challenge tray setup. Please verify your data source path mapping.");
+      clearTimeoutEngine();
+    });
+}
+
 function clearTimeoutEngine() {
   if (gameEnded) return;
   gameEnded = true;
@@ -162,5 +230,7 @@ function clearTimeoutEngine() {
   }
 }
 
+// Global window registration map hooks
 window.startGameEngine = startGameEngine;
+window.startChallengeEngine = startChallengeEngine;
 window.clearTimeoutEngine = clearTimeoutEngine;

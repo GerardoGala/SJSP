@@ -23,29 +23,36 @@
   <!-- Dice tray: 1 row x 8 columns -->
   <div id="dice-tray"></div>
 
-  <!-- 3) Instant Scoring Submission Button with Position Overlay -->
-  <div id="action-panel" style="position: relative; width: 100%; max-width: calc(var(--cell-size) * 8 + 2px); height: 45px;">
+<!-- 3) Unified Game Action Control Panels -->
+<div id="action-container" style="width: 100%; max-width: calc(var(--cell-size) * 8 + 2px); margin: 10px auto;">
     
-    <!-- 🏁 Done Button (Resting at the bottom layer) -->
-    <button id="done-btn" class="btn" disabled 
-            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-            onclick="this.disabled=true; document.getElementById('start-btn').style.display='block'; if(typeof clearTimeoutEngine === 'function') clearTimeoutEngine();">
-      Done
-    </button>
+    <!-- 🚀 Startup Selection Row (Both buttons side-by-side, taking 50% width each) -->
+    <div id="mode-selection-row" style="display: flex; gap: 8px; width: 100%; height: 45px;">
+        <button id="start-btn" class="btn" style="flex: 1; height: 100%;" 
+                onclick="document.getElementById('mode-selection-row').style.display='none'; document.getElementById('done-btn-container').style.display='block'; if(typeof startGameEngine === 'function') startGameEngine();">
+            FREE PLAY
+        </button>
+        <button id="challenge-start-btn" class="btn" style="flex: 1; height: 100%;" 
+                onclick="document.getElementById('mode-selection-row').style.display='none'; document.getElementById('done-btn-container').style.display='block'; if(typeof startChallengeEngine === 'function') startChallengeEngine();">
+            DAILY CHALLENGE
+        </button>
+    </div>
 
-    <!-- 🚀 Start Button (Mask layer: perfectly mirrors and hides Done) -->
-    <button id="start-btn" class="btn" 
-            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: block; z-index: 10;" 
-            onclick="this.style.display='none'; document.getElementById('done-btn').disabled=false; if(typeof startGameEngine === 'function') startGameEngine();">
-      START
-    </button>
+    <!-- 🏁 Active Gameplay State Panel (Initially hidden, spans full width when active) -->
+    <div id="done-btn-container" style="display: none; width: 100%; height: 45px;">
+        <button id="done-btn" class="btn" style="width: 100%; height: 100%;" 
+                onclick="document.getElementById('done-btn-container').style.display='none'; document.getElementById('mode-selection-row').style.display='flex'; if(typeof clearTimeoutEngine === 'function') clearTimeoutEngine();">
+            Done
+        </button>
+    </div>
 
-  </div>
+</div>
 
-
+ 
   <!-- 4) Bottom Plain Text Formula Scoring Output Box -->
   <div id="score-output-area">
-    <div>Press Start to Play!</div>
+    <div>Press 'FREE PLAY' or 'DAILY CHALLENGE'</div>
+    <div>to play</div>
   </div>
 
 
