@@ -32,6 +32,7 @@ function getTodayDateKey() {
  * @param {number} finalScore - The verified score integer from your game engine loop.
  */
 async function processChallengeEndgame(finalScore) {
+    console.log("finalScore at start of processChallengeEndgame():", finalScore);
     if (!window.isDailyChallengeMode) {
         console.log("Free Play active. Skipping leaderboard processing.");
         return;
@@ -76,6 +77,7 @@ async function processChallengeEndgame(finalScore) {
 
         // Conditional Branching: Prompt user ONLY if they earned a ranking spot
         if (makesTop10) {
+   console.log("finalScore at prompt of Name for Leaderboard", finalScore);
             const playerName = prompt(`Incredible! Your score of ${numericScore} qualifies for today's Top 10! Enter your name:`);
             
             if (playerName && playerName.trim() !== "") {
@@ -86,6 +88,8 @@ async function processChallengeEndgame(finalScore) {
                     score: numericScore
                 });
                 alert("Your score has been posted!");
+                    console.log("✈️ Navigating to beautiful leaderboard template...");
+                    window.location.href = "leaderboard.html"; 
             } else {
                 alert("Rankings submission bypassed. A name is required.");
             }
@@ -114,7 +118,7 @@ async function displayDailyLeaderboard() {
     if (!container) return;
 
     try {
-        const leaderboardRef = collection(db, "leaderboard");
+        const leaderboardRef = collection(db, "rollaword_leaderboard");
         const q = query(
             leaderboardRef, 
             where("date", "==", todayKey), 

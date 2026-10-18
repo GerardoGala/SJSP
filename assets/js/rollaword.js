@@ -228,25 +228,15 @@ function clearTimeoutEngine() {
   gameEnded = true;
   clearInterval(countdownTicker);
   
-  // Restore the original brand title when gameplay is done
   if (gameTitleElement) gameTitleElement.textContent = "ROLLAWORD"; 
 
+  // Kicks off the scoring pipeline. 
+  // It will naturally cascade through rollawordscoring.js and rollawordbonus.js
   if (typeof processEndgameScoring === 'function') {
     processEndgameScoring(timeRemaining * 5);
   }
-
-  // 🏆 NEW FIRESTORE LEADERBOARD PIPELINE
-  if (window.isDailyChallengeMode && typeof window.processChallengeEndgame === 'function') {
-    // Looks for the final tally printed by your scoring files
-    const calculatedScore = window.finalScore || 0;
-    
-    // 🚀 STEP 1: Process the score against the database
-    window.processChallengeEndgame(calculatedScore).then(() => {
-        // 🚀 STEP 2: Automatically redirect to your brand-new template page after prompt completion
-        window.location.href = "leaderboard.html";
-    });
-  }
 }
+
 
 
 

@@ -213,8 +213,10 @@ function applyScoreBonuses(
 
   scoreArea.appendChild(finalDiv);
 
-  console.log("Time bonus:", awardedTimeBonus);
-  console.log("Final score:", finalScore);
+
+  window.finalScore = finalScore
+  console.log("Time bonus  in applyScoreBonuses:", awardedTimeBonus);
+  console.log("Final score in applyScoreBonuses:", window.finalScore);
 }
 
 

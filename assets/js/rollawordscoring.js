@@ -230,6 +230,14 @@ async function processEndgameScoring(timeBonus = 0) {
     "Blank assignments:",
     Object.fromEntries(bestResult.assignments)
   );
+
+  // 🏆 LAUNCH LEADERBOARD PROMPT HERE — NOW THAT WE CERTAINLY HAVE THE SCORE!
+  if (window.isDailyChallengeMode && typeof window.processChallengeEndgame === 'function') {
+    console.log("🚀 Scoring verified complete. Handing off to leaderboard with score:", window.finalScore);
+    window.processChallengeEndgame(window.finalScore);
+  }
+
+
 }
 
 // DISPLAY VALID AND INVALID WORD SCORES
