@@ -10,17 +10,12 @@
 <body>
 
   <!-- 1) Top Count-Down Timer -->
-  <header>
-    <h1 id="game-title" class="h1">ROLLAWORD</h1>
-    <div id="timer-container"><span id="timer-display">3:00</span></div>
+  <!-- 1) Top Count-Down Timer (Unified Flex Row Layout) -->
+  <header style="display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: calc(var(--cell-size) * 8 + 2px); margin: calc(var(--baseline) * 4) auto 0 auto; box-sizing: border-box;">
+    <h1 id="game-title" class="h1" style="margin: 0; text-align: left; text-transform: uppercase;">ROLLAWORD</h1>
+    <div id="timer-container" style="margin: 0; text-align: right;"><span id="timer-display">3:00</span></div>
   </header>
 
-  <!-- 📣 Scrolling Notification Ticker -->
-  <div class="ticker-wrapper">
-      <div id="notification-ticker" class="ticker-text">
-          Welcome to RollaWord! Choose a game mode below to start playing...
-      </div>
-  </div>
 
   <!-- 2) Playing board: 6 rows x 8 columns -->
   <div id="game-board"></div>
@@ -73,6 +68,8 @@
 <script src="assets/js/rollaword.js"></script>
 <!-- 🏆 New Firestore Leaderboard Module Layer -->
 <script type="module" src="assets/js/rollawordleaderboard.js"></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5517653304280747"
+     crossorigin="anonymous"></script>
 </body>
 </html>
 
