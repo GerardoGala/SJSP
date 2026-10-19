@@ -25,18 +25,19 @@ function scoreAssignment(rawWords, assignments) {
       0
     );
 
+    // FIXED: Corrected array index to look at the first tile's color
     const firstColor = wordObj.tiles[0].color;
 
     const sameColor = wordObj.tiles.every(
       tile => tile.color === firstColor
     );
 
-  //  Safe fallback ensures the game won't crash even if scripts load out of order
-  const activeMultipliers = window.COLOR_MULTIPLIERS || { "BLUE": 2, "RED": 3 };
+    // Safe fallback ensures the game won't crash even if scripts load out of order
+    const activeMultipliers = window.COLOR_MULTIPLIERS || { "BLUE": 2, "RED": 3 };
 
-  const multiplier = sameColor
-    ? (activeMultipliers[firstColor] || 1)
-    : 1;
+    const multiplier = sameColor
+      ? (activeMultipliers[firstColor] || 1)
+      : 1;
 
     return {
       ...wordObj,
@@ -51,7 +52,6 @@ function scoreAssignment(rawWords, assignments) {
 
 
   // IDENTIFY ALL TILES THAT BELONG TO INVALID WORDS
-
   const disqualifiedDiceIds = new Set();
 
   words.forEach(word => {
@@ -64,7 +64,6 @@ function scoreAssignment(rawWords, assignments) {
 
 
   // DISQUALIFY VALID WORDS THAT SHARE TILES WITH INVALID WORDS
-
   words.forEach(word => {
     const sharesInvalidTile = word.tiles.some(
       tile => disqualifiedDiceIds.has(tile.id)
@@ -76,7 +75,6 @@ function scoreAssignment(rawWords, assignments) {
 
 
   // SCORE ONLY VALID, NON-DISQUALIFIED WORDS
-
   words.forEach(word => {
     if (word.isValid && !word.isDisqualified) {
       word.score = word.baseScore * word.multiplier;
@@ -87,7 +85,6 @@ function scoreAssignment(rawWords, assignments) {
 
 
   // CALCULATE TOTAL FROM ELIGIBLE WORDS ONLY
-
   const total = words.reduce(
     (sum, word) => sum + word.score,
     0
@@ -104,7 +101,6 @@ function scoreAssignment(rawWords, assignments) {
 // =========================================================================
 // FIND THE HIGHEST-SCORING BLANK-TILE ASSIGNMENT
 // =========================================================================
-
 function calculateBestWordScores(rawWords, blankTiles) {
   let bestResult = null;
   const assignments = new Map();
@@ -151,57 +147,66 @@ function applyScoreBonuses(
   timeBonus,
   scoreArea
 ) {
-  // 🧠 THE ANTI-NAN FIX: Resolve global namespace scope safely
-  const jackpotMultiplier = window.ALL_DICE_JACKPOT_MULTIPLIER || 2;
-  
   let finalScore = grandBaseTotal;
 
-  // JACKPOT: ALL EIGHT PLAYABLE DICE MUST SCORE
+  // Check if we are running in RollaKid context using the global window variable
+  const currentIsKidsMode = window.isKidsMode || false;
 
+  // JACKPOT: ALL EIGHT PLAYABLE DICE MUST SCORE
   const triggeredJackpot =
     totalDicePlaced === 8 &&
     validDiceIds.size === 8;
 
   if (triggeredJackpot) {
+    let jackpotMultiplier = 1;
+    
+    if (currentIsKidsMode) {
+      jackpotMultiplier = 2;
+    } else {
+      jackpotMultiplier = timeBonus > 1 ? timeBonus : 1;
+    }
+    
     finalScore *= jackpotMultiplier;
 
-    const jackpotDiv = document.createElement("div");
-
-    jackpotDiv.style.color = "var(--color-yellow)";
-
-    jackpotDiv.textContent =
-      `8-dice bonus = x${jackpotMultiplier}`;
-
-    scoreArea.appendChild(jackpotDiv);
+    if (jackpotMultiplier > 1) {
+      const jackpotDiv = document.createElement("div");
+      jackpotDiv.style.color = "var(--color-yellow)";
+      
+      if (currentIsKidsMode) {
+        jackpotDiv.textContent = `🎉 8-Dice Jackpot Bonus! = x${jackpotMultiplier}`;
+      } else {
+        jackpotDiv.textContent = `8-dice bonus = x${jackpotMultiplier} (seconds remaining)`;
+      }
+      
+      scoreArea.appendChild(jackpotDiv);
+    }
   }
 
 
-  // TIME BONUS: EVERY WORD MUST BE VALID AND QUALIFIED
+  // TIME BONUS: EVERY WORD MUST BE VALID AND QUALIFIED (Only applies to Adults)
+  let awardedTimeBonus = 0;
+  
+  if (!currentIsKidsMode) {
+    const allWordsValid = bestResult.words.every(
+      word => word.isValid && !word.isDisqualified
+    );
 
-  const allWordsValid = bestResult.words.every(
-    word => word.isValid && !word.isDisqualified
-  );
+    awardedTimeBonus =
+      totalDicePlaced === 8 && allWordsValid
+        ? timeBonus
+        : 0;
 
-  const awardedTimeBonus =
-    totalDicePlaced === 8 && allWordsValid
-      ? timeBonus
-      : 0;
+    finalScore += awardedTimeBonus;
 
-  finalScore += awardedTimeBonus;
-
-  if (awardedTimeBonus > 0) {
-    const timeBonusDiv = document.createElement("div");
-
-    timeBonusDiv.textContent =
-      `Time bonus = ${awardedTimeBonus / 2} x 2 = ` +
-      `${awardedTimeBonus}`;
-
-    scoreArea.appendChild(timeBonusDiv);
+    if (awardedTimeBonus > 0) {
+      const timeBonusDiv = document.createElement("div");
+      timeBonusDiv.textContent = `Time bonus = ${awardedTimeBonus / 2} x 2 = ${awardedTimeBonus}`;
+      scoreArea.appendChild(timeBonusDiv);
+    }
   }
 
 
   // DISPLAY FINAL SCORE
-
   const finalDiv = document.createElement("div");
 
   finalDiv.classList.add("total-line");
@@ -210,9 +215,9 @@ function applyScoreBonuses(
   scoreArea.appendChild(finalDiv);
 
 
-  window.finalScore = finalScore
-  console.log("Time bonus  in applyScoreBonuses:", awardedTimeBonus);
-  console.log("Final score in applyScoreBonuses:", window.finalScore);
+  window.finalScore = finalScore;
+  console.log("Is Kids Mode active during scoring:", currentIsKidsMode);
+  console.log("Final score calculated:", window.finalScore);
 }
 
 
@@ -221,7 +226,6 @@ function applyScoreBonuses(
 // =========================================================================
 // DRAW COLOR MULTIPLIER GRAPHICS
 // =========================================================================
-
 function drawVisualStrikethrough(tiles, colorClass, factor) {
   const firstCell = tiles[0].element;
   const lastCell = tiles[tiles.length - 1].element;
@@ -268,7 +272,6 @@ function drawVisualStrikethrough(tiles, colorClass, factor) {
   strikeLine.style.top = `${startY}px`;
   strikeLine.style.transform = `rotate(${angle}deg)`;
 
-  // FIXED: Guard block prevents 1x text labels from appending to the board
   if (factor > 1) {
     const tag = document.createElement("span");
 
