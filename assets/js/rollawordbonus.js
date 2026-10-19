@@ -147,6 +147,15 @@ function applyScoreBonuses(
   timeBonus,
   scoreArea
 ) {
+  // 🎯 ADDED: Display word score subtotal BEFORE calculating jackpot/bonuses
+  const subtotalDiv = document.createElement("div");
+  subtotalDiv.style.fontWeight = "800";
+  subtotalDiv.style.marginTop = "10px";
+  subtotalDiv.style.paddingTop = "6px";
+  subtotalDiv.style.borderTop = "1px dashed var(--text-color, #17181E)";
+  subtotalDiv.textContent = `SUBTOTAL = ${grandBaseTotal}`;
+  scoreArea.appendChild(subtotalDiv);
+
   let finalScore = grandBaseTotal;
 
   // Check if we are running in RollaKid context using the global window variable
