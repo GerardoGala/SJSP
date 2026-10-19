@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RollaWord - Ultra Compact Mobile</title>
   <link rel="stylesheet" href="assets/css/rollaword.css">
+  <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 
@@ -26,7 +27,8 @@
 <div id="dice-tray"></div>
 
   <!-- 3) Instant Scoring Submission Button with Position Overlay -->
-  <div id="action-panel" style="position: relative; width: 100%; max-width: calc(var(--cell-size) * 8 + 2px); height: 45px;">
+  <!-- FIXED: Added margin: 10px auto; to center-align the action panel container -->
+  <div id="action-panel" style="position: relative; width: 100%; max-width: calc(var(--cell-size) * 8 + 2px); height: 45px; margin: 10px auto;">
     
     <!-- 🏁 Done Button (Resting at the bottom layer) -->
     <button id="done-btn" class="btn" disabled 

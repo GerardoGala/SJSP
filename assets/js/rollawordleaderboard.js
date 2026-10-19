@@ -87,14 +87,14 @@ async function processChallengeEndgame(finalScore) {
                     date: todayKey,
                     score: numericScore
                 });
-                alert("Your score has been posted!");
+                //alert("Your score has been posted!");
                     console.log("✈️ Navigating to beautiful leaderboard template...");
                     window.location.href = "leaderboard.html"; 
             } else {
-                alert("Rankings submission bypassed. A name is required.");
+                //alert("Rankings submission bypassed. A name is required.");
             }
         } else {
-            alert(`Good game! Your score was ${numericScore}. Today's Top 10 cutoff is higher. Try again tomorrow!`);
+            //alert(`Good game! Your score was ${numericScore}. Today's Top 10 cutoff is higher. Try again tomorrow!`);
         }
 
         // Always show the finalized leaderboard list on screen at the end
