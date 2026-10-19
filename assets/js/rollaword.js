@@ -38,8 +38,6 @@ for (let c = 0; c < GRID_COLS; c++) {
   cell.classList.add("grid-cell", "tray-cell");
   
   // 🧠 THE ANTI-NAN FIX: Change "tray" to "-1"
-  // An integer like -1 ensures your scoring engine won't crash with a NaN error.
-  // It instantly tells the scoring loop: "This letter is in the tray, skip calculating points for it!"
   cell.dataset.row = "-1"; 
   cell.dataset.col = c;
   
@@ -63,8 +61,6 @@ function attachLayoutDragListeners(cell) {
   cell.addEventListener("drop", e => {
     e.preventDefault();
     
-    // 👉 CRITICAL CHANGE: e.currentTarget directly targets the element that caught the event listener.
-    // This guarantees we hook onto the parent .grid-cell container block wrapper instead of text span elements.
     const targetCell = e.currentTarget;
     if (!targetCell || targetCell.hasChildNodes()) return;
     
@@ -74,10 +70,8 @@ function attachLayoutDragListeners(cell) {
     const dieElement = document.getElementById(dieId);
     
     if (dieElement) {
-      // Append the clean DOM element node directly into the verified target cell container
       targetCell.appendChild(dieElement);
       
-      // If your original script checked scores live on drop, trigger it safely here:
       if (typeof checkWords === 'function') {
         checkWords();
       }
@@ -97,7 +91,6 @@ const timerDisplay = document.getElementById("timer-display");
 
 /**
  * Shared layout rendering pipeline used by both game modes.
- * Maps array objects to uppercase properties to preserve backward-compatible game logic.
  */
 function renderDicePayload(payload) {
   // Flush stale nodes
@@ -105,7 +98,6 @@ function renderDicePayload(payload) {
 
   // Unified rendering cycle
   payload.forEach((rawFace, index) => {
-    // Normalise casing safely so it functions perfectly with legacy code loops
     const chosenFace = {
       L: rawFace.L || rawFace.l,
       C: rawFace.C || rawFace.c
@@ -166,36 +158,36 @@ function startCountdownTimer() {
  * 🚀 Mode 1: FREE PLAY Engine Initiation
  */
 function startGameEngine() {
-  isDailyChallengeMode = false; // 👈 Set to false for Free Play
+  // CLEAR OLD STRIKE-THROUGH LINES
+  document.querySelectorAll(".word-strike-line").forEach(line => line.remove());
+
+  isDailyChallengeMode = false;
   gameEnded = false;
   timeRemaining = INITIAL_TIME_SECONDS;
   
-  // Fetch a clean random letter collection from standard generators
   const verifiedRollResult = window.generateLetterPayload();
-  
-  // Pass results straight to the rendering core
   renderDicePayload(verifiedRollResult);
   startCountdownTimer();
 }
 
 /**
  * 📅 Mode 2: DAILY CHALLENGE Engine Initiation
- * Fetches the fixed daily pool using the user's current local date.
  */
 function startChallengeEngine() {
+  // CLEAR OLD STRIKE-THROUGH LINES
+  document.querySelectorAll(".word-strike-line").forEach(line => line.remove());
+
   console.log("isDailyChallengeMode in rollaword.js - startChallengeEngine:", window.isDailyChallengeMode);
-  isDailyChallengeMode = true;  // 👈 Set to true for Daily Challenge
+  isDailyChallengeMode = true; 
   gameEnded = false;
   timeRemaining = INITIAL_TIME_SECONDS;
 
-  // Generate today's local date string format matching: "YYYYMMDD"
   const now = new Date();
   const year = now.getFullYear();
   const month = String(now.getMonth() + 1).padStart(2, '0');
   const day = String(now.getDate()).padStart(2, '0');
   const todayKey = `${year}${month}${day}`;
 
-  // Fetch the dictionary array file
   fetch('assets/js/dailychallenge.json')
     .then(response => {
       if (!response.ok) {
@@ -212,7 +204,6 @@ function startChallengeEngine() {
         return;
       }
 
-      // Render the extracted daily payload and trigger the clock
       renderDicePayload(dailyLetters);
       startCountdownTimer();
     })
@@ -227,20 +218,7 @@ function clearTimeoutEngine() {
   if (gameEnded) return;
   gameEnded = true;
   clearInterval(countdownTicker);
-  
-  if (gameTitleElement) gameTitleElement.textContent = "ROLLAWORD"; 
-
-  // Kicks off the scoring pipeline. 
-  // It will naturally cascade through rollawordscoring.js and rollawordbonus.js
   if (typeof processEndgameScoring === 'function') {
-    processEndgameScoring(timeRemaining * 5);
+    processEndgameScoring(timeRemaining);
   }
 }
-
-
-
-
-// Global window registration map hooks
-window.startGameEngine = startGameEngine;
-window.startChallengeEngine = startChallengeEngine;
-window.clearTimeoutEngine = clearTimeoutEngine;

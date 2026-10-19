@@ -5,7 +5,6 @@
 
 
 // SCORE A PARTICULAR ASSIGNMENT OF BLANK LETTERS
-// Add this at the absolute top of the file to safely link your snippet
 const COLOR_MULTIPLIERS = window.COLOR_MULTIPLIERS;
 
 function scoreAssignment(rawWords, assignments) {
@@ -153,7 +152,6 @@ function applyScoreBonuses(
   scoreArea
 ) {
   // 🧠 THE ANTI-NAN FIX: Resolve global namespace scope safely
-  // Uses your global window declaration or defaults to a standard x2 multiplier backup
   const jackpotMultiplier = window.ALL_DICE_JACKPOT_MULTIPLIER || 2;
   
   let finalScore = grandBaseTotal;
@@ -165,14 +163,12 @@ function applyScoreBonuses(
     validDiceIds.size === 8;
 
   if (triggeredJackpot) {
-    // 👉 Updated to use the safe local variable reference for mathematical calculation
     finalScore *= jackpotMultiplier;
 
     const jackpotDiv = document.createElement("div");
 
     jackpotDiv.style.color = "var(--color-yellow)";
 
-    // 👉 Updated string literal to read clean integers instead of printing "xundefined"
     jackpotDiv.textContent =
       `8-dice bonus = x${jackpotMultiplier}`;
 
@@ -272,12 +268,16 @@ function drawVisualStrikethrough(tiles, colorClass, factor) {
   strikeLine.style.top = `${startY}px`;
   strikeLine.style.transform = `rotate(${angle}deg)`;
 
-  const tag = document.createElement("span");
+  // FIXED: Guard block prevents 1x text labels from appending to the board
+  if (factor > 1) {
+    const tag = document.createElement("span");
 
-  tag.classList.add("multiplier-tag");
-  tag.textContent = `${factor}x Multiplier`;
-  tag.style.transform = `rotate(${-angle}deg)`;
+    tag.classList.add("multiplier-tag");
+    tag.textContent = `${factor}x Multiplier`;
+    tag.style.transform = `rotate(${-angle}deg)`;
 
-  strikeLine.appendChild(tag);
+    strikeLine.appendChild(tag);
+  }
+
   gridContainer.appendChild(strikeLine);
 }

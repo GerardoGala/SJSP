@@ -3,8 +3,6 @@
 // Board analysis, word discovery, and score display
 // =========================================================================
 
-
-
 async function processEndgameScoring(timeBonus = 0) {
   const gridContainer = document.getElementById("game-board");
   await dictionaryLoadingPromise;
@@ -29,16 +27,13 @@ async function processEndgameScoring(timeBonus = 0) {
   const scoreArea = document.getElementById("score-output-area");
   scoreArea.innerHTML = "<div>Checking words...</div>";
 
-  // The separate dice tray is not part of the playing board.
   const playableRows = 6;
 
   // BUILD THE COMPLETE BOARD.
-  // Only dice in playable rows are counted.
   const boardMatrix = Array.from(
     { length: playableRows },
     () => Array(GRID_COLS).fill(null)
   );
-
 
   let totalDicePlaced = 0;
 
@@ -75,9 +70,7 @@ async function processEndgameScoring(timeBonus = 0) {
       id: die.id,
       letter: originalLetter,
       color: (die.dataset.color || "").toUpperCase(),
-      score: isBlank
-        ? 0
-        : (SCRABBLE_SCORE_MAP[originalLetter] || 0),
+      score: isBlank ? 0 : (SCRABBLE_SCORE_MAP[originalLetter] || 0),
       isBlank,
       element: cell,
       dieElement: die
@@ -87,7 +80,6 @@ async function processEndgameScoring(timeBonus = 0) {
   });
 
   // FIND HORIZONTAL WORDS IN PLAYABLE ROWS.
-
   const rawWords = [];
 
   for (let r = 0; r < playableRows; r++) {
@@ -107,7 +99,6 @@ async function processEndgameScoring(timeBonus = 0) {
             direction: "horizontal"
           });
         }
-
         run = [];
       }
     }
@@ -116,12 +107,11 @@ async function processEndgameScoring(timeBonus = 0) {
       rawWords.push({
         tiles: run,
         direction: "horizontal"
-      });
-    }
+          });
+        }
   }
 
   // FIND VERTICAL WORDS IN PLAYABLE ROWS.
-
   for (let c = 0; c < GRID_COLS; c++) {
     let run = [];
 
@@ -139,7 +129,6 @@ async function processEndgameScoring(timeBonus = 0) {
             direction: "vertical"
           });
         }
-
         run = [];
       }
     }
@@ -153,7 +142,6 @@ async function processEndgameScoring(timeBonus = 0) {
   }
 
   // IDENTIFY BLANK TILES.
-
   const blankTiles = [];
   const seenBlankIds = new Set();
 
@@ -167,7 +155,6 @@ async function processEndgameScoring(timeBonus = 0) {
   });
 
   // CHECK THE MOAT RULE BEFORE SCORING.
-
   if (!hasSingleIsland(boardMatrix)) {
     scoreArea.innerHTML = "";
     alert("Invalid game. Only one island is allowed.");
@@ -175,35 +162,27 @@ async function processEndgameScoring(timeBonus = 0) {
   }
 
   // CALCULATE THE BEST WORD SCORES.
-
   const bestResult = calculateBestWordScores(rawWords, blankTiles);
 
   // DISPLAY THE SELECTED LETTERS ON BLANK TILES.
-
   blankTiles.forEach(tile => {
-    const chosenLetter =
-      bestResult.assignments.get(tile.id) || "A";
-
+    const chosenLetter = bestResult.assignments.get(tile.id) || "A";
     tile.dieElement.dataset.assignedLetter = chosenLetter;
 
     let letterSpan = tile.dieElement.querySelector("span");
-
     if (!letterSpan) {
       letterSpan = document.createElement("span");
       tile.dieElement.prepend(letterSpan);
     }
-
     letterSpan.textContent = chosenLetter;
 
     const valueBadge = tile.dieElement.querySelector(".die-value");
-
     if (valueBadge) {
       valueBadge.textContent = "0";
     }
   });
 
-  // DISPLAY WORD SCORES.
-
+  // DISPLAY WORD SCORES (Calls the separate display module engine).
   gridContainer
     .querySelectorAll(".word-strike-line")
     .forEach(line => line.remove());
@@ -213,7 +192,6 @@ async function processEndgameScoring(timeBonus = 0) {
   const scoreTotals = displayWordScores(bestResult.words, scoreArea);
 
   // APPLY JACKPOT AND TIME BONUS.
-
   applyScoreBonuses(
     bestResult,
     totalDicePlaced,
@@ -224,74 +202,7 @@ async function processEndgameScoring(timeBonus = 0) {
   );
 
   console.log("RollaWord scoring complete.");
-  console.log("Dice on board:", totalDicePlaced);
-  console.log("Words checked:", bestResult.words.length);
-  console.log(
-    "Blank assignments:",
-    Object.fromEntries(bestResult.assignments)
-  );
-
-  // 🏆 LAUNCH LEADERBOARD PROMPT HERE — NOW THAT WE CERTAINLY HAVE THE SCORE!
   if (window.isDailyChallengeMode && typeof window.processChallengeEndgame === 'function') {
-    console.log("🚀 Scoring verified complete. Handing off to leaderboard with score:", window.finalScore);
     window.processChallengeEndgame(window.finalScore);
   }
-
-
-}
-
-// DISPLAY VALID AND INVALID WORD SCORES
-
-function displayWordScores(words, scoreArea) {
-  let grandBaseTotal = 0;
-  const validDiceIds = new Set();
-
-  words.forEach(wordObj => {
-    if (!wordObj.isValid) {
-      const invalidDiv = document.createElement("div");
-
-      invalidDiv.style.color =
-        "var(--text-muted, #a1a1aa)";
-
-      invalidDiv.style.textDecoration = "line-through";
-
-      invalidDiv.textContent =
-        `${wordObj.text} = 0 (invalid)`;
-
-      scoreArea.appendChild(invalidDiv);
-      return;
-    }
-
-    wordObj.tiles.forEach(tile => {
-      validDiceIds.add(tile.id);
-    });
-
-    grandBaseTotal += wordObj.score;
-
-    if (wordObj.multiplier > 1) {
-      drawVisualStrikethrough(
-        wordObj.tiles,
-        wordObj.tiles[0].color.toLowerCase(),
-        wordObj.multiplier
-      );
-    }
-
-    const lineDiv = document.createElement("div");
-
-    if (wordObj.multiplier > 1) {
-      lineDiv.textContent =
-        `${wordObj.text} = ${wordObj.baseScore} x ` +
-        `${wordObj.multiplier} = ${wordObj.score}`;
-    } else {
-      lineDiv.textContent =
-        `${wordObj.text} = ${wordObj.baseScore}`;
-    }
-
-    scoreArea.appendChild(lineDiv);
-  });
-
-  return {
-    grandBaseTotal,
-    validDiceIds
-  };
 }

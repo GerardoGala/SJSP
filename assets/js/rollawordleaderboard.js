@@ -98,7 +98,7 @@ async function processChallengeEndgame(finalScore) {
         }
 
         // Always show the finalized leaderboard list on screen at the end
-        await displayDailyLeaderboard();
+        //await displayDailyLeaderboard();
 
     } catch (error) {
         console.error("Database endgame verification sequence error:", error);

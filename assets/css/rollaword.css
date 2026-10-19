@@ -216,3 +216,6 @@ header {
   font-weight: 800;
   white-space: nowrap;
 }
+.word-strike-line.black {
+  background-color: rgba(23, 24, 30, 0.9) !important;
+}
