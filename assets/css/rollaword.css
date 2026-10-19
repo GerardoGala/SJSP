@@ -93,9 +93,13 @@ header {
   font-weight: var(--font-weight-bold) !important;
   cursor: grab !important;
   user-select: none !important;
-  transition: background-color 0.15s ease !important;
   box-sizing: border-box !important;
   color: #ffffff !important; /* Forces main letter text to be white */
+  z-index: 1;
+
+  /* Smooth transform transitions preventing pixelated jumps */
+  transition: transform 0.12s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.15s ease, filter 0.15s ease !important;
+  will-change: transform;
 }
 
 /* Target any interior spans, paragraphs, or raw text blocks to also force them to white */
@@ -112,9 +116,12 @@ header {
   background-color: #dc2626 !important;
 }
 
-/* Hover effect on playable items */
-.die:hover {
+/* 🚀 FIXED: Tile scale-up expansion on hover or drag/press states */
+.die:hover, .die:active, .die:focus {
   filter: brightness(0.95) !important;
+  transform: scale(1.15) !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2) !important;
+  z-index: 50 !important;
 }
 
 /* Smaller Subscript Font, Positional Layout & White text for Numbers */
@@ -202,7 +209,7 @@ header {
   position: absolute;
   top: -20px;
   background: transparent !important;
-  color: #ffffff !important; /* FIXED: Forced text color to white */
+  color: #ffffff !important; 
   padding: 1px 4px;
   border-radius: 2px;
   font-size: 0.65rem;
