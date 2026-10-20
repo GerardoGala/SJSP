@@ -222,7 +222,7 @@ function applyScoreBonuses(
   finalDiv.textContent = `TOTAL = ${finalScore}`;
 
   scoreArea.appendChild(finalDiv);
-
+  scoreArea.style.textAlign = "right";
 
   window.finalScore = finalScore;
   console.log("Is Kids Mode active during scoring:", currentIsKidsMode);
