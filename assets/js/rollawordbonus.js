@@ -1,19 +1,17 @@
 // =========================================================================
 // ROLLAWORD BONUS AND CALCULATION ENGINE
-// Blank-tile optimization, word scoring, jackpot, and time bonus
+// Fully autonomous, zero global flags, self-contained context evaluation
 // =========================================================================
 
-
-// SCORE A PARTICULAR ASSIGNMENT OF BLANK LETTERS
-const COLOR_MULTIPLIERS = window.COLOR_MULTIPLIERS;
-
+// =========================================================================
+// 1. SCORE A PARTICULAR ASSIGNMENT OF BLANK LETTERS
+// =========================================================================
 function scoreAssignment(rawWords, assignments) {
   const words = rawWords.map(wordObj => {
     const letters = wordObj.tiles.map(tile => {
       if (tile.isBlank) {
         return assignments.get(tile.id) || "A";
       }
-
       return tile.letter;
     });
 
@@ -25,14 +23,12 @@ function scoreAssignment(rawWords, assignments) {
       0
     );
 
-    // FIXED: Corrected array index to look at the first tile's color
-    const firstColor = wordObj.tiles[0].color;
+    const firstColor = wordObj.tiles[0]?.color || "";
 
     const sameColor = wordObj.tiles.every(
       tile => tile.color === firstColor
     );
 
-    // Safe fallback ensures the game won't crash even if scripts load out of order
     const activeMultipliers = window.COLOR_MULTIPLIERS || { "BLUE": 2, "RED": 3 };
 
     const multiplier = sameColor
@@ -50,10 +46,8 @@ function scoreAssignment(rawWords, assignments) {
     };
   });
 
-
   // IDENTIFY ALL TILES THAT BELONG TO INVALID WORDS
   const disqualifiedDiceIds = new Set();
-
   words.forEach(word => {
     if (!word.isValid) {
       word.tiles.forEach(tile => {
@@ -62,17 +56,13 @@ function scoreAssignment(rawWords, assignments) {
     }
   });
 
-
   // DISQUALIFY VALID WORDS THAT SHARE TILES WITH INVALID WORDS
   words.forEach(word => {
     const sharesInvalidTile = word.tiles.some(
       tile => disqualifiedDiceIds.has(tile.id)
     );
-
-    word.isDisqualified =
-      word.isValid && sharesInvalidTile;
+    word.isDisqualified = word.isValid && sharesInvalidTile;
   });
-
 
   // SCORE ONLY VALID, NON-DISQUALIFIED WORDS
   words.forEach(word => {
@@ -83,12 +73,8 @@ function scoreAssignment(rawWords, assignments) {
     }
   });
 
-
   // CALCULATE TOTAL FROM ELIGIBLE WORDS ONLY
-  const total = words.reduce(
-    (sum, word) => sum + word.score,
-    0
-  );
+  const total = words.reduce((sum, word) => sum + word.score, 0);
 
   return {
     words,
@@ -97,9 +83,8 @@ function scoreAssignment(rawWords, assignments) {
   };
 }
 
-
 // =========================================================================
-// FIND THE HIGHEST-SCORING BLANK-TILE ASSIGNMENT
+// 2. FIND THE HIGHEST-SCORING BLANK-TILE ASSIGNMENT
 // =========================================================================
 function calculateBestWordScores(rawWords, blankTiles) {
   let bestResult = null;
@@ -108,17 +93,16 @@ function calculateBestWordScores(rawWords, blankTiles) {
   function searchBlankAssignments(index) {
     if (index >= blankTiles.length) {
       const result = scoreAssignment(rawWords, assignments);
-
       if (!bestResult || result.total > bestResult.total) {
         bestResult = result;
       }
-
       return;
     }
 
     const blank = blankTiles[index];
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-    for (const letter of ALPHABET) {
+    for (const letter of alphabet) {
       assignments.set(blank.id, letter);
       searchBlankAssignments(index + 1);
     }
@@ -135,9 +119,8 @@ function calculateBestWordScores(rawWords, blankTiles) {
   return bestResult;
 }
 
-
 // =========================================================================
-// APPLY JACKPOT, TIME BONUS, AND FINAL SCORE
+// 3. APPLY JACKPOT AND SCORE DISPLAY
 // =========================================================================
 function applyScoreBonuses(
   bestResult,
@@ -147,7 +130,7 @@ function applyScoreBonuses(
   timeBonus,
   scoreArea
 ) {
-  // 🎯 ADDED: Display word score subtotal BEFORE calculating jackpot/bonuses
+  // 1. DISPLAY THE SUBTOTAL BLOCK WITH A TOP DASHED LINE
   const subtotalDiv = document.createElement("div");
   subtotalDiv.style.fontWeight = "800";
   subtotalDiv.style.marginTop = "10px";
@@ -158,10 +141,10 @@ function applyScoreBonuses(
 
   let finalScore = grandBaseTotal;
 
-  // Check if we are running in RollaKid context using the global window variable
-  const currentIsKidsMode = window.isKidsMode || false;
+  // 🛡️ LOCAL ARCHITECTURAL RESET: Evaluate game profile by reading current browser path context
+  const isKidsModeFile = window.location.pathname.includes("rollaKid.html");
 
-  // JACKPOT: ALL EIGHT PLAYABLE DICE MUST SCORE
+  // JACKPOT CONDITIONAL: ALL EIGHT PLAYABLE DICE MUST SCORE
   const triggeredJackpot =
     totalDicePlaced === 8 &&
     validDiceIds.size === 8;
@@ -169,127 +152,37 @@ function applyScoreBonuses(
   if (triggeredJackpot) {
     let jackpotMultiplier = 1;
     
-    if (currentIsKidsMode) {
-      jackpotMultiplier = 2;
+    if (isKidsModeFile) {
+      jackpotMultiplier = 2; // Hardlocked flat reward for kids' environment
     } else {
-      jackpotMultiplier = timeBonus > 1 ? timeBonus : 1;
+      jackpotMultiplier = timeBonus > 1 ? timeBonus : 1; // Dynamic clock evaluation for adults
     }
     
     finalScore *= jackpotMultiplier;
 
+    // 2. DISPLAY THE CLEAN 8-DICE REWARD LINE IF TRIGGERED
     if (jackpotMultiplier > 1) {
       const jackpotDiv = document.createElement("div");
-      jackpotDiv.style.color = "var(--color-yellow)";
-      
-      if (currentIsKidsMode) {
-        jackpotDiv.textContent = `🎉 8-Dice Jackpot Bonus! = x${jackpotMultiplier}`;
-      } else {
-        jackpotDiv.textContent = `8-dice bonus = x${jackpotMultiplier} (seconds remaining)`;
-      }
-      
+      jackpotDiv.textContent = `8 dice reward = x${jackpotMultiplier}`;
       scoreArea.appendChild(jackpotDiv);
     }
   }
 
+  // 3. SEPARATOR LINE BEFORE THE GRAND TOTAL
+  const middleLine = document.createElement("div");
+  middleLine.style.marginTop = "6px";
+  middleLine.style.paddingTop = "6px";
+  middleLine.style.borderTop = "1px dashed var(--text-color, #17181E)";
+  scoreArea.appendChild(middleLine);
 
-  // TIME BONUS: EVERY WORD MUST BE VALID AND QUALIFIED (Only applies to Adults)
-  let awardedTimeBonus = 0;
-  
-  if (!currentIsKidsMode) {
-    const allWordsValid = bestResult.words.every(
-      word => word.isValid && !word.isDisqualified
-    );
-
-    awardedTimeBonus =
-      totalDicePlaced === 8 && allWordsValid
-        ? timeBonus
-        : 0;
-
-    finalScore += awardedTimeBonus;
-
-    if (awardedTimeBonus > 0) {
-      const timeBonusDiv = document.createElement("div");
-      timeBonusDiv.textContent = `Time bonus = ${awardedTimeBonus / 2} x 2 = ${awardedTimeBonus}`;
-      scoreArea.appendChild(timeBonusDiv);
-    }
-  }
-
-
-  // DISPLAY FINAL SCORE
+  // 4. DISPLAY THE GRAND TOTAL
   const finalDiv = document.createElement("div");
-
   finalDiv.classList.add("total-line");
-  finalDiv.textContent = `TOTAL = ${finalScore}`;
-
+  finalDiv.style.fontWeight = "800";
+  finalDiv.textContent = `GRAND TOTAL = ${finalScore}`;
   scoreArea.appendChild(finalDiv);
+  
   scoreArea.style.textAlign = "right";
 
   window.finalScore = finalScore;
-  console.log("Is Kids Mode active during scoring:", currentIsKidsMode);
-  console.log("Final score calculated:", window.finalScore);
-}
-
-
-
-
-// =========================================================================
-// DRAW COLOR MULTIPLIER GRAPHICS
-// =========================================================================
-function drawVisualStrikethrough(tiles, colorClass, factor) {
-  const firstCell = tiles[0].element;
-  const lastCell = tiles[tiles.length - 1].element;
-
-  const rectStart = firstCell.getBoundingClientRect();
-  const rectEnd = lastCell.getBoundingClientRect();
-  const gridContainer = document.getElementById("game-board");
-  const containerRect = gridContainer.getBoundingClientRect();
-
-  const startX =
-    (rectStart.left + rectStart.width / 2) -
-    containerRect.left;
-
-  const startY =
-    (rectStart.top + rectStart.height / 2) -
-    containerRect.top;
-
-  const endX =
-    (rectEnd.left + rectEnd.width / 2) -
-    containerRect.left;
-
-  const endY =
-    (rectEnd.top + rectEnd.height / 2) -
-    containerRect.top;
-
-  const length = Math.sqrt(
-    Math.pow(endX - startX, 2) +
-    Math.pow(endY - startY, 2)
-  );
-
-  const angle =
-    Math.atan2(endY - startY, endX - startX) *
-    (180 / Math.PI);
-
-  const strikeLine = document.createElement("div");
-
-  strikeLine.classList.add(
-    "word-strike-line",
-    colorClass
-  );
-
-  strikeLine.style.width = `${length}px`;
-  strikeLine.style.left = `${startX}px`;
-  strikeLine.style.top = `${startY}px`;
-  strikeLine.style.transform = `rotate(${angle}deg)`;
-
-  if (factor > 1) {
-    const tag = document.createElement("span");
-
-    tag.classList.add("multiplier-tag");
-    tag.textContent = `${factor}x Multiplier`;
-    tag.style.transform = `rotate(${-angle}deg)`;
-
-    strikeLine.appendChild(tag);
-  }
-
-  gridContainer.appendChild(strikeLine);
 }
