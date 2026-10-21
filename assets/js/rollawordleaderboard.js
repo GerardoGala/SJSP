@@ -31,23 +31,39 @@ function getTodayDateKey() {
  * Evaluates if a score deserves entry, prompts only if it qualifies, then updates the UI.
  * @param {number} finalScore - The verified score integer from your game engine loop.
  */
+/**
+ * Processes the game-over sequence for daily challenge matches.
+ * Verifies if the score qualifies for the daily Top 10 leaderboard.
+ * 
+ * @param {number|string} finalScore - The player's unparsed endgame score.
+ */
 async function processChallengeEndgame(finalScore) {
     console.log("finalScore at start of processChallengeEndgame():", finalScore);
+    
+    // 1. MODE GUARD: Drop out instantly if the user is playing in unranked Free Play mode
     if (!window.isDailyChallengeMode) {
         console.log("Free Play active. Skipping leaderboard processing.");
         return;
     }
 
-    const todayKey = getTodayDateKey();
     const numericScore = Number(finalScore) || 0;
+
+    // 2. SCORE GUARD: Early exit rule. If the score is 0, ignore it completely and bypass lookup
+    if (numericScore === 0) {
+        console.log("Score is 0. Bypassing leaderboard qualification checks entirely.");
+        return;
+    }
+
+    const todayKey = getTodayDateKey();
     const container = document.getElementById("score-output-area");
     
+    // Provide user interface visual feedback during database latency period
     if (container) {
         container.innerHTML = "<div>Checking today's leaderboard standings...</div>";
     }
 
     try {
-        // Query today's existing scores sorted from highest to lowest (Limit 10)
+        // Build query against today's entry sub-nodes sorted descending (Highest -> Lowest) capped at 10 rows
         const leaderboardRef = collection(db, "rollaword_leaderboard");
         const q = query(
             leaderboardRef, 
@@ -55,31 +71,38 @@ async function processChallengeEndgame(finalScore) {
             orderBy("score", "desc"), 
             limit(10)
         );
+        
+        // Execute safe asynchronous read payload extraction
         const querySnapshot = await getDocs(q);
         
         let makesTop10 = false;
         const totalEntriesToday = querySnapshot.size;
+        const docs = querySnapshot.docs;
 
+        // 3. QUALIFICATION DETERMINATION FLOW
         if (totalEntriesToday < 10) {
-            // Condition A: If there are fewer than 10 scores posted today, they qualify automatically!
+            // Condition A: If the board has structural vacancies (< 10 total posts), entry is guaranteed!
             makesTop10 = true;
-        } else {
-            // Condition B: Find the current 10th place score anchor
-            const docs = querySnapshot.docs;
+        } else if (docs.length > 0) {
+            // Condition B: Safe fallback tracking. Access the historical 10th row anchor index
             const tenthPlaceDoc = docs[docs.length - 1].data();
-            const tenthPlaceScore = Number(tenthPlaceDoc.score) || 0;
+            
+            // Defensively extract value or resolve fallback safely to prevent processing corruption
+            const tenthPlaceScore = tenthPlaceDoc && tenthPlaceDoc.score ? Number(tenthPlaceDoc.score) : 0;
 
-            // If player score is better than or equal to the 10th score, they qualify
+            // Mark pass authorization if the player matches or defeats the current boundary value
             if (numericScore >= tenthPlaceScore) {
                 makesTop10 = true;
             }
         }
 
-        // Conditional Branching: Prompt user ONLY if they earned a ranking spot
+        // 4. CONDITIONAL POSTING PIPELINE: Prompt user ONLY if they earned a ranking spot
         if (makesTop10) {
-   console.log("finalScore at prompt of Name for Leaderboard", finalScore);
+            console.log("finalScore at prompt of Name for Leaderboard:", numericScore);
+            
             const playerName = prompt(`Incredible! Your score of ${numericScore} qualifies for today's Top 10! Enter your name:`);
             
+            // Clean extraction tracking validation check
             if (playerName && playerName.trim() !== "") {
                 // Submit the verified record document to Firestore
                 await addDoc(collection(db, "rollaword_leaderboard"), {
@@ -87,26 +110,28 @@ async function processChallengeEndgame(finalScore) {
                     date: todayKey,
                     score: numericScore
                 });
-                //alert("Your score has been posted!");
-                    console.log("✈️ Navigating to beautiful leaderboard template...");
-                    window.location.href = "leaderboard.html"; 
+                
+                console.log("✈️ Navigating to beautiful leaderboard template...");
+                window.location.href = "leaderboard.html"; 
             } else {
-                //alert("Rankings submission bypassed. A name is required.");
+                console.log("Rankings submission bypassed by player. A name is required.");
             }
         } else {
-            //alert(`Good game! Your score was ${numericScore}. Today's Top 10 cutoff is higher. Try again tomorrow!`);
+            console.log(`Good game! Score ${numericScore} did not clear today's cutoff threshold.`);
         }
 
         // Always show the finalized leaderboard list on screen at the end
-        //await displayDailyLeaderboard();
+        // await displayDailyLeaderboard();
 
     } catch (error) {
+        // Enforce strong administrative debug tracking logs if network mutations abort unexpectedly
         console.error("Database endgame verification sequence error:", error);
         if (container) {
             container.innerHTML = "<div>Could not verify leaderboard position.</div>";
         }
     }
 }
+
 
 /**
  * 📅 FETCH & DISPLAY RANKINGS FUNCTION
