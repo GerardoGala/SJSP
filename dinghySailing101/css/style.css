@@ -73,3 +73,32 @@ li {
     background-color: #004499; /* Deepened variant on hover states */
     text-decoration: none;
 }
+/* ==========================================================================
+   FORCE UNIVERSAL GEOMETRIC SQUARED OVERRIDE
+   ========================================================================== */
+
+/* Target every element, pseudo-element, and structural layout wrap */
+*, 
+*:before, 
+*:after, 
+html, 
+body, 
+div, 
+span, 
+main, 
+section, 
+article, 
+img, 
+a, 
+button, 
+.btn, 
+.button, 
+.start-button, 
+input, 
+select, 
+textarea {
+    border-radius: 0px !important;
+    -webkit-border-radius: 0px !important;
+    -moz-border-radius: 0px !important;
+}
+
