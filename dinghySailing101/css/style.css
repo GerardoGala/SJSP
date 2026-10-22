@@ -1,0 +1,56 @@
+/* 1. Define your 5 colors */
+:root {
+  --bg-color: rgb(245 240 223);       /* 1. Soft Sand (Main Light Background) */
+  --text-color: rgb(33 37 41);         /* 2. Charcoal Black (Main Text for clear reading) */
+  --primary-color: rgb(21 101 161);    /* 3. Deep Sea Blue (Buttons) */
+  --nav-bg: rgb(113 186 236);          /* 4. Light Clear Sky Blue (Navbar Background) */
+  --footer-bg: rgb(229 217 186);       /* 5. Sandy Beach Beige (Footer Background) */
+}
+
+
+/* 2. Assign them to your HTML structures */
+body {
+  background-color: var(--bg-color) !important;
+  color: var(--text-color) !important;
+}
+
+nav.navbar {
+  background-color: var(--nav-bg) !important;
+}
+
+nav.navbar .navbar-brand,
+nav.navbar .nav-link {
+  color: var(--text-color) !important;
+}
+
+.btn-primary {
+  background-color: var(--primary-color) !important;
+  color: var(--bg-color) !important; 
+}
+
+/* Apply your beach-beige color to the footer element */
+footer {
+  background-color: var(--footer-bg) !important;
+  color: var(--text-color) !important;
+}
+
+/* Ensure any links inside the footer are also easy to read */
+footer a {
+  color: var(--text-color) !important;
+  text-decoration: underline;
+}
+
+/* Fix: Change button text to pure white so it stands out against the blue background */
+/* Overrides Bootstrap's default outline primary button */
+.btn-outline-primary {
+  background-color: transparent !important;
+  color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+}
+
+/* Overrides the look when hovered */
+.btn-outline-primary:hover {
+  background-color: var(--primary-color) !important;
+  color: rgb(255 255 255) !important;
+  border-color: var(--primary-color) !important;
+}
