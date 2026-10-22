@@ -2,32 +2,32 @@
     {
         "path": "404.html",
         "type": "file",
-        "md5": "ba142c13be4bf5b97bbe1dfa924e6498"
+        "md5": "ab425b730a002f25aabaa077c4dca2cf"
     },
     {
         "path": "4th-post.html",
         "type": "file",
-        "md5": "40c0e61253b84e087198c484f4f8f40d"
+        "md5": "4e92e666318ac6614ca4af6e85004679"
     },
     {
         "path": "5.html",
         "type": "file",
-        "md5": "f5b871385faad458bc3a1b0608fc5038"
+        "md5": "7e674918ffff4caa0717fb53aab7ed39"
     },
     {
         "path": "5th-post.html",
         "type": "file",
-        "md5": "b16a7a55674df0493242fcb795e86d92"
+        "md5": "fe13d94c9c710fba502c01f5bffad953"
     },
     {
         "path": "a-new-post.html",
         "type": "file",
-        "md5": "aa58dc9180a815f160d9a8ab24ae1cc9"
+        "md5": "45836c5369d11762f252e7c07452e759"
     },
     {
         "path": "about-us.html",
         "type": "file",
-        "md5": "5da83add1bfd87259aa8b671ef420cd2"
+        "md5": "89c53aaadfe1d07a9ddc52cd0830783b"
     },
     {
         "path": "assets",
@@ -122,7 +122,7 @@
     {
         "path": "/authors/gerardo-gala/index.html",
         "type": "file",
-        "md5": "75cf402171dc27b53c472c9e16090031"
+        "md5": "5d334a53fffeee6f41d61157368823c9"
     },
     {
         "path": "authors/gerardo-gala/page",
@@ -137,52 +137,52 @@
     {
         "path": "/authors/gerardo-gala/page/2/index.html",
         "type": "file",
-        "md5": "03c51c8d8b453ef877aaf7e87364e324"
+        "md5": "6fc7cbcb2d5e3fdce6686379a8475e7c"
     },
     {
         "path": "dinghy-sailing-101.html",
         "type": "file",
-        "md5": "686a7fc486a643cd23fc5338ff3ad2ef"
+        "md5": "8d141da8a379f5612266d9ef0aa01eb5"
     },
     {
         "path": "feed.json",
         "type": "file",
-        "md5": "77988f56fd0ec7a41c959e99039b6a65"
+        "md5": "93622fa3697edc19aa1f9cd81256961c"
     },
     {
         "path": "feed.xml",
         "type": "file",
-        "md5": "35a708a88c215aeaff9622274a3f96e6"
+        "md5": "05d856c2d3f817eaa58ff4bc5c48c531"
     },
     {
         "path": "index.html",
         "type": "file",
-        "md5": "66d3ec8acb3c1db81172a93751d0eaa8"
+        "md5": "639e777e9938ea8c84997534824ec76c"
     },
     {
         "path": "instructors.html",
         "type": "file",
-        "md5": "9029206fd3bc9a80888fd1a483c4850f"
+        "md5": "a70f37ce03e000ed0a357a8e32176232"
     },
     {
         "path": "interactive-visual-thesaurus.html",
         "type": "file",
-        "md5": "faff6b1566abca83b697c08a4ff49115"
+        "md5": "0760c7b60c329760865df8633896b98c"
     },
     {
         "path": "kombi-quick-canoe-build.html",
         "type": "file",
-        "md5": "d898628703cf08be5cce3c015d8bc425"
+        "md5": "d8e5155a58c666d72f3d93b870454542"
     },
     {
         "path": "lake-tahoe-paradox.html",
         "type": "file",
-        "md5": "d401a3c7ec14da4e62ae091c5817c902"
+        "md5": "2ab07d6968db8590fdf4f6421038c2a5"
     },
     {
         "path": "login.html",
         "type": "file",
-        "md5": "772e41cbbcb357330ca6fa5e0c78033a"
+        "md5": "232049b9aad2c7bcb6283a1668a83f56"
     },
     {
         "path": "media",
@@ -2062,32 +2062,32 @@
     {
         "path": "online-courses-2.html",
         "type": "file",
-        "md5": "16592f5b95bfea95a5991e0ca3dddfde"
+        "md5": "07ec38f7097bcaab0ce8e8fcb5a3ff0b"
     },
     {
         "path": "rentals.html",
         "type": "file",
-        "md5": "8cc05a25111fd4e459a1303e62a1e706"
+        "md5": "1a42c97ec318f7aaf850f5890ecaaaae"
     },
     {
         "path": "robots.txt",
         "type": "file",
-        "md5": "7c4729673dd9537149ec204f708235a9"
+        "md5": "33e7416adb717a9a17c138c8105b29bf"
     },
     {
         "path": "sailboats.html",
         "type": "file",
-        "md5": "eb5976f7094510a67b4e91f73b5e5bcc"
+        "md5": "eeec83d08059097f81c0d7a604106394"
     },
     {
         "path": "sailing-concepts-2.html",
         "type": "file",
-        "md5": "586c9d7889b311aa6fcf9bfc64a8ad34"
+        "md5": "b72ef4fb6521b0ece8af0bc7851606e9"
     },
     {
         "path": "sitemap.xml",
         "type": "file",
-        "md5": "efd09a6001ba7f30b7e615d3fb70a123"
+        "md5": "9a016c4306d1febbf8b658a9cafd7fcd"
     },
     {
         "path": "sitemap.xsl",
@@ -2097,7 +2097,7 @@
     {
         "path": "student-report.html",
         "type": "file",
-        "md5": "e2a3928819fedc7912c8420920cbfe52"
+        "md5": "99d9ba60a02b24f6491e75e0524746eb"
     },
     {
         "path": "tags",
@@ -2112,7 +2112,7 @@
     {
         "path": "/tags/blog/index.html",
         "type": "file",
-        "md5": "bae5d883d66995bead8cfbd205efcc57"
+        "md5": "68fd55a599281488f5bad264863cada4"
     },
     {
         "path": "tags/blog/page",
@@ -2127,36 +2127,36 @@
     {
         "path": "/tags/blog/page/2/index.html",
         "type": "file",
-        "md5": "599ea90bebb2f32a9d26c03984f226d9"
+        "md5": "b762477ae048cdf5c09e80f29d686a27"
     },
     {
         "path": "/tags/index.html",
         "type": "file",
-        "md5": "7b528b4274fff33677fa463d0ad4e413"
+        "md5": "3c54ac74217fd27275d1dc65f0c6d2a6"
     },
     {
         "path": "teachers-upload.html",
         "type": "file",
-        "md5": "cc44269259cc7c1ccfd0e17add0ed172"
+        "md5": "023fa20b5b0a5ce2982aef005fbee1da"
     },
     {
         "path": "test.html",
         "type": "file",
-        "md5": "5a69c7917764b7d8348a375765874304"
+        "md5": "a5afc01e7a3911c9dbe049cdb7d04662"
     },
     {
         "path": "thesaurus.html",
         "type": "file",
-        "md5": "97385a420435b9f6c70d73af3d890d06"
+        "md5": "77ce25d2ada469b660bad2ec6642b6a1"
     },
     {
         "path": "tide-schedule.html",
         "type": "file",
-        "md5": "588176e981d56f7b000e5aeb3f13639e"
+        "md5": "a3c314aeff690dc7a2c7f6622c99be07"
     },
     {
         "path": "wind-prediction.html",
         "type": "file",
-        "md5": "18b5d259ba2a4ea4b1c39c9df3465d9d"
+        "md5": "d5a0e7bdb62f9b4a15c62e9b962459df"
     }
 ]
