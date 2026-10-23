@@ -55,24 +55,61 @@ li {
     margin-bottom: 0.5rem;
 }
 
-/* 5. Clean, Native Buttons */
-.btn, button, .start-button {
-    display: inline-block;
-    background-color: #0066cc; /* Match primary action accent color */
-    color: #ffffff !important;
-    padding: 0.65rem 1.5rem;
-    font-size: 1rem;
-    font-weight: 600;
-    border-radius: 4px;
-    border: none;
+.btn, 
+button, 
+.start-button {
+    /* Layout & Alignment: Matches Publii's inline-flex alignment physics */
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+    text-align: center;
+    overflow: hidden;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    
+    /* Structure & Sizing: Replaced hardcoded sizes with theme equivalents */
+    padding: 0.566rem 1.133rem; /* Calculates exactly out to Publii's baseline metrics */
+    font-size: 0.824rem;        /* Publii's precise font size footprint */
+    font-weight: 600;
+    
+    /* Borders & Corners: Converts 4px to the calculated 30px pill-shape shape */
+    border-radius: 30px; 
+    border: 1px solid #0066cc;  /* Maps directly to var(--dark) in Light mode */
+    
+    /* Initial Theme Colors */
+    background-color: transparent; 
+    color: #0066cc !important;  /* Maps directly to var(--dark) text output */
+    
+    /* Animation: Smoothed to match Publii's hardware-accelerated transition profile */
+    will-change: transform;
+    transition: all 0.24s ease-out;
 }
 
-.btn:hover, button:hover {
-    background-color: #004499; /* Deepened variant on hover states */
+/* Hover, Active, and Focus States */
+.btn:hover, 
+button:hover,
+.start-button:hover,
+.btn:active, 
+button:active,
+.start-button:active,
+.btn:focus, 
+button:focus,
+.start-button:focus {
+    /* Action: Performs the theme's inversion flip (solid background, light text) */
+    background-color: #0066cc; /* Swaps to full dark background */
+    color: #ffffff !important; /* Swaps text cleanly to matching helper light color */
     text-decoration: none;
 }
+
+/* Mobile Responsiveness Strategy */
+@media (max-width: 19.9375em) {
+    .btn, 
+    button, 
+    .start-button {
+        width: 100%;
+    }
+}
+
+
 /* ==========================================================================
    FORCE UNIVERSAL GEOMETRIC SQUARED OVERRIDE
    ========================================================================== */
