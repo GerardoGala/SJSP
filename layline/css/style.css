@@ -1,0 +1,51 @@
+
+
+
+/* Map specific styling */
+#map {
+  background-color: #e5e9f0;
+  border: 1px dashed #ccd4e0;
+  height: 910px;
+}
+
+/* ==========================================================================
+   MOBILE FOOTER RESIZING FOR THE 0.5 VIEWPORT SCALE
+   ========================================================================== */
+
+/* Target mobile devices where the 0.5 viewport compresses the layout */
+@media (max-width: 768px) {
+    
+    /* 1. Double the padding and text sizes inside the footer */
+    #footer-placeholder footer, 
+    #footer-placeholder .brand-footer,
+    footer, 
+    .brand-footer {
+        padding-top: 40px !important;
+        padding-bottom: 40px !important;
+        font-size: 28px !important; /* Doubles the base text visibility */
+        line-height: 1.6 !important;
+    }
+
+    /* 2. Scale up any headings inside the footer */
+    #footer-placeholder h1, #footer-placeholder h2, #footer-placeholder h3, #footer-placeholder h4, #footer-placeholder h5, #footer-placeholder h6,
+    footer h1, footer h2, footer h3, footer h4, footer h5, footer h6 {
+        font-size: 36px !important;
+        margin-bottom: 20px !important;
+    }
+
+    /* 3. Scale up links and list items */
+    #footer-placeholder a, 
+    #footer-placeholder li,
+    footer a, 
+    footer li {
+        font-size: 28px !important;
+        padding: 10px 0 !important; /* Makes links easier to tap on mobile */
+    }
+
+    /* 4. Scale up icons inside the footer if you have them */
+    #footer-placeholder i, 
+    footer i {
+        font-size: 32px !important;
+    }
+}
+
