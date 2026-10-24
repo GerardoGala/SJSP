@@ -14,15 +14,15 @@
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/style.css">
+  	<!-- 2. Your Personal Custom CSS Last (Overrides everything above safely) -->
+  	<link rel="stylesheet" href="css/style.css">
     <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
     <link rel="manifest" href="favicon/site.webmanifest">
 </head>
 <body>
-    <div id="header-placeholder"></div>
-
+    <main class="container py-5">
     <!-- Replaced with .brand-card utility from your shared.css -->
     <div class="brand-card" id="game-card">
         
@@ -52,30 +52,27 @@
         <div class="action-bar">
             <div id="result"></div>
             <div class="btn-group gap-2">
-                <button class="btn btn-primary" id="btn-submit" onclick="checkAnswer()">Submit</button>
+                <button class="btn btn-secondary" id="btn-submit" onclick="checkAnswer()">Submit</button>
                 <button class="btn btn-secondary text-white" id="btn-retry" style="display:none;" onclick="resetCurrentScenario()">Try Again</button>
-                <button class="btn btn-primary" id="btn-next" style="display:none;" onclick="navigateNext()">Next Scenario →</button>
+                <button class="btn btn-secondary" id="btn-next" style="display:none;" onclick="navigateNext()">Next Scenario →</button>
             </div>
         </div>
+    <hr>
+    <!-- Bottom Navigation Context -->
+    <div class="button-row-container">
 
-        <!-- Bottom Navigation Context -->
-        <div class="text-center mt-5 pt-4 border-top">
-            <a href="index.html" class="btn btn-outline-primary me-3">
-                <i class="bi bi-house-door me-2"></i>Home
+            <a href="index.html" class="btn btn-outline-secondary me-3">
+                Home
             </a>
-            <a href="challenge.html" class="btn btn-primary">
-                Go to Challenge <i class="bi bi-arrow-right ms-2"></i>
+            <a href="challenge.html" class="btn btn-secondary">
+                Go to Challenge 
+
             </a>
         </div>
 
     </div>
+    </main>
 
-
-
-    <div id="footer-placeholder"></div>
-
-
-    <script src="js/layout.js"></script>
     <script src="js/practice.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js">
     </script>
