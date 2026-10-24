@@ -58,7 +58,7 @@ li {
 .btn, 
 button, 
 .start-button {
-    /* Layout & Alignment: Matches Publii's inline-flex alignment physics */
+    /* Layout & Alignment */
     display: inline-flex;
     align-items: center;
     vertical-align: middle;
@@ -66,25 +66,25 @@ button,
     overflow: hidden;
     cursor: pointer;
     
-    /* Structure & Sizing: Replaced hardcoded sizes with theme equivalents */
-    padding: 0.566rem 1.133rem; /* Calculates exactly out to Publii's baseline metrics */
-    font-size: 0.824rem;        /* Publii's precise font size footprint */
+    /* Structure & Sizing */
+    padding: 0.65rem 1.5rem;
+    font-size: 1rem;
     font-weight: 600;
     
-    /* Borders & Corners: Converts 4px to the calculated 30px pill-shape shape */
-    border-radius: 30px; 
-    border: 1px solid #0066cc;  /* Maps directly to var(--dark) in Light mode */
+    /* Shape & Borders: Sharp rectangular corners */
+    border-radius: 0; 
+    border: 1px solid #0066cc;
     
-    /* Initial Theme Colors */
-    background-color: transparent; 
-    color: #0066cc !important;  /* Maps directly to var(--dark) text output */
+    /* Core Branding Colors: Solid Blue with White Text */
+    background-color: #0066cc; 
+    color: #ffffff !important;
     
-    /* Animation: Smoothed to match Publii's hardware-accelerated transition profile */
+    /* Transition Profile */
     will-change: transform;
     transition: all 0.24s ease-out;
 }
 
-/* Hover, Active, and Focus States */
+/* Strict Color Inversion Hover, Active, and Focus States */
 .btn:hover, 
 button:hover,
 .start-button:hover,
@@ -94,9 +94,10 @@ button:active,
 .btn:focus, 
 button:focus,
 .start-button:focus {
-    /* Action: Performs the theme's inversion flip (solid background, light text) */
-    background-color: #0066cc; /* Swaps to full dark background */
-    color: #ffffff !important; /* Swaps text cleanly to matching helper light color */
+    /* Action: Blue becomes White, White becomes Blue */
+    background-color: #ffffff; 
+    border-color: #0066cc;
+    color: #0066cc !important; 
     text-decoration: none;
 }
 
@@ -108,6 +109,8 @@ button:focus,
         width: 100%;
     }
 }
+
+
 
 
 /* ==========================================================================
