@@ -1,0 +1,28 @@
+
+        .header-meta { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f1f5f9; padding-bottom: 15px; margin-bottom: 20px; }
+        .scenario-title { font-size: 22px; margin: 0; font-weight: 700; }
+        .step-counter { font-size: 14px; font-weight: 600; color: #64748b; background: #e2e8f0; padding: 4px 10px; border-radius: 20px; }
+        .instructions { font-size: 16px; line-height: 1.6; margin-bottom: 25px; min-height: 72px; }
+
+        /* Drag & Drop Workspaces */
+        .source-box { display: flex; justify-content: center; gap: 15px; padding: 20px; background: #f1f5f9; border-radius: 8px; min-height: 50px; align-items: center; margin-bottom: 30px; }
+        .item { padding: 12px 30px; background: var(--primary-color); color: var(--bg-color) !important; border-radius: 6px; cursor: grab; font-size: 24px; user-select: none; box-shadow: 0 2px 4px rgba(0,0,0,0.08); transition: transform 0.1s; }
+        .item:active { cursor: grabbing; transform: scale(0.95); }
+
+        .work-area { display: flex; justify-content: center; align-items: center; min-height: 280px; background: #e0f2fe; border-radius: 8px; padding: 25px; box-sizing: border-box; }
+        .work-area.horizontal { flex-direction: row; gap: 20px; }
+        .work-area.vertical { flex-direction: column; gap: 15px; }
+
+        /* Drop Targets */
+        .slot { width: 130px; height: 75px; border: 2px dashed #94a3b8; border-radius: 6px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.6); color: #64748b; font-size: 14px; font-weight: 500; }
+        
+        /* Fixed Beach Reference Anchor */
+        .beach-fixed { display: flex; align-items: center; justify-content: center; background: #f0d59e; color: #7c2d12; font-size: 24px; border-radius: 6px; border: 2px solid #e2e8f0; }
+        .horizontal .beach-fixed { width: 90px; height: 230px; }
+        .vertical .beach-fixed { width: 100%; height: 55px; order: 4; }
+
+        /* Action Panel & Feedback Colors */
+        .action-bar { display: flex; flex-direction: column; align-items: center; gap: 15px; margin-top: 30px; border-top: 2px solid #f1f5f9; padding-top: 20px; }
+        #result { font-size: 18px; font-weight: bold; min-height: 27px; }
+        .pass { color: #10b981; }
+        .fail { color: #ef4444; }
